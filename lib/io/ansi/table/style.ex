@@ -5,8 +5,9 @@ defmodule IO.ANSI.Table.Style do
   """
 
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
-  @app    Mix.Project.config[:app]
-  @styles Application.get_env(@app, :table_styles)
+  @external_resource Path.expand Mix.Project.config[:config_path]
+  @app               Mix.Project.config[:app]
+  @styles            Application.get_env(@app, :table_styles)
 
   Module.register_attribute __MODULE__, :style_lengths, accumulate: true
 

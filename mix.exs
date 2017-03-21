@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.4",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -26,6 +26,7 @@ defmodule IO.ANSI.Table.Mixfile do
 
   def package do
     [
+      files: ["lib", "mix.exs", "README*", "readme*", "config/config.exs"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{

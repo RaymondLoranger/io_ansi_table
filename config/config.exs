@@ -12,7 +12,7 @@ use Mix.Config
 #
 #     config :io_ansi_table, key: :value
 
-config :elixir, ansi_enabled: true # e.g. mix docs messages in colors
+config :elixir, ansi_enabled: true # mix messages in colors
 
 # A parent project must recompile this dependency
 # after modifying any of the following 3 configs:

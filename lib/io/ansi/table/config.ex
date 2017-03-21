@@ -5,10 +5,11 @@ defmodule IO.ANSI.Table.Config do
   """
 
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
-  @app             Mix.Project.config[:app]
-  @ansi_enabled    Application.get_env(@app, :ansi_enabled)
-  @default_margins Application.get_env(@app, :default_margins)
-  @line_types      Application.get_env(@app, :line_types)
+  @external_resource Path.expand Mix.Project.config[:config_path]
+  @app               Mix.Project.config[:app]
+  @ansi_enabled      Application.get_env(@app, :ansi_enabled)
+  @default_margins   Application.get_env(@app, :default_margins)
+  @line_types        Application.get_env(@app, :line_types)
 
   @doc """
   Checks if ANSI coloring is enabled.
