@@ -26,7 +26,7 @@ defmodule IO.ANSI.Table.Mixfile do
 
   def package do
     [
-      files: ["lib", "mix.exs", "README*", "readme*", "config/config.exs"],
+      files: ["lib", "mix.exs", "README*", "config/config.exs"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{
