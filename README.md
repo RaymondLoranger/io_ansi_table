@@ -13,11 +13,11 @@ def deps do
 end
 ```
 
-After adding `IO ANSI Table` as a dependency, run mix deps.get to install it.
+After adding `IO ANSI Table` as a dependency, run `mix deps.get` to install it.
 
-Then in your config/config.exs file, configure table headers and a key header.
+Then in your `config/config.exs` file, configure table headers and key header.
 
-Here is an example, if your table relates to Github Issues:
+Here is an example, if your table relates to GitHub Issues:
 
 ```elixir
 config :io_ansi_table, headers: [
@@ -36,7 +36,7 @@ config :io_ansi_table, margins: [
 ]
 ```
 
-Otherwise all 3 margins will default to 0.
+Otherwise all 3 margins default to 0.
 
 ## Example
 
@@ -51,7 +51,7 @@ config :io_ansi_table, margins: [
 ```
 
 ```elixir
-alias IO ANSI Table.Formatter
+alias IO.ANSI.Table.Formatter
 people = [
   %{name: "Mike", likes: "ski, arts", date_of_birth: "1992-04-15"},
   %{name: "Mary", likes: "reading"  , date_of_birth: "1985-07-11"},
@@ -63,9 +63,11 @@ Formatter.print_table(people, 3, true, :dark)
 
 ## Customization
 
-You can create new table styles or modify any of the 16 predifined ones
-by changing the dependency's config/config.exs file. You would then need
-to run mix deps.compile io_ansi_table [--force] to make them effective.
+You can create new table styles or modify any of the 16 predefined ones
+by changing the dependency's `config/config.exs` file.
+
+You would then need to run `mix deps.compile io_ansi_table [--force]`
+to make the changes effective.
 
 ## Future versions
 
