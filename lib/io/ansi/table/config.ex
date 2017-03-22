@@ -1,83 +1,92 @@
 
 defmodule IO.ANSI.Table.Config do
   @moduledoc """
-  Defines functions to retrieve table config properties.
+  Defines functions to retrieve table config properties at **runtime**.
   """
 
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
-  @ansi_enabled      Application.get_env(@app, :ansi_enabled)
   @default_margins   Application.get_env(@app, :default_margins)
-  @line_types        Application.get_env(@app, :line_types)
 
   @doc """
-  Checks if ANSI coloring is enabled.
+  Retrieves the headers of a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> Config.ansi_enabled?
-      true
+      iex> # config :io_ansi_table, headers: ["number", "created_at"]
+      iex> # Config.headers # => ["number", "created_at"]
+      iex> Config.headers
+      []
   """
-  @spec ansi_enabled? :: boolean
-  def ansi_enabled? do
-    @ansi_enabled
+  def headers do
+    Application.get_env(@app, :headers, [])
   end
 
   @doc """
-  Retrieves the line types of a table.
+  Retrieves the key header of a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> Config.line_types
-      [:top, :header, :separator, :data, :bottom]
+      iex> # config :io_ansi_table, key_header: "created_at"
+      iex> # Config.key_header # => "created_at"
+      iex> Config.key_header
+      nil
   """
-  @spec line_types :: [atom]
-  def line_types do
-    @line_types
+  def key_header do
+    Application.get_env(@app, :key_header)
   end
 
   @doc ~S"""
-  Retrieves the top margin above a table.
+  Retrieves the top margin to leave above a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> Config.margin_top(top: 4)
-      "\n\n\n\n"
+      iex> # config :io_ansi_table, margins: [top: 4]
+      iex> # Config.margin_top # => "\n\n\n\n"
+      iex> Config.margin_top
+      ""
   """
-  @spec margin_top(Keyword.t) :: String.t
-  def margin_top(margins) do
+  @spec margin_top :: String.t
+  def margin_top do
+    margins = Application.get_env(@app, :margins, [])
     String.duplicate "\n", Keyword.merge(@default_margins, margins)[:top]
   end
 
   @doc ~S"""
-  Retrieves the bottom margin under a table.
+  Retrieves the bottom margin to leave under a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> Config.margin_bottom(bottom: 3)
-      "\n\n\n"
+      iex> # config :io_ansi_table, margins: [bottom: 3]
+      iex> # Config.margin_bottom # => "\n\n\n"
+      iex> Config.margin_bottom
+      ""
   """
-  @spec margin_bottom(Keyword.t) :: String.t
-  def margin_bottom(margins) do
+  @spec margin_bottom :: String.t
+  def margin_bottom do
+    margins = Application.get_env(@app, :margins, [])
     String.duplicate "\n", Keyword.merge(@default_margins, margins)[:bottom]
   end
 
-  @doc """
-  Retrieves the left margin on the left-hand side of a table.
+  @doc ~S"""
+  Retrieves the left margin to leave left of a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> Config.margin_left(left: 2)
-      "\s\s"
+      iex> # config :io_ansi_table, margins: [left: 2]
+      iex> # Config.margin_left # => "\s\s"
+      iex> Config.margin_left
+      ""
   """
-  @spec margin_left(Keyword.t) :: String.t
-  def margin_left(margins) do
+  @spec margin_left :: String.t
+  def margin_left do
+    margins = Application.get_env(@app, :margins, [])
     String.duplicate "\s", Keyword.merge(@default_margins, margins)[:left]
   end
 end

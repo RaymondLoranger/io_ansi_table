@@ -18,11 +18,14 @@ defmodule IO.ANSI.Table.FormatterTest do
       %{c1: "r2 c1", c2: "r2 c2" , c3: "r2 c3", c4: "r2 c4"  }
     ]
     headers = [:c4, :c1, :c2]
-    key = :c4
-    {:ok, fake_maps: fake_maps, maps: maps, headers: headers, key: key}
+    key_header = :c4
+    {
+      :ok, fake_maps: fake_maps, maps: maps,
+      headers: headers, key_header: key_header
+    }
   end
 
-  test "fake maps sorted on :key header", %{fake_maps: fake_maps} do
+  test "fake maps sorted on header :key", %{fake_maps: fake_maps} do
     assert fake_maps
     |> Enum.sort(&(&1.key <= &2.key))
     |> Enum.map(&(&1.key))
@@ -30,9 +33,14 @@ defmodule IO.ANSI.Table.FormatterTest do
   end
 
   describe "IO.ANSI.Table.Formatter.print_table/5" do
-    test "formats table ok", %{maps: maps, headers: headers, key: key} do
+    test "formats table ok", %{
+      maps: maps, headers: headers, key_header: key_header
+    }
+    do
       result = CIO.capture_io fn ->
-        TF.print_table(maps, 4, false, :test, headers: headers, key: key)
+        TF.print_table(
+          maps, 4, false, :test, headers: headers, key_header: key_header
+        )
       end
       assert result == """
       ┌─────────┬───────┬────────┐

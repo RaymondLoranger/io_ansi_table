@@ -7,16 +7,13 @@ defmodule IO.ANSI.Table.Formatter do
   a list of values identified by successive headers.
   """
 
+  alias IO.ANSI.Table.Config
   alias IO.ANSI.Table.Formatter.Helper
   alias IO.ANSI.Table.Style
 
-  @app     Mix.Project.config[:app]
-  @headers Application.get_env(@app, :table_headers)
-  @key     Application.get_env(@app, :key_header)
-
   @doc """
   Takes a list of `key`-`value` `collections`, how many to format,
-  whether to ring the bell, a table `style` and, as `options`, a list
+  whether to ring the `bell`, a table `style` and, as `options`, a list
   of `headers` (`keys`) and a key `header` to sort the `collections` on.
 
   Prints a table to STDOUT of the `values` in each `collection`.
@@ -31,15 +28,15 @@ defmodule IO.ANSI.Table.Formatter do
     - `count`       - number of collections to format (integer)
     - `bell`        - ring the bell? (boolean)
     - `style`       - table style (atom)
-    - `options`     - table headers and key header (keyword)
+    - `options`     - headers and key header (keyword)
 
   ## Table styles
 
   #{Style.texts "  - `&style`&filler - &note\n"}
   ## Options
 
-    - `:headers` - defaults to config value `:table_headers`
-    - `:key`     - defaults to config value `:key_header`
+    - `:headers`    - defaults to config value `:headers`
+    - `:key_header` - defaults to config value `:key_header`
 
   ## Examples
 
@@ -52,7 +49,7 @@ defmodule IO.ANSI.Table.Formatter do
       Formatter.print_table(
         people, 3, true, :dark,
         headers: [:name, :date_of_birth, :likes],
-        key: :date_of_birth
+        key_header: :date_of_birth
       )
   ## ![print_table_people](images/print_table_people.png)
       iex> alias IO.ANSI.Table.Formatter
@@ -66,7 +63,7 @@ defmodule IO.ANSI.Table.Formatter do
       ...>   Formatter.print_table(
       ...>     people, 3, false, :dashed,
       ...>     headers: [:name, :date_of_birth, :likes],
-      ...>     key: :date_of_birth
+      ...>     key_header: :date_of_birth
       ...>   )
       ...> end
       \"""
@@ -82,19 +79,19 @@ defmodule IO.ANSI.Table.Formatter do
   @spec print_table([map | Keyword.t], integer, boolean, atom, Keyword.t)
     :: :ok
   def print_table(collections, count, bell, style, options \\ []) do
-    headers = Keyword.get(options, :headers, @headers)
-    key = Keyword.get(options, :key, @key)
+    headers = Keyword.get(options, :headers, Config.headers)
+    key_header = Keyword.get(options, :key_header, Config.key_header)
     collections =
       collections
       |> Stream.map(&Map.take &1, headers) # optional
-      |> Enum.sort(&(&1[key] <= &2[key]))
+      |> Enum.sort(&(&1[key_header] <= &2[key_header]))
       |> Enum.take(count)
     widths =
       [Map.new(headers, &{&1, titlecase &1}) | collections]
       |> columns(headers)
       |> widths # => max widths of column values or headers
     rows = rows(collections, headers)
-    Helper.print_table(rows, headers, key, widths, style, bell)
+    Helper.print_table(rows, headers, key_header, widths, style, bell)
   end
 
   @doc """
@@ -125,7 +122,7 @@ defmodule IO.ANSI.Table.Formatter do
   @spec columns([map | Keyword.t], [any]) :: [[String.t]]
   def columns(collections, keys) do
     for key <- keys do
-      for collection <- collections, do: to_string(collection[key])
+      for collection <- collections, do: to_string collection[key]
     end
   end
 
@@ -157,7 +154,7 @@ defmodule IO.ANSI.Table.Formatter do
   @spec rows([map | Keyword.t], [any]) :: [[String.t]]
   def rows(collections, keys) do
     for collection <- collections do
-      for key <- keys, do: to_string(collection[key])
+      for key <- keys, do: to_string collection[key]
     end
   end
 
@@ -209,6 +206,6 @@ defmodule IO.ANSI.Table.Formatter do
     |> to_string
     |> String.split(~r/(_|\s)+/, trim: true)
     |> Enum.map(&String.capitalize/1)
-    |> Enum.join(" ")
+    |> Enum.join("\s")
   end
 end

@@ -39,8 +39,8 @@ defmodule IO.ANSI.Table.StyleTest do
     test "retrieves the border widths of a table style and line type" do
       assert Style.border_widths(:medium, :top   )
       == {[2, 0], [0, 3, 0], [0, 2]}
-      assert Style.border_widths(:light , :bottom)
-      == {[2, 0], [0, 3, 0], [0, 2]}
+      assert Style.border_widths(:light , :data  )
+      == {[1, 1], [1, 1, 1], [1, 1]}
       assert Style.border_widths(:heavy , :bottom) == nil
     end
   end

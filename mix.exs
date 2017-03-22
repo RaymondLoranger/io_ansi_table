@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "0.1.1",
+      version: "0.1.2",
       elixir: "~> 1.4",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -66,7 +66,7 @@ defmodule IO.ANSI.Table.Mixfile do
 
   defp copy_images(_) do
     File.cp_r "images", "doc/images", fn src, dst ->
-      IO.gets(~s|Overwriting "#{dst}" with "#{src}". Proceed? [Yn]\s|)
+      IO.gets(~s|Overwriting "#{dst}" with "#{src}".\nProceed? [Yn]\s|)
       in ["y\n", "Y\n"]
     end
   end

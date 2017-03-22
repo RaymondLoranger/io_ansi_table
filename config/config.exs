@@ -14,31 +14,27 @@ use Mix.Config
 
 config :elixir, ansi_enabled: true # mix messages in colors
 
-# A parent project must recompile this dependency
-# after modifying any of the following 3 configs:
-
 # Example to adjust table position (up to 3 ways):
-# config :io_ansi_table, margins: [
-#   top:    1, # line(s) before table
-#   bottom: 1, # line(s) after table
-#   left:   2  # space(s) left of table
-# ]
+#
+#     config :io_ansi_table, margins: [
+#       top:    1, # line(s) before table
+#       bottom: 1, # line(s) after table
+#       left:   2  # space(s) left of table
+#     ]
 
-# Example of key header and table headers to provide:
-# config :io_ansi_table, key_header: "created_at"
-# config :io_ansi_table, table_headers: [
-#   "number", "created_at", "updated_at", "id", "title"
-# ]
-
-# How to disable table formatting in colors:
-# config :io_ansi_table, ansi_enabled: false
+# Example of headers and key header to provide:
+#
+#     config :io_ansi_table, headers: [
+#       "number", "created_at", "updated_at", "id", "title"
+#     ]
+#     config :io_ansi_table, key_header: "created_at"
 
 config :io_ansi_table, ansi_enabled: true # table formatting in colors
 
 config :io_ansi_table, default_margins: [ # default table position:
   top:    0, # line(s) before table
-  left:   0, # space(s) left of table
-  bottom: 0  # line(s) after table
+  bottom: 0, # line(s) after table
+  left:   0  # space(s) left of table
 ]
 
 config :io_ansi_table, line_types: [

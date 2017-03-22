@@ -162,7 +162,7 @@ defmodule IO.ANSI.Table.Style do
 
   @doc ~S"""
   Retrieves a list of interpolated texts (one per table style)
-  or optionally passes each interpolated text to a function.
+  and optionally passes each interpolated text to a function.
 
   ## Examples
 
@@ -174,13 +174,12 @@ defmodule IO.ANSI.Table.Style do
 
   ## Interpolation placeholders
 
-    - `&style`  - table style (e.g. :light)
-    - `&tag`    - table style tag (e.g. light)
+    - `&style`  - table style (e.g. ":light")
+    - `&tag`    - table style tag (e.g. "light")
     - `&filler` - padding after &style or &tag
     - `&note`   - table style note
     - `&rank`   - table style rank
   """
-
   @spec texts(String.t, (String.t -> any)) :: [any]
   def texts(template, fun \\ &(&1)) when is_function(fun, 1) do
     @styles
@@ -192,14 +191,14 @@ defmodule IO.ANSI.Table.Style do
   @spec interpolate({atom, map}, String.t) :: String.t
   defp interpolate({style, %{note: note, rank: rank}}, template) do
     {style, tag, rank} = {inspect(style), to_string(style), to_string(rank)}
-    filler = String.duplicate " ", @max_length - String.length(style)
+    filler = String.duplicate "\s", @max_length - String.length(style)
     template
     |> String.replace("&style", style)
     |> String.replace("&tag", tag)
     |> String.replace("&filler", filler)
     |> String.replace("&note", note)
     |> String.replace("&rank", rank)
-    |> String.replace(~r/ +. *$/u, "")
-    |> String.replace(~r/ +\(\) *$/, "")
+    |> String.replace(~r/ +. *$/u, "") # e.g. erase trailing string " - "
+    |> String.replace(~r/ +\(\) *$/, "") # erase trailing string " () "
   end
 end
