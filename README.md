@@ -64,10 +64,7 @@ Formatter.print_table(people, 3, true, :dark)
 ## Customization
 
 You can create new table styles or modify any of the 16 predefined ones
-by changing the dependency's `config/config.exs` file.
-
-You would then need to run `mix deps.compile io_ansi_table [--force]`
-to make the changes effective.
+by changing the dependency's `config/config.exs` file. You would then need to run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
 ## Future versions
 
