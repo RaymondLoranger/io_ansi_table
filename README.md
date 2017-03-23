@@ -36,7 +36,7 @@ config :io_ansi_table, margins: [
 ]
 ```
 
-Otherwise all 3 margins default to 0.
+Otherwise all 3 margins will default to 0.
 
 ## Example
 
