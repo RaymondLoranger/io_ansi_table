@@ -61,6 +61,8 @@ Formatter.print_table(people, 3, true, :dark)
 ```
 ## ![print_table_people](images/print_table_people.png)
 
+N.B. If you are on Windows, run command `chcp 65001` to change the code page.
+
 ## Customization
 
 You can create new table styles or modify any of the 16 predefined ones
