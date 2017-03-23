@@ -14,8 +14,8 @@ defmodule IO.ANSI.Table.StyleTest do
 
   describe "IO.ANSI.Table.Style.for/1" do
     test ~S/retrieves the table style for a table style "tag"/ do
-      assert Style.for("light") == {:ok, :light}
-      assert Style.for("Light") == :error
+      assert Style.style_for("light") == {:ok, :light}
+      assert Style.style_for("Light") == :error
     end
   end
 

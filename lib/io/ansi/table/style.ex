@@ -17,17 +17,17 @@ defmodule IO.ANSI.Table.Style do
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.for("light")
+      iex> Style.style_for("light")
       {:ok, :light}
   """
-  @spec for(String.t) :: {:ok, atom} | :error
-  def for(tag)
+  @spec style_for(String.t) :: {:ok, atom} | :error
+  def style_for(tag)
 
   for {style, %{}} <- @styles do
     @style_lengths String.length(inspect style)
-    def for(unquote to_string style), do: {:ok, unquote style}
+    def style_for(unquote to_string style), do: {:ok, unquote style}
   end
-  def for(_tag), do: :error
+  def style_for(_tag), do: :error
 
   @max_length Enum.max @style_lengths
 
