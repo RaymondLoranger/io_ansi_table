@@ -12,15 +12,19 @@ defmodule IO.ANSI.Table.Formatter do
   alias IO.ANSI.Table.Style
 
   @doc """
-  Takes a list of `key`-`value` `collections`, how many to format,
-  whether to ring the `bell`, a table `style` and, as `options`, a list
-  of `headers` (`keys`) and a key `header` to sort the `collections` on.
+  Takes a list of key-value `collections`, the (maximum) number of
+  `collections` to format, whether to ring the `bell`, a table `style` and,
+  as `options`, a list of `headers` (keys) and a list of `key headers` to
+  sort the `collections` on.
 
-  Prints a table to STDOUT of the `values` in each `collection`.
+  Prints a table to STDOUT of the values in each selected `collection`.
   The columns are identified by successive `headers` in order.
 
   We calculate the width of each column to fit the longest element
   in that column, also considering the `header` itself.
+
+  If the number of `collections` given is positive, we format
+  the `n` first `collections` in the list. If negative, the last `n` ones.
 
   ## Parameters
 
@@ -28,15 +32,15 @@ defmodule IO.ANSI.Table.Formatter do
     - `count`       - number of collections to format (integer)
     - `bell`        - ring the bell? (boolean)
     - `style`       - table style (atom)
-    - `options`     - headers and key header (keyword)
+    - `options`     - headers and key headers (keyword)
 
   ## Table styles
 
   #{Style.texts "  - `&style`&filler - &note\n"}
   ## Options
 
-    - `:headers`    - defaults to config value `:headers`
-    - `:key_header` - defaults to config value `:key_header`
+    - `:headers`     - defaults to config value `:headers`
+    - `:key_headers` - defaults to config value `:key_headers`
 
   ## Examples
 
@@ -49,7 +53,7 @@ defmodule IO.ANSI.Table.Formatter do
       Formatter.print_table(
         people, 3, true, :dark,
         headers: [:name, :date_of_birth, :likes],
-        key_header: :date_of_birth
+        key_headers: [:date_of_birth]
       )
   ## ![print_table_people](images/print_table_people.png)
       iex> alias IO.ANSI.Table.Formatter
@@ -63,41 +67,60 @@ defmodule IO.ANSI.Table.Formatter do
       ...>   Formatter.print_table(
       ...>     people, 3, false, :dashed,
       ...>     headers: [:name, :date_of_birth, :likes],
-      ...>     key_header: :date_of_birth
+      ...>     key_headers: [:date_of_birth]
       ...>   )
       ...> end
-      \"""
-      +------+---------------+-----------+
-      | Name | Date Of Birth | Likes     |
-      +------+---------------+-----------+
-      | Ray  | 1977-08-28    | cycling   |
-      | Mary | 1985-07-11    | reading   |
-      | Mike | 1992-04-15    | ski, arts |
-      +------+---------------+-----------+
-      \"""
+      "\\n" <> \"""
+        +------+---------------+-----------+
+        | Name | Date Of Birth | Likes     |
+        +------+---------------+-----------+
+        | Ray  | 1977-08-28    | cycling   |
+        | Mary | 1985-07-11    | reading   |
+        | Mike | 1992-04-15    | ski, arts |
+        +------+---------------+-----------+
+      \""" <> "\\n"
   """
   @spec print_table([map | Keyword.t], integer, boolean, atom, Keyword.t)
     :: :ok
   def print_table(collections, count, bell, style, options \\ []) do
     headers = Keyword.get(options, :headers, Config.headers)
-    key_header = Keyword.get(options, :key_header, Config.key_header)
+    key_headers = Keyword.get(options, :key_headers, Config.key_headers)
     collections =
       collections
       |> Stream.map(&Map.take &1, headers) # optional
-      |> Enum.sort(&(&1[key_header] <= &2[key_header]))
+      |> Enum.sort_by(&key_for &1, key_headers)
       |> Enum.take(count)
     widths =
       [Map.new(headers, &{&1, titlecase &1}) | collections]
       |> columns(headers)
       |> widths # => max widths of column values or headers
     rows = rows(collections, headers)
-    Helper.print_table(rows, headers, key_header, widths, style, bell)
+    Helper.print_table(rows, headers, key_headers, widths, style, bell)
   end
 
   @doc """
-  Takes a list of `key`-`value` `collections` and a list of `keys`.
+  Takes a key-value `collection` and a list of `keys`.
 
-  Returns a list of columns, each column being a list of string `values`
+  Returns a sort key for the `collection`.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Formatter
+      iex> collection = [one: '1', two: "2", three: 3.0, four: 4]
+      iex> keys = [:three, :one, :four]
+      iex> Formatter.key_for(collection, keys)
+      "3.014"
+  """
+
+  @spec key_for([map | Keyword.t], [any]) :: String.t
+  def key_for(collection, keys) do
+    Enum.map_join keys, &collection[&1]
+  end
+
+  @doc """
+  Takes a list of key-value `collections` and a list of `keys`.
+
+  Returns a list of columns, each column being a list of string values
   selected from each `collection` on a given `key` and repeatedly on
   successive `keys` in order.
 
@@ -127,9 +150,9 @@ defmodule IO.ANSI.Table.Formatter do
   end
 
   @doc """
-  Takes a list of `key`-`value` `collections` and a list of `keys`.
+  Takes a list of key-value `collections` and a list of `keys`.
 
-  Returns a list of rows, each row being a list of string `values`
+  Returns a list of rows, each row being a list of string values
   orderly selected on successive `keys` from a given `collection` and
   repeatedly for each `collection` in turn.
 
@@ -159,8 +182,8 @@ defmodule IO.ANSI.Table.Formatter do
   end
 
   @doc """
-  Given a list of sublists, where each sublist contains the strings of
-  a `column`, returns a list containing the maximum width of each `column`.
+  Given a list of `columns` (string sublists), returns a list containing
+  the maximum width of each `column`.
 
   ## Examples
 

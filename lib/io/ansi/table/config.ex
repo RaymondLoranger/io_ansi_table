@@ -25,18 +25,18 @@ defmodule IO.ANSI.Table.Config do
   end
 
   @doc """
-  Retrieves the key header of a table.
+  Retrieves the key headers of a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> # config :io_ansi_table, key_header: "created_at"
-      iex> # Config.key_header # => "created_at"
-      iex> Config.key_header
+      iex> # config :io_ansi_table, key_headers: ["created_at"]
+      iex> # Config.key_headers # => ["created_at"]
+      iex> Config.key_headers
       nil
   """
-  def key_header do
-    Application.get_env(@app, :key_header)
+  def key_headers do
+    Application.get_env(@app, :key_headers)
   end
 
   @doc ~S"""
@@ -48,7 +48,7 @@ defmodule IO.ANSI.Table.Config do
       iex> # config :io_ansi_table, margins: [top: 4]
       iex> # Config.margin_top # => "\n\n\n\n"
       iex> Config.margin_top
-      ""
+      "\n"
   """
   @spec margin_top :: String.t
   def margin_top do
@@ -65,7 +65,7 @@ defmodule IO.ANSI.Table.Config do
       iex> # config :io_ansi_table, margins: [bottom: 3]
       iex> # Config.margin_bottom # => "\n\n\n"
       iex> Config.margin_bottom
-      ""
+      "\n"
   """
   @spec margin_bottom :: String.t
   def margin_bottom do
@@ -82,7 +82,7 @@ defmodule IO.ANSI.Table.Config do
       iex> # config :io_ansi_table, margins: [left: 2]
       iex> # Config.margin_left # => "\s\s"
       iex> Config.margin_left
-      ""
+      "\s\s"
   """
   @spec margin_left :: String.t
   def margin_left do

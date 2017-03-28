@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "0.1.3",
+      version: "0.1.4",
       elixir: "~> 1.4",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -18,10 +18,8 @@ defmodule IO.ANSI.Table.Mixfile do
   end
 
   defp description do
-    """
-    Prints data to STDOUT in a table with borders and colors.
-    Can choose a table style among the 16 already predefined.
-    """
+    "Prints data to STDOUT in a table with borders and colors. "
+    <> "Can choose table style among 24 already predefined."
   end
 
   def package do

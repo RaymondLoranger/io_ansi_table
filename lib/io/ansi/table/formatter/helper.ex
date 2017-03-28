@@ -12,25 +12,25 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
   @ansi_enabled      Application.get_env(@app, :ansi_enabled)
-  @line_types        Application.get_env(@app, :line_types)
 
-  defstruct rows: nil, headers: nil, key_header: nil, widths: nil, style: nil
+  defstruct rows: nil, headers: nil, key_headers: nil, widths: nil, style: nil
 
   @doc """
   Creates a new table formatter helper (struct).
   """
-  @spec new([[String.t]], [any], any, [non_neg_integer], atom) :: %__MODULE__{}
-  def new(rows, headers, key_header, widths, style) do
+  @spec new([[String.t]], [any], [any], [non_neg_integer], atom)
+    :: %__MODULE__{}
+  def new(rows, headers, key_headers, widths, style) do
     %__MODULE__{
-      rows: rows, headers: headers, key_header: key_header,
+      rows: rows, headers: headers, key_headers: key_headers,
       widths: widths, style: style
     }
   end
 
   @doc """
   Takes a list of `rows` (string sublists), a list of `headers`,
-  a `key header`, a list of column `widths`, a table `style` and
-  whether to ring the `bell`.
+  a list of `key headers`, a list of column `widths`, a table `style`
+  and whether to ring the `bell`.
 
   Prints a table to STDOUT of the strings in each `row`.
   The columns are identified by successive `headers`.
@@ -48,12 +48,12 @@ defmodule IO.ANSI.Table.Formatter.Helper do
         ["Paris" , "France" , "9,854,000"]
       ]
       headers = ['city', 'country', 'population']
-      key_header = 'country'
+      key_headers = ['country']
       widths = [6, 7, 10]
       table_style = :medium
       bell = true
       Helper.print_table(
-        capitals, headers, key_header, widths, table_style, bell
+        capitals, headers, key_headers, widths, table_style, bell
       )
   ## ![print_table_capitals](images/print_table_capitals.png)
       iex> alias IO.ANSI.Table.Formatter.Helper
@@ -64,53 +64,65 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       ...>   ["Paris" , "France" , "9,854,000"]
       ...> ]
       iex> headers = ['city', :country, "population"]
-      iex> key_header = :country
+      iex> key_headers = [:country]
       iex> widths = [6, 7, 10]
       iex> table_style = :dashed
       iex> bell = false
       iex> CaptureIO.capture_io fn ->
       ...>   Helper.print_table(
-      ...>     capitals, headers, key_header, widths, table_style, bell
+      ...>     capitals, headers, key_headers, widths, table_style, bell
       ...>   )
       ...> end
-      \"""
-      +--------+---------+------------+
-      | City   | Country | Population |
-      +--------+---------+------------+
-      | Ottawa | Canada  | 1,142,700  |
-      | Zagreb | Croatia |   685,500  |
-      | Paris  | France  | 9,854,000  |
-      +--------+---------+------------+
-      \"""
+      "\\n" <> \"""
+        +--------+---------+------------+
+        | City   | Country | Population |
+        +--------+---------+------------+
+        | Ottawa | Canada  | 1,142,700  |
+        | Zagreb | Croatia |   685,500  |
+        | Paris  | France  | 9,854,000  |
+        +--------+---------+------------+
+      \""" <> "\\n"
   """
   @spec print_table(
-    [[String.t]], [any], any, [non_neg_integer], atom, boolean
+    [[String.t]], [any], [any], [non_neg_integer], atom, boolean
   ) :: :ok
-  def print_table(rows, headers, key_header, widths, style, bell) do
-    helper = new(rows, headers, key_header, widths, style)
+  def print_table(rows, headers, key_headers, widths, style, bell) do
+    helper = new(rows, headers, key_headers, widths, style)
     IO.write Config.margin_top
-    Enum.each @line_types, &write(helper, &1)
+    Enum.each Style.line_types(style), &write(helper, &1)
     IO.write Config.margin_bottom
     IO.write bell && "\a" || ""
   end
 
   @doc """
-  Writes one or many table lines depending on the line `type` given (atom).
+  Writes one or many table lines depending on the line `type` given.
 
   ## Line types
 
     - `:top`       - top line
     - `:header`    - line of header(s) between top & separator
-    - `:separator` - separator line between header & data
-    - `:data`      - line(s) of data item(s) between separator & bottom
+    - `:separator` - separator line between header & data rows
+    - `row types`  - list of related row type(s) listed below
     - `:bottom`    - bottom line
+
+  ## Row types
+
+    - `:row`      - single row type
+    - `:even_row` - first alternating row type
+    - `:odd_row`  - second alternating row type
+    - `:row_1`    - first row type of repeating group of 3
+    - `:row_2`    - second row type of repeating group of 3
+    - `:row_3`    - third row type of repeating group of 3
 
   ## Examples
 
-      # Evaluate rows, headers, header key, widths and style...
+      # Evaluate rows, headers, key headers, widths and style...
       alias IO.ANSI.Table.Formatter.Helper
-      helper = Helper.new(rows, headers, header_key, widths, style)
-      Helper.write(helper, :data)
+      helper = Helper.new(rows, headers, key_headers, widths, style)
+      Helper.write(helper, :top)
+      ...
+      Helper.write(helper, [:row])
+      ...
   """
   @spec write(%__MODULE__{}, atom) :: :ok
   def write(helper = %__MODULE__{widths: widths, style: style}, type)
@@ -128,36 +140,34 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     |> write(type, helper)
   end
   def write(helper = %__MODULE__{rows: rows}, type)
-    when type == :data
+    when is_list(type)
   do
-    Enum.each rows, &write(&1, type, helper)
+    rows
+    |> Enum.zip(Stream.cycle type)
+    |> Enum.each(&write elem(&1, 0), elem(&1, 1), helper)
   end
 
   @spec write([String.t], atom, %__MODULE__{}) :: :ok
   defp write(elems, type, %__MODULE__{
-    rows: _rows, headers: headers, key_header: key_header,
+    rows: _rows, headers: headers, key_headers: key_headers,
     widths: widths, style: style
   })
   do
     items = items(elems, Style.borders(style, type))
-    if Enum.all? items, &(&1 =~ ~r/^\s*$/) do
-      :ok # do not print all blank items
-    else
-      attrs = attrs(headers, key_header, style, type)
-      widths = widths(widths, elems, Style.border_widths(style, type))
-      :io.format(format(widths, attrs), items)
-    end
+    attrs = attrs(headers, key_headers, style, type)
+    widths = widths(widths, elems, Style.border_widths(style, type))
+    :io.format(format(widths, attrs), items)
   end
 
   @doc """
-  Takes a list of `elements` and 3 `delimiters` (`left`, `inner` and `right`).
+  Takes a list of `elements` and 3 delimiters (`left`, `inner` and `right`).
 
-  Expands the list of `elements` by combining the `delimiters`.
+  Expands the list of `elements` by combining the delimiters.
 
-  The `inner` `delimiter` is inserted between all `elements` and
-  the result is then surrounded by the `left` and `right` `delimiters`.
+  The `inner` delimiter is inserted between all `elements` and
+  the result is then surrounded by the `left` and `right` delimiters.
 
-  Returns a flattened list in case any `element`/`delimiter` is a list.
+  Returns a flattened list in case any `element` or delimiter is a list.
 
   ## Examples
 
@@ -201,14 +211,14 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     })
   end
 
-  @spec attrs([any], any, atom, atom) :: [any]
-  defp attrs(headers, key_header, style, type) do
-    border_attr  = Style.border_attr(style)
-    filler_attr  = Style.filler_attr(style)
+  @spec attrs([any], [any], atom, atom) :: [any]
+  defp attrs(headers, key_headers, style, type) do
+    border_attr  = Style.border_attr(style, type)
+    filler_attr  = Style.filler_attr(style, type)
     key_attr     = Style.key_attr(style, type)
     non_key_attr = Style.non_key_attr(style, type)
     headers
-    |> Enum.map(&(&1 == key_header && {key_attr} || {non_key_attr}))
+    |> Enum.map(&(&1 in key_headers && {key_attr} || {non_key_attr}))
     |> expand({ # wrap attributes in braces to prevent flattening
       [               [               {border_attr}, {filler_attr}]],
       [{filler_attr}, [{filler_attr}, {border_attr}, {filler_attr}]],
@@ -249,7 +259,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> widths = [2, 0, 6]
       iex> attrs = [:light_yellow, :normal, :light_cyan]
       iex> Helper.format(widths, attrs)
-      "\e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
+      "  \e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
   """
   @spec format([non_neg_integer], [[atom] | atom]) :: String.t
   def format(widths, attrs) do
