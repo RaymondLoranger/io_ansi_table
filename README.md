@@ -71,7 +71,7 @@ run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
 ## Current version
 
-Current version now supports:
+The current version now supports:
 
   - multiple key headers
   - alternating row attributes
