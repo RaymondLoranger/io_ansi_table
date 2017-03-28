@@ -1,7 +1,7 @@
 # IO ANSI Table
 
 Prints data to STDOUT in a table with borders and colors.
-Can choose a table style among the 16 already predefined.
+Can choose a table style among the 24 predefined ones.
 
 ## Using
 
@@ -15,7 +15,7 @@ end
 
 After adding `IO ANSI Table` as a dependency, run `mix deps.get` to install it.
 
-Then in your `config/config.exs` file, configure table headers and key header.
+Then in your `config/config.exs` file, configure table headers and key headers.
 
 Here is an example, if your table relates to GitHub Issues:
 
@@ -23,7 +23,7 @@ Here is an example, if your table relates to GitHub Issues:
 config :io_ansi_table, headers: [
   "number", "created_at", "updated_at", "id", "title"
 ]
-config :io_ansi_table, key_header: "created_at"
+config :io_ansi_table, key_headers: ["created_at"]
 ```
 
 You can also position the table by specifying up to 3 margins:
@@ -36,13 +36,13 @@ config :io_ansi_table, margins: [
 ]
 ```
 
-Otherwise all 3 margins will default to 0.
+The above margins represent the default table position.
 
 ## Example
 
 ```elixir
 config :io_ansi_table, headers: [:name, :date_of_birth, :likes]
-config :io_ansi_table, key_header: :date_of_birth
+config :io_ansi_table, key_headers: [:date_of_birth]
 config :io_ansi_table, margins: [
   top:    2, # line(s) before table
   bottom: 2, # line(s) after table
@@ -61,16 +61,17 @@ Formatter.print_table(people, 3, true, :dark)
 ```
 ## ![print_table_people](images/print_table_people.png)
 
-N.B. If you are on Windows, run command `chcp 65001` to use the UTF-8 code page.
+N.B. If you are on Windows, run command `chcp 65001` for the UTF-8 code page.
 
 ## Customization
 
-You can create new table styles or modify any of the 16 predefined ones
-by changing the dependency's `config/config.exs` file. You would then need to run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
+You can create new table styles or modify any of the 24 predefined ones
+by changing the dependency's `config/config.exs` file. You would then need to
+run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
-## Future versions
+## Current version
 
-Future versions may support:
+Current version now supports:
 
-  - multiple header keys
-  - alternating line attributes
+  - multiple key headers
+  - alternating row attributes
