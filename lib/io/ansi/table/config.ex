@@ -15,8 +15,6 @@ defmodule IO.ANSI.Table.Config do
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> # config :io_ansi_table, headers: ["number", "created_at"]
-      iex> # Config.headers # => ["number", "created_at"]
       iex> Config.headers
       []
   """
@@ -30,63 +28,40 @@ defmodule IO.ANSI.Table.Config do
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> # config :io_ansi_table, key_headers: ["created_at"]
-      iex> # Config.key_headers # => ["created_at"]
       iex> Config.key_headers
-      nil
+      []
   """
   def key_headers do
-    Application.get_env(@app, :key_headers)
+    Application.get_env(@app, :key_headers, [])
   end
 
-  @doc ~S"""
-  Retrieves the top margin to leave above a table.
+  @doc """
+  Retrieves the header terms of a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> # config :io_ansi_table, margins: [top: 4]
-      iex> # Config.margin_top # => "\n\n\n\n"
-      iex> Config.margin_top
-      "\n"
+      iex> Config.header_terms
+      []
   """
-  @spec margin_top :: String.t
-  def margin_top do
-    margins = Application.get_env(@app, :margins, [])
-    String.duplicate "\n", Keyword.merge(@default_margins, margins)[:top]
+  def header_terms do
+    Application.get_env(@app, :header_terms, [])
   end
 
-  @doc ~S"""
-  Retrieves the bottom margin to leave under a table.
+  @doc """
+  Retrieves the margins to leave around a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> # config :io_ansi_table, margins: [bottom: 3]
-      iex> # Config.margin_bottom # => "\n\n\n"
-      iex> Config.margin_bottom
-      "\n"
+      iex> Config.margins([])
+      [top: 1, bottom: 1, left: 2]
   """
-  @spec margin_bottom :: String.t
-  def margin_bottom do
-    margins = Application.get_env(@app, :margins, [])
-    String.duplicate "\n", Keyword.merge(@default_margins, margins)[:bottom]
+  @spec margins(Keyword.t | nil) :: Keyword.t
+  def margins(nil) do
+    margins Application.get_env(@app, :margins, [])
   end
-
-  @doc ~S"""
-  Retrieves the left margin to leave left of a table.
-
-  ## Examples
-
-      iex> alias IO.ANSI.Table.Config
-      iex> # config :io_ansi_table, margins: [left: 2]
-      iex> # Config.margin_left # => "\s\s"
-      iex> Config.margin_left
-      "\s\s"
-  """
-  @spec margin_left :: String.t
-  def margin_left do
-    margins = Application.get_env(@app, :margins, [])
-    String.duplicate "\s", Keyword.merge(@default_margins, margins)[:left]
+  def margins(margins) do
+    Keyword.merge(@default_margins, margins)
   end
 end

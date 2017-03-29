@@ -39,7 +39,10 @@ defmodule IO.ANSI.Table.FormatterTest do
     do
       result = CIO.capture_io fn ->
         TF.print_table(
-          maps, 4, false, :test, headers: headers, key_headers: key_headers
+          maps, 4, false, :test,
+          headers: headers,
+          key_headers: key_headers,
+          margins: [top: 1, bottom: 1, left: 2]
         )
       end
       assert result == """

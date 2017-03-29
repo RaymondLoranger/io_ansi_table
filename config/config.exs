@@ -14,12 +14,16 @@ use Mix.Config
 
 config :elixir, ansi_enabled: true # mix messages in colors
 
-# Example of headers and key headers to provide:
+# Example of headers, key headers and header terms to provide:
 #
 #     config :io_ansi_table, headers: [
-#       "number", "created_at", "updated_at", "id", "title"
+#       "station_id", "weather", "temperature_string", "wind_mph",
+#       "location", "observation_time_rfc822"
 #     ]
-#     config :io_ansi_table, key_headers: ["created_at"]
+#
+#     config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
+#
+#     config :io_ansi_table, header_terms: ["ID", "MPH", "RFC"]
 
 # Example to adjust table position (up to 3 ways):
 #
@@ -187,9 +191,58 @@ config :io_ansi_table, table_styles: %{
       bottom:    :light_green
     }
   },
+  pretty: %{
+    note: "multicolored",
+    rank: 40,
+    line_types: [:top, :header, :separator, [:row], :bottom],
+    borders: %{
+      #           left  inner  right dash
+      top:       {"╔═", "═╦═", "═╗", "═"},
+      header:    {"║" ,  "║" ,  "║", nil},
+      separator: {"╠═", "═╬═", "═╣", "═"},
+      row:       {"║" ,  "║" ,  "║", nil},
+      bottom:    {"╚═", "═╩═", "═╝", "═"}
+    },
+    border_widths: %{
+      #           left    inner      right
+      top:       {[2, 0], [0, 3, 0], [0, 2]},
+      header:    {[1, 1], [1, 1, 1], [1, 1]},
+      separator: {[2, 0], [0, 3, 0], [0, 2]},
+      row:       {[1, 1], [1, 1, 1], [1, 1]},
+      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
+    },
+    border_attrs: %{
+      top:       :light_magenta,
+      header:    :light_magenta,
+      separator: :light_magenta,
+      row:       :light_magenta,
+      bottom:    :light_magenta
+    },
+    filler_attrs: %{
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      row:       :normal,
+      bottom:    :normal
+    },
+    key_attrs: %{
+      top:       :light_magenta,
+      header:    [:light_green, :underline],
+      separator: :light_magenta,
+      row:       :light_cyan,
+      bottom:    :light_magenta
+    },
+    non_key_attrs: %{
+      top:       :light_magenta,
+      header:    :light_green,
+      separator: :light_magenta,
+      row:       :light_yellow,
+      bottom:    :light_magenta
+    }
+  },
   cyan: %{
     note: "light cyan background",
-    rank: 40,
+    rank: 50,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -238,7 +291,7 @@ config :io_ansi_table, table_styles: %{
   },
   yellow: %{
     note: "light yellow background",
-    rank: 50,
+    rank: 60,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -287,7 +340,7 @@ config :io_ansi_table, table_styles: %{
   },
   green: %{
     note: "light green background",
-    rank: 60,
+    rank: 70,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -336,7 +389,7 @@ config :io_ansi_table, table_styles: %{
   },
   CYAN: %{
     note: "light cyan border",
-    rank: 70,
+    rank: 80,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -385,7 +438,7 @@ config :io_ansi_table, table_styles: %{
   },
   YELLOW: %{
     note: "light yellow border",
-    rank: 80,
+    rank: 90,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -434,7 +487,7 @@ config :io_ansi_table, table_styles: %{
   },
   GREEN: %{
     note: "light green border",
-    rank: 90,
+    rank: 100,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -483,7 +536,7 @@ config :io_ansi_table, table_styles: %{
   },
   mixed: %{
     note: "fillers revealed",
-    rank: 100,
+    rank: 110,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -532,7 +585,7 @@ config :io_ansi_table, table_styles: %{
   },
   dotted: %{
     note: "slightly colored",
-    rank: 110,
+    rank: 120,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -581,7 +634,7 @@ config :io_ansi_table, table_styles: %{
   },
   dashed: %{
     note: "no colors",
-    rank: 120,
+    rank: 130,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -630,7 +683,7 @@ config :io_ansi_table, table_styles: %{
   },
   plain: %{
     note: "slightly colored",
-    rank: 130,
+    rank: 140,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -679,7 +732,7 @@ config :io_ansi_table, table_styles: %{
   },
   test: %{
     note: "no colors",
-    rank: 140,
+    rank: 150,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -728,7 +781,7 @@ config :io_ansi_table, table_styles: %{
   },
   bare: %{
     note: "no colors",
-    rank: 150,
+    rank: 160,
     line_types: [:header, :separator, [:row]],
     borders: %{
       #           left inner  right dash
@@ -777,7 +830,7 @@ config :io_ansi_table, table_styles: %{
   },
   barish: %{
     note: "like bare but colored",
-    rank: 160,
+    rank: 170,
     line_types: [:header, :separator, [:row]],
     borders: %{
       #           left inner  right dash
@@ -826,7 +879,7 @@ config :io_ansi_table, table_styles: %{
   },
   green_padded: %{
     note: "like green but with extra padding",
-    rank: 170,
+    rank: 180,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -875,7 +928,7 @@ config :io_ansi_table, table_styles: %{
   },
   green_unpadded: %{
     note: "like green but without padding",
-    rank: 180,
+    rank: 190,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left inner right dash
@@ -924,7 +977,7 @@ config :io_ansi_table, table_styles: %{
   },
   GREEN_PADDED: %{
     note: "like GREEN but with extra padding",
-    rank: 190,
+    rank: 200,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left  inner  right dash
@@ -973,7 +1026,7 @@ config :io_ansi_table, table_styles: %{
   },
   GREEN_UNPADDED: %{
     note: "like GREEN but without padding",
-    rank: 200,
+    rank: 210,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
       #           left inner right dash
@@ -1022,7 +1075,7 @@ config :io_ansi_table, table_styles: %{
   },
   black_alt: %{
     note: "black header, alternating row colors",
-    rank: 210,
+    rank: 220,
     line_types: [:top, :header, :separator, [:even_row, :odd_row]],
     borders: %{
       #           left  inner  right dash
@@ -1077,7 +1130,7 @@ config :io_ansi_table, table_styles: %{
   },
   black_mult: %{
     note: "black header, 3 repeating row colors",
-    rank: 220,
+    rank: 230,
     line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3]],
     borders: %{
       #           left  inner  right dash
@@ -1138,7 +1191,7 @@ config :io_ansi_table, table_styles: %{
   },
   green_alt: %{
     note: "green header, alternating row colors",
-    rank: 230,
+    rank: 240,
     line_types: [:top, :header, :separator, [:even_row, :odd_row]],
     borders: %{
       #           left  inner  right dash
@@ -1193,7 +1246,7 @@ config :io_ansi_table, table_styles: %{
   },
   green_mult: %{
     note: "green header, 3 repeating row colors",
-    rank: 240,
+    rank: 250,
     line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3]],
     borders: %{
       #           left  inner  right dash

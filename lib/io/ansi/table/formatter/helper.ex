@@ -4,7 +4,6 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   Prints a table of rows with headers, applying a table style (configurable).
   """
 
-  alias IO.ANSI.Table.Config
   alias IO.ANSI.Table.Formatter
   alias IO.ANSI.Table.Style
 
@@ -13,24 +12,26 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   @app               Mix.Project.config[:app]
   @ansi_enabled      Application.get_env(@app, :ansi_enabled)
 
-  defstruct rows: nil, headers: nil, key_headers: nil, widths: nil, style: nil
+  defstruct rows: nil, headers: nil, key_headers: nil,
+    header_terms: nil, margin: nil, widths: nil, style: nil
 
   @doc """
   Creates a new table formatter helper (struct).
   """
-  @spec new([[String.t]], [any], [any], [non_neg_integer], atom)
-    :: %__MODULE__{}
-  def new(rows, headers, key_headers, widths, style) do
+  @spec new(
+    [[String.t]], [any], [any], [String.t], String.t, [non_neg_integer], atom
+  ) :: %__MODULE__{}
+  def new(rows, headers, key_headers, header_terms, margin, widths, style) do
     %__MODULE__{
       rows: rows, headers: headers, key_headers: key_headers,
-      widths: widths, style: style
+      header_terms: header_terms, margin: margin, widths: widths, style: style
     }
   end
 
   @doc """
   Takes a list of `rows` (string sublists), a list of `headers`,
-  a list of `key headers`, a list of column `widths`, a table `style`
-  and whether to ring the `bell`.
+  a list of `key headers`, a list of `margins`, a list of column `widths`,
+  a table `style` and whether to ring the `bell`.
 
   Prints a table to STDOUT of the strings in each `row`.
   The columns are identified by successive `headers`.
@@ -49,11 +50,14 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       ]
       headers = ['city', 'country', 'population']
       key_headers = ['country']
+      header_terms = []
+      margins = [top: 2, bottom: 2, left: 2]
       widths = [6, 7, 10]
       table_style = :medium
       bell = true
       Helper.print_table(
-        capitals, headers, key_headers, widths, table_style, bell
+        capitals, headers, key_headers, header_terms,
+        margins, widths, table_style, bell
       )
   ## ![print_table_capitals](images/print_table_capitals.png)
       iex> alias IO.ANSI.Table.Formatter.Helper
@@ -65,32 +69,43 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       ...> ]
       iex> headers = ['city', :country, "population"]
       iex> key_headers = [:country]
+      iex> header_terms = []
+      iex> margins = [top: 2, bottom: 2, left: 3]
       iex> widths = [6, 7, 10]
       iex> table_style = :dashed
       iex> bell = false
       iex> CaptureIO.capture_io fn ->
       ...>   Helper.print_table(
-      ...>     capitals, headers, key_headers, widths, table_style, bell
+      ...>     capitals, headers, key_headers, header_terms,
+      ...>     margins, widths, table_style, bell
       ...>   )
       ...> end
-      "\\n" <> \"""
-        +--------+---------+------------+
-        | City   | Country | Population |
-        +--------+---------+------------+
-        | Ottawa | Canada  | 1,142,700  |
-        | Zagreb | Croatia |   685,500  |
-        | Paris  | France  | 9,854,000  |
-        +--------+---------+------------+
-      \""" <> "\\n"
+      "\\n\\n" <> \"""
+         +--------+---------+------------+
+         | City   | Country | Population |
+         +--------+---------+------------+
+         | Ottawa | Canada  | 1,142,700  |
+         | Zagreb | Croatia |   685,500  |
+         | Paris  | France  | 9,854,000  |
+         +--------+---------+------------+
+      \""" <> "\\n\\n"
   """
   @spec print_table(
-    [[String.t]], [any], [any], [non_neg_integer], atom, boolean
+    [[String.t]], [any], [any], [String.t],
+    Keyword.t, [non_neg_integer], atom, boolean
   ) :: :ok
-  def print_table(rows, headers, key_headers, widths, style, bell) do
-    helper = new(rows, headers, key_headers, widths, style)
-    IO.write Config.margin_top
+  def print_table(
+    rows, headers, key_headers, header_terms,
+    margins, widths, style, bell
+  )
+  do
+    margin = String.duplicate "\s", margins[:left]
+    helper = new(
+      rows, headers, key_headers, header_terms, margin, widths, style
+    )
+    IO.write String.duplicate("\n", margins[:top])
     Enum.each Style.line_types(style), &write(helper, &1)
-    IO.write Config.margin_bottom
+    IO.write String.duplicate("\n", margins[:bottom])
     IO.write bell && "\a" || ""
   end
 
@@ -116,9 +131,9 @@ defmodule IO.ANSI.Table.Formatter.Helper do
 
   ## Examples
 
-      # Evaluate rows, headers, key headers, widths and style...
+      # Evaluate rows, headers, key headers, margin, widths and style...
       alias IO.ANSI.Table.Formatter.Helper
-      helper = Helper.new(rows, headers, key_headers, widths, style)
+      helper = Helper.new(rows, headers, key_headers, margin, widths, style)
       Helper.write(helper, :top)
       ...
       Helper.write(helper, [:row])
@@ -132,11 +147,12 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     |> Enum.map(&String.duplicate Style.dash(style, type), &1)
     |> write(type, helper)
   end
-  def write(helper = %__MODULE__{headers: headers}, type)
-    when type == :header
+  def write(helper = %__MODULE__{
+    headers: headers, header_terms: header_terms
+  }, type) when type == :header
   do
     headers
-    |> Enum.map(&Formatter.titlecase/1)
+    |> Enum.map(&Formatter.titlecase &1, header_terms)
     |> write(type, helper)
   end
   def write(helper = %__MODULE__{rows: rows}, type)
@@ -150,12 +166,13 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   @spec write([String.t], atom, %__MODULE__{}) :: :ok
   defp write(elems, type, %__MODULE__{
     rows: _rows, headers: headers, key_headers: key_headers,
-    widths: widths, style: style
+    margin: margin, widths: widths, style: style
   })
   do
     items = items(elems, Style.borders(style, type))
     attrs = attrs(headers, key_headers, style, type)
     widths = widths(widths, elems, Style.border_widths(style, type))
+    IO.write margin
     :io.format(format(widths, attrs), items)
   end
 
@@ -259,7 +276,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> widths = [2, 0, 6]
       iex> attrs = [:light_yellow, :normal, :light_cyan]
       iex> Helper.format(widths, attrs)
-      "  \e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
+      "\e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
   """
   @spec format([non_neg_integer], [[atom] | atom]) :: String.t
   def format(widths, attrs) do
@@ -272,6 +289,6 @@ defmodule IO.ANSI.Table.Formatter.Helper do
           _ -> IO.ANSI.format [attr, "~-#{width}ts"], @ansi_enabled
         end
       end)
-    "#{Config.margin_left}#{fragments}~n" # => string of ANSI escape sequences
+    "#{fragments}~n" # => string of ANSI escape sequences
   end
 end
