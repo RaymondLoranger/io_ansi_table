@@ -235,13 +235,13 @@ defmodule IO.ANSI.Table.Formatter do
   """
   @spec titlecase(any, [String.t]) :: String.t
   def titlecase(title, terms \\ []) do
-    import Enum, only: [reduce: 3]
-    import String, only: [upcase: 1, first: 1, slice: 2, replace: 3]
+    import Enum, only: [map_join: 3, reduce: 3]
+    import String, only: [first: 1, replace: 3, slice: 2, split: 3, upcase: 1]
     title =
       title
       |> to_string
-      |> String.split(~r/(_|\s)+/, trim: true)
-      |> Enum.map_join("\s", &(upcase(first &1) <> slice &1, 1..-1))
+      |> split(~r/(_|\s)+/, trim: true)
+      |> map_join("\s", &(upcase(first &1) <> slice &1, 1..-1))
     reduce terms, title, &replace(&2, ~r/#{&1}/i, &1)
   end
 end
