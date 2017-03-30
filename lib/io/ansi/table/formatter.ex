@@ -213,7 +213,7 @@ defmodule IO.ANSI.Table.Formatter do
 
   @doc """
   Uppercases all first characters of a `title` (converted to a string).
-  Patterns "matching" any given term will be replaced by the term as is.
+  Patterns "matching" any given `term` will be replaced by the `term` as is.
 
   Any underscore is considered a space and consecutive
   whitespace characters are treated as a single occurrence.
