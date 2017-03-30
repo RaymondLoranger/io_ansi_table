@@ -1,7 +1,7 @@
 # IO ANSI Table
 
 Prints data to STDOUT in a table with borders and colors.
-Can choose a table style among the 24 predefined ones.
+Can choose a table style among the 25 predefined ones.
 
 ## Using
 
@@ -23,6 +23,7 @@ Here is an example, if your table relates to GitHub Issues:
 config :io_ansi_table, headers: [
   "number", "created_at", "updated_at", "id", "title"
 ]
+config :io_ansi_table, header_terms: [" at", "ID"]
 config :io_ansi_table, key_headers: ["created_at"]
 ```
 
@@ -42,6 +43,7 @@ The above margins represent the default table position.
 
 ```elixir
 config :io_ansi_table, headers: [:name, :date_of_birth, :likes]
+config :io_ansi_table, header_terms: [" of "]
 config :io_ansi_table, key_headers: [:date_of_birth]
 config :io_ansi_table, margins: [
   top:    2, # line(s) before table
@@ -65,7 +67,7 @@ N.B. If you are on Windows, run command `chcp 65001` for the UTF-8 code page.
 
 ## Customization
 
-You can create new table styles or modify any of the 24 predefined ones
+You can create new table styles or modify any of the 25 predefined ones
 by changing the dependency's `config/config.exs` file. You would then need to
 run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 

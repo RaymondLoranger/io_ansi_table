@@ -14,16 +14,16 @@ use Mix.Config
 
 config :elixir, ansi_enabled: true # mix messages in colors
 
-# Example of headers, key headers and header terms to provide:
+# Example of headers, header terms and key headers to provide:
 #
 #     config :io_ansi_table, headers: [
 #       "station_id", "weather", "temperature_string", "wind_mph",
 #       "location", "observation_time_rfc822"
 #     ]
 #
-#     config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
-#
 #     config :io_ansi_table, header_terms: ["ID", "MPH", "RFC"]
+#
+#     config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
 
 # Example to adjust table position (up to 3 ways):
 #
@@ -45,7 +45,7 @@ config :io_ansi_table, default_margins: [ # default table position:
 
 config :io_ansi_table, table_styles: %{
   light: %{
-    note: "",
+    note: "light colors",
     rank: 10,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
@@ -94,7 +94,7 @@ config :io_ansi_table, table_styles: %{
     }
   },
   medium: %{
-    note: "",
+    note: "medium colors",
     rank: 20,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
@@ -143,7 +143,7 @@ config :io_ansi_table, table_styles: %{
     }
   },
   dark: %{
-    note: "",
+    note: "dark colors",
     rank: 30,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
