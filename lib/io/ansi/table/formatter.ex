@@ -28,8 +28,8 @@ defmodule IO.ANSI.Table.Formatter do
   in that column, also considering the `header` itself.
 
   If the number of `collections` given is positive, we format
-  the `n` first `collections` in the list once sorted. If negative,
-  the last `n` ones.
+  the first _n_ `collections` in the list once sorted. If negative,
+  the last _n_ ones.
 
   ## Parameters
 
