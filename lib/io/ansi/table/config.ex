@@ -18,6 +18,7 @@ defmodule IO.ANSI.Table.Config do
       iex> Config.headers
       []
   """
+  @spec headers :: [any]
   def headers do
     Application.get_env(@app, :headers, [])
   end
@@ -31,21 +32,23 @@ defmodule IO.ANSI.Table.Config do
       iex> Config.key_headers
       []
   """
+  @spec key_headers :: [any]
   def key_headers do
     Application.get_env(@app, :key_headers, [])
   end
 
   @doc """
-  Retrieves the header terms of a table.
+  Retrieves the header fixes of a table.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> Config.header_terms
-      []
+      iex> Config.header_fixes
+      %{}
   """
-  def header_terms do
-    Application.get_env(@app, :header_terms, [])
+  @spec header_fixes :: map
+  def header_fixes do
+    Application.get_env(@app, :header_fixes, %{})
   end
 
   @doc """

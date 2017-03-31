@@ -14,14 +14,18 @@ use Mix.Config
 
 config :elixir, ansi_enabled: true # mix messages in colors
 
-# Example of headers, header terms and key headers to provide:
+# Example of headers, header fixes and key headers to provide:
 #
 #     config :io_ansi_table, headers: [
 #       "station_id", "weather", "temperature_string", "wind_mph",
 #       "location", "observation_time_rfc822"
 #     ]
 #
-#     config :io_ansi_table, header_terms: ["ID", "MPH", "RFC"]
+#     config :io_ansi_table, header_fixes: %{
+#       ~r[\sid$]i       => "\sID",
+#       ~r[\smph$]i      => "\sMPH",
+#       ~r[\srfc(\d+)$]i => "\sRFC-\\1"
+#     }
 #
 #     config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
 
@@ -716,18 +720,18 @@ config :io_ansi_table, table_styles: %{
       bottom:    :normal
     },
     key_attrs: %{
-      top:       :normal,
+      top:       :light_yellow,
       header:    [:light_yellow, :underline],
-      separator: :normal,
+      separator: :light_yellow,
       row:       :light_yellow,
-      bottom:    :normal
+      bottom:    :light_yellow
     },
     non_key_attrs: %{
-      top:       :normal,
+      top:       :light_yellow,
       header:    :light_yellow,
-      separator: :normal,
+      separator: :light_yellow,
       row:       :normal,
-      bottom:    :normal
+      bottom:    :light_yellow
     }
   },
   test: %{
@@ -882,7 +886,7 @@ config :io_ansi_table, table_styles: %{
     rank: 180,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
-      #           left  inner  right dash
+      #           left   inner    right  dash
       top:       {"╔══", "══╦══", "══╗", "═"},
       header:    {"║"  ,   "║"  ,   "║", nil},
       separator: {"╠══", "══╬══", "══╣", "═"},
@@ -980,7 +984,7 @@ config :io_ansi_table, table_styles: %{
     rank: 200,
     line_types: [:top, :header, :separator, [:row], :bottom],
     borders: %{
-      #           left  inner  right dash
+      #           left   inner    right  dash
       top:       {"╔══", "══╦══", "══╗", "═"},
       header:    {"║"  ,   "║"  ,   "║", nil},
       separator: {"╠══", "══╬══", "══╣", "═"},

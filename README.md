@@ -1,11 +1,12 @@
+
 # IO ANSI Table
 
 Prints data to STDOUT in a table with borders and colors.
-Can choose a table style among the 25 predefined ones.
+Can choose a table style among the 25 already predefined.
 
 ## Using
 
-To use `IO ANSI Table` in your Mix projects, first add it as a dependency:
+To use `IO ANSI Table` in your Mix project, first add it as a dependency:
 
 ```elixir
 def deps do
@@ -13,18 +14,32 @@ def deps do
 end
 ```
 
-After adding `IO ANSI Table` as a dependency, run `mix deps.get` to install it.
+Then run `mix deps.get` to install all dependencies or more specifically:
+  - `mix deps.get io_ansi_table`
+  - `mix deps.update io_ansi_table`  (if required)
+  - `mix deps.unlock io_ansi_table`  (if required)
+  - `mix deps.compile io_ansi_table` (if required)
 
-Then in your `config/config.exs` file, configure table headers and key headers.
+In your project's `config/config.exs` file, you should then configure:
+  - headers
+  - header fixes
+  - key headers
 
-Here is an example, if your table relates to GitHub Issues:
+Here is an example, if your table relates to NOAA Observations:
 
 ```elixir
 config :io_ansi_table, headers: [
-  "number", "created_at", "updated_at", "id", "title"
+  "station_id", "weather", "temperature_string", "wind_mph",
+  "location", "observation_time_rfc822"
 ]
-config :io_ansi_table, header_terms: [" at", "ID"]
-config :io_ansi_table, key_headers: ["created_at"]
+
+config :io_ansi_table, header_fixes: %{
+  ~r[\sid$]i       => "\sID",
+  ~r[\smph$]i      => "\sMPH",
+  ~r[\srfc(\d+)$]i => "\sRFC-\\1"
+}
+
+config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
 ```
 
 You can also position the table by specifying up to 3 margins:
@@ -43,7 +58,7 @@ The above margins represent the default table position.
 
 ```elixir
 config :io_ansi_table, headers: [:name, :date_of_birth, :likes]
-config :io_ansi_table, header_terms: [" of "]
+config :io_ansi_table, header_fixes: %{~r[\sof\s]i => "\sof\s"}
 config :io_ansi_table, key_headers: [:date_of_birth]
 config :io_ansi_table, margins: [
   top:    2, # line(s) before table
@@ -73,7 +88,7 @@ run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
 ## Current version
 
-The current version now supports:
+The current version supports:
 
   - multiple key headers
   - alternating row attributes

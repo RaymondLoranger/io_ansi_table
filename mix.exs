@@ -4,17 +4,21 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "0.1.6",
+      version: "0.1.7",
       elixir: "~> 1.4",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
       name: "IO ANSI Table",
-      source_url: "https://github.com/RaymondLoranger/io_ansi_table",
+      source_url: source_url(),
       description: description(),
       package: package(),
       aliases: aliases(),
       deps: deps()
     ]
+  end
+
+  defp source_url do
+    "https://github.com/RaymondLoranger/io_ansi_table"
   end
 
   defp description do
@@ -24,14 +28,12 @@ defmodule IO.ANSI.Table.Mixfile do
     """
   end
 
-  def package do
+  defp package do
     [
       files: ["lib", "mix.exs", "README*", "config/config.exs"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
-      links: %{
-        "GitHub" => "https://github.com/RaymondLoranger/io_ansi_table"
-      }
+      links: %{"GitHub" => source_url()}
     ]
   end
 

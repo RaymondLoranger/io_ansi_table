@@ -13,7 +13,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   @ansi_enabled      Application.get_env(@app, :ansi_enabled)
 
   defstruct rows: nil, headers: nil, key_headers: nil,
-    header_terms: nil, margin: nil, widths: nil, style: nil
+    header_fixes: nil, margin: nil, widths: nil, style: nil
 
   @doc """
   Creates a new table formatter helper (struct).
@@ -21,17 +21,17 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   @spec new(
     [[String.t]], [any], [any], [String.t], String.t, [non_neg_integer], atom
   ) :: %__MODULE__{}
-  def new(rows, headers, key_headers, header_terms, margin, widths, style) do
+  def new(rows, headers, key_headers, header_fixes, margin, widths, style) do
     %__MODULE__{
       rows: rows, headers: headers, key_headers: key_headers,
-      header_terms: header_terms, margin: margin, widths: widths, style: style
+      header_fixes: header_fixes, margin: margin, widths: widths, style: style
     }
   end
 
   @doc """
   Takes a list of `rows` (string sublists), a list of `headers`,
-  a list of `key headers`, a list of `margins`, a list of column `widths`,
-  a table `style` and whether to ring the `bell`.
+  a list of `key headers`, a map of `header fixes`, a list of `margins`,
+  a list of column `widths`, a table `style` and whether to ring the `bell`.
 
   Prints a table to STDOUT of the strings in each `row`.
   The columns are identified by successive `headers`.
@@ -50,13 +50,13 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       ]
       headers = ['city', 'country', 'population']
       key_headers = ['country']
-      header_terms = []
+      header_fixes = %{}
       margins = [top: 2, bottom: 2, left: 2]
       widths = [6, 7, 10]
       table_style = :medium
       bell = true
       Helper.print_table(
-        capitals, headers, key_headers, header_terms,
+        capitals, headers, key_headers, header_fixes,
         margins, widths, table_style, bell
       )
   ## ![print_table_capitals](images/print_table_capitals.png)
@@ -69,14 +69,14 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       ...> ]
       iex> headers = ['city', :country, "population"]
       iex> key_headers = [:country]
-      iex> header_terms = []
+      iex> header_fixes = %{}
       iex> margins = [top: 2, bottom: 2, left: 3]
       iex> widths = [6, 7, 10]
       iex> table_style = :dashed
       iex> bell = false
       iex> CaptureIO.capture_io fn ->
       ...>   Helper.print_table(
-      ...>     capitals, headers, key_headers, header_terms,
+      ...>     capitals, headers, key_headers, header_fixes,
       ...>     margins, widths, table_style, bell
       ...>   )
       ...> end
@@ -95,13 +95,13 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     Keyword.t, [non_neg_integer], atom, boolean
   ) :: :ok
   def print_table(
-    rows, headers, key_headers, header_terms,
+    rows, headers, key_headers, header_fixes,
     margins, widths, style, bell
   )
   do
     margin = String.duplicate "\s", margins[:left]
     helper = new(
-      rows, headers, key_headers, header_terms, margin, widths, style
+      rows, headers, key_headers, header_fixes, margin, widths, style
     )
     IO.write String.duplicate("\n", margins[:top])
     Enum.each Style.line_types(style), &write(helper, &1)
@@ -148,18 +148,18 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     |> write(type, helper)
   end
   def write(helper = %__MODULE__{
-    headers: headers, header_terms: header_terms
+    headers: headers, header_fixes: header_fixes
   }, type) when type == :header
   do
     headers
-    |> Enum.map(&Formatter.titlecase &1, header_terms)
+    |> Enum.map(&Formatter.titlecase &1, header_fixes)
     |> write(type, helper)
   end
   def write(helper = %__MODULE__{rows: rows}, type)
     when is_list(type)
   do
     rows
-    |> Enum.zip(Stream.cycle type)
+    |> Stream.zip(Stream.cycle type)
     |> Enum.each(&write elem(&1, 0), elem(&1, 1), helper)
   end
 

@@ -46,12 +46,12 @@ defmodule IO.ANSI.Table do
     [:date_of_birth, :likes]
   end
 
-  def header_terms do
-    ["BMI", " of "]
+  def header_fixes do
+    %{~r/^bmi$/i => "BMI", ~r/\sof\s/i => "\s\of\s"}
   end
 
   def margins do
-    [top: 2, bottom: 2, left: 3]
+    [top: 0, bottom: 0, left: 2]
   end
 
   def print_people(style) do
@@ -59,7 +59,7 @@ defmodule IO.ANSI.Table do
     Formatter.print_table(
       people(), 11, true, style,
       headers: headers(), key_headers: key_headers(),
-      header_terms: header_terms(), margins: margins()
+      header_fixes: header_fixes(), margins: margins()
     )
   end
 

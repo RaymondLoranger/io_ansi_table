@@ -168,7 +168,7 @@ defmodule IO.ANSI.Table.Style do
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.filler_attr(:mixed, :separator)
+      iex> Style.filler_attr(:mixed, :row)
       :light_green_background
   """
   @spec filler_attr(atom, atom) :: [atom] | atom | nil
@@ -199,9 +199,7 @@ defmodule IO.ANSI.Table.Style do
 
   for {style, %{key_attrs: key_attrs}} <- @styles do
     for {type, key_attr} <- key_attrs do
-      def key_attr(unquote(style), unquote(type)) do
-        unquote(key_attr)
-      end
+      def key_attr(unquote(style), unquote(type)), do: unquote(key_attr)
     end
   end
   def key_attr(_style, _type), do: nil
@@ -251,7 +249,7 @@ defmodule IO.ANSI.Table.Style do
   def texts(template, fun \\ &(&1)) when is_function(fun, 1) do
     @styles
     |> Enum.sort(&(elem(&1, 1).rank <= elem(&2, 1).rank))
-    |> Enum.map(&interpolate &1, template)
+    |> Stream.map(&interpolate &1, template)
     |> Enum.map(&fun.(&1))
   end
 

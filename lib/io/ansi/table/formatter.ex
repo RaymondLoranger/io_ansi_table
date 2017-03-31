@@ -32,7 +32,7 @@ defmodule IO.ANSI.Table.Formatter do
     - `count`       - number of collections to format (integer)
     - `bell`        - ring the bell? (boolean)
     - `style`       - table style (atom)
-    - `options`     - headers, key headers, header terms and margins (keyword)
+    - `options`     - headers, header fixes, key headers, and margins (keyword)
 
   ## Table styles
 
@@ -41,7 +41,7 @@ defmodule IO.ANSI.Table.Formatter do
 
     - `:headers`      - defaults to config value `:headers`
     - `:key_headers`  - defaults to config value `:key_headers`
-    - `:header_terms` - defaults to config value `:header_terms`
+    - `:header_fixes` - defaults to config value `:header_fixes`
     - `:margins`      - defaults to config value `:margins`
 
   ## Examples
@@ -56,7 +56,7 @@ defmodule IO.ANSI.Table.Formatter do
         people, 3, true, :dark,
         headers: [:name, :date_of_birth, :likes],
         key_headers: [:date_of_birth],
-        header_terms: [" of "],
+        header_fixes: %{~r/\sof\s/i => "\sof\s"},
         margins: [top: 2, bottom: 2, left: 2]
       )
   ## ![print_table_people](images/print_table_people.png)
@@ -72,7 +72,7 @@ defmodule IO.ANSI.Table.Formatter do
       ...>     people, 3, false, :dashed,
       ...>     headers: [:name, :date_of_birth, :likes],
       ...>     key_headers: [:date_of_birth],
-      ...>     header_terms: [" of "],
+      ...>     header_fixes: %{~r/\sof\s/i => "\sof\s"},
       ...>     margins: [top: 0, bottom: 0, left: 0]
       ...>   )
       ...> end
@@ -91,7 +91,7 @@ defmodule IO.ANSI.Table.Formatter do
   def print_table(collections, count, bell, style, options \\ []) do
     headers = Keyword.get(options, :headers, Config.headers)
     key_headers = Keyword.get(options, :key_headers, Config.key_headers)
-    header_terms = Keyword.get(options, :header_terms, Config.header_terms)
+    header_fixes = Keyword.get(options, :header_fixes, Config.header_fixes)
     margins = Config.margins Keyword.get(options, :margins)
     collections =
       collections
@@ -99,12 +99,12 @@ defmodule IO.ANSI.Table.Formatter do
       |> Enum.sort_by(&key_for &1, key_headers)
       |> Enum.take(count)
     widths =
-      [Map.new(headers, &{&1, titlecase(&1, header_terms)}) | collections]
+      [Map.new(headers, &{&1, titlecase(&1, header_fixes)}) | collections]
       |> columns(headers)
       |> widths # => max widths of column values or headers
     rows = rows(collections, headers)
     Helper.print_table(
-      rows, headers, key_headers, header_terms, margins, widths, style, bell
+      rows, headers, key_headers, header_fixes, margins, widths, style, bell
     )
   end
 
@@ -213,28 +213,38 @@ defmodule IO.ANSI.Table.Formatter do
 
   @doc """
   Uppercases all first characters of a `title` (converted to a string).
-  Patterns "matching" any given `term` will be replaced by the `term` as is.
 
   Any underscore is considered a space and consecutive
   whitespace characters are treated as a single occurrence.
   Leading and trailing whitespace characters are removed.
 
+  Then, given a `fixes` map, all `fix` key occurrences in the `title`
+  will be replaced with the corresponding 'fix' value.
+
+  Then, using the given `fixes` map, we replace each `fix` key occurrence
+  with the corresponding `fix` value.
+
   ## Examples
 
       iex> alias IO.ANSI.Table.Formatter
-      iex> Formatter.titlecase(" son   of a gun ", [" of ", " a "])
+      iex> Formatter.titlecase(" son   of a gun ", %{
+      ...>   ~r/\sof\s/i => " of ",
+      ...>   ~r/\sa\s/i  => " a "
+      ...> })
       "Son of a Gun"
 
       iex> alias IO.ANSI.Table.Formatter
-      iex> Formatter.titlecase("_date___of_birth_", [" of "])
+      iex> Formatter.titlecase("_date___of_birth_", %{
+      ...>   ~r/\sof\s/i => " of "
+      ...> })
       "Date of Birth"
 
       iex> alias IO.ANSI.Table.Formatter
       iex> Formatter.titlecase(:" _an_ _oDD case_ ")
       "An ODD Case"
   """
-  @spec titlecase(any, [String.t]) :: String.t
-  def titlecase(title, terms \\ []) do
+  @spec titlecase(any, map) :: String.t
+  def titlecase(title, fixes \\ %{}) do
     import Enum, only: [map_join: 3, reduce: 3]
     import String, only: [first: 1, replace: 3, slice: 2, split: 3, upcase: 1]
     title =
@@ -242,6 +252,6 @@ defmodule IO.ANSI.Table.Formatter do
       |> to_string
       |> split(~r/(_|\s)+/, trim: true)
       |> map_join("\s", &(upcase(first &1) <> slice &1, 1..-1))
-    reduce terms, title, &replace(&2, ~r/#{&1}/i, &1)
+    reduce fixes, title, &replace(&2, elem(&1, 0), elem(&1, 1))
   end
 end
