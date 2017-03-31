@@ -16,8 +16,8 @@ end
 
 Then run `mix deps.get` to install all dependencies or more specifically:
   - `mix deps.get io_ansi_table`
-  - `mix deps.update io_ansi_table`  (if required)
-  - `mix deps.unlock io_ansi_table`  (if required)
+  - `mix deps.update io_ansi_table` (if required)
+  - `mix deps.unlock io_ansi_table` (if required)
   - `mix deps.compile io_ansi_table` (if required)
 
 In your project's `config/config.exs` file, you should then configure:
