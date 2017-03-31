@@ -18,9 +18,8 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   @doc """
   Creates a new table formatter helper (struct).
   """
-  @spec new(
-    [[String.t]], [any], [any], [String.t], String.t, [non_neg_integer], atom
-  ) :: %__MODULE__{}
+  @spec new([[String.t]], [any], [any], map, String.t, [non_neg_integer], atom)
+  :: %__MODULE__{}
   def new(rows, headers, key_headers, header_fixes, margin, widths, style) do
     %__MODULE__{
       rows: rows, headers: headers, key_headers: key_headers,
@@ -29,8 +28,8 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   end
 
   @doc """
-  Takes a list of `rows` (string sublists), a list of `headers`,
-  a list of `key headers`, a map of `header fixes`, a list of `margins`,
+  Takes a list of `rows` (string sublists), a list of `headers`, a list
+  of `key headers`, a map of `header fixes`, a keyword list of `margins`,
   a list of column `widths`, a table `style` and whether to ring the `bell`.
 
   Prints a table to STDOUT of the strings in each `row`.
@@ -56,8 +55,8 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       table_style = :medium
       bell = true
       Helper.print_table(
-        capitals, headers, key_headers, header_fixes,
-        margins, widths, table_style, bell
+        capitals, headers, key_headers,
+        header_fixes, margins, widths, table_style, bell
       )
   ## ![print_table_capitals](images/print_table_capitals.png)
       iex> alias IO.ANSI.Table.Formatter.Helper
@@ -76,8 +75,8 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> bell = false
       iex> CaptureIO.capture_io fn ->
       ...>   Helper.print_table(
-      ...>     capitals, headers, key_headers, header_fixes,
-      ...>     margins, widths, table_style, bell
+      ...>     capitals, headers, key_headers,
+      ...>     header_fixes, margins, widths, table_style, bell
       ...>   )
       ...> end
       "\\n\\n" <> \"""
@@ -91,12 +90,12 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       \""" <> "\\n\\n"
   """
   @spec print_table(
-    [[String.t]], [any], [any], [String.t],
-    Keyword.t, [non_neg_integer], atom, boolean
+    [[String.t]], [any], [any],
+    map, Keyword.t, [non_neg_integer], atom, boolean
   ) :: :ok
   def print_table(
-    rows, headers, key_headers, header_fixes,
-    margins, widths, style, bell
+    rows, headers, key_headers,
+    header_fixes, margins, widths, style, bell
   )
   do
     margin = String.duplicate "\s", margins[:left]
@@ -115,9 +114,9 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   ## Line types
 
     - `:top`       - top line
-    - `:header`    - line of header(s) between top & separator
-    - `:separator` - separator line between header & data rows
-    - `row types`  - list of related row type(s) listed below
+    - `:header`    - line of table header(s)
+    - `:separator` - separator line
+    - `row types`  - list of related row type(s)
     - `:bottom`    - bottom line
 
   ## Row types
@@ -128,16 +127,6 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     - `:row_1`    - first row type of repeating group of 3
     - `:row_2`    - second row type of repeating group of 3
     - `:row_3`    - third row type of repeating group of 3
-
-  ## Examples
-
-      # Evaluate rows, headers, key headers, margin, widths and style...
-      alias IO.ANSI.Table.Formatter.Helper
-      helper = Helper.new(rows, headers, key_headers, margin, widths, style)
-      Helper.write(helper, :top)
-      ...
-      Helper.write(helper, [:row])
-      ...
   """
   @spec write(%__MODULE__{}, atom) :: :ok
   def write(helper = %__MODULE__{widths: widths, style: style}, type)
@@ -260,12 +249,11 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   Takes a list of `widths` and a list of corresponding `attributes`.
 
   Returns an Erlang io format reflecting these `widths` and `attributes`.
+  It consists of a string with embedded
+  [ANSI color codes](https://gist.github.com/chrisopedia/8754917)
+  (escape sequences).
 
-  For details of ANSI color codes (`attributes`) see
-  [ANSI color codes](https://gist.github.com/chrisopedia/8754917).
-
-  Here are a few examples:
-
+  Here are a few ANSI color codes:
   - light yellow - \\e[93m
   - light cyan   - \\e[96m
   - reset        - \\e[0m
@@ -289,6 +277,6 @@ defmodule IO.ANSI.Table.Formatter.Helper do
           _ -> IO.ANSI.format [attr, "~-#{width}ts"], @ansi_enabled
         end
       end)
-    "#{fragments}~n" # => string of ANSI escape sequences
+    "#{fragments}~n" # => string embedded with ANSI escape sequences
   end
 end

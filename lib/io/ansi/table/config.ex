@@ -16,11 +16,11 @@ defmodule IO.ANSI.Table.Config do
 
       iex> alias IO.ANSI.Table.Config
       iex> Config.headers
-      []
+      [:unknown]
   """
   @spec headers :: [any]
   def headers do
-    Application.get_env(@app, :headers, [])
+    Application.get_env(@app, :headers, [:unknown])
   end
 
   @doc """
@@ -38,7 +38,7 @@ defmodule IO.ANSI.Table.Config do
   end
 
   @doc """
-  Retrieves the header fixes of a table.
+  Retrieves the header fixes for a table.
 
   ## Examples
 
@@ -57,7 +57,7 @@ defmodule IO.ANSI.Table.Config do
   ## Examples
 
       iex> alias IO.ANSI.Table.Config
-      iex> Config.margins([])
+      iex> Config.margins(nil)
       [top: 1, bottom: 1, left: 2]
   """
   @spec margins(Keyword.t | nil) :: Keyword.t

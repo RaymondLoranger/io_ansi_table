@@ -13,9 +13,13 @@ defmodule IO.ANSI.Table.Formatter do
 
   @doc """
   Takes a list of key-value `collections`, the (maximum) number of
-  `collections` to format, whether to ring the `bell`, a table `style` and,
-  as `options`, a list of `headers` (keys), a list of `key headers` to sort
-  the `collections` on and a list of `margins` to position the table.
+  `collections` to format, whether to ring the `bell`, a table `style` and
+  up to four `options`:
+
+    - `headers` (keys)
+    - `key headers` to sort the `collections` on
+    - `header fixes` to alter the `headers`
+    - `margins` to position the table
 
   Prints a table to STDOUT of the values in each selected `collection`.
   The columns are identified by successive `headers` in order.
@@ -24,7 +28,8 @@ defmodule IO.ANSI.Table.Formatter do
   in that column, also considering the `header` itself.
 
   If the number of `collections` given is positive, we format
-  the `n` first `collections` in the list. If negative, the last `n` ones.
+  the `n` first `collections` in the list once sorted. If negative,
+  the last `n` ones.
 
   ## Parameters
 
@@ -32,17 +37,18 @@ defmodule IO.ANSI.Table.Formatter do
     - `count`       - number of collections to format (integer)
     - `bell`        - ring the bell? (boolean)
     - `style`       - table style (atom)
-    - `options`     - headers, header fixes, key headers, and margins (keyword)
+    - `options`     - headers, key headers, header fixes and margins (keyword)
+
+  ## Options
+
+    - `:headers`      - defaults to config value `:headers` (list)
+    - `:key_headers`  - defaults to config value `:key_headers` (list)
+    - `:header_fixes` - defaults to config value `:header_fixes` (map)
+    - `:margins`      - defaults to config value `:margins` (keyword)
 
   ## Table styles
 
   #{Style.texts "  - `&style`&filler - &note\n"}
-  ## Options
-
-    - `:headers`      - defaults to config value `:headers`
-    - `:key_headers`  - defaults to config value `:key_headers`
-    - `:header_fixes` - defaults to config value `:header_fixes`
-    - `:margins`      - defaults to config value `:margins`
 
   ## Examples
 
@@ -56,7 +62,7 @@ defmodule IO.ANSI.Table.Formatter do
         people, 3, true, :dark,
         headers: [:name, :date_of_birth, :likes],
         key_headers: [:date_of_birth],
-        header_fixes: %{~r/\sof\s/i => "\sof\s"},
+        header_fixes: %{~r[\sof\s]i => "\sof\s"},
         margins: [top: 2, bottom: 2, left: 2]
       )
   ## ![print_table_people](images/print_table_people.png)
@@ -72,7 +78,7 @@ defmodule IO.ANSI.Table.Formatter do
       ...>     people, 3, false, :dashed,
       ...>     headers: [:name, :date_of_birth, :likes],
       ...>     key_headers: [:date_of_birth],
-      ...>     header_fixes: %{~r/\sof\s/i => "\sof\s"},
+      ...>     header_fixes: %{~r[\sof\s]i => "\sof\s"},
       ...>     margins: [top: 0, bottom: 0, left: 0]
       ...>   )
       ...> end
@@ -211,31 +217,29 @@ defmodule IO.ANSI.Table.Formatter do
     for column <- columns, do: column |> Enum.map(&String.length/1) |> Enum.max
   end
 
-  @doc """
-  Uppercases all first characters of a `title` (converted to a string).
+  @doc ~S"""
+  Uppercases the first letter of every "word" of a `title` (must be
+  convertible to a string).
 
   Any underscore is considered a space and consecutive
   whitespace characters are treated as a single occurrence.
   Leading and trailing whitespace characters are removed.
 
-  Then, given a `fixes` map, all `fix` key occurrences in the `title`
-  will be replaced with the corresponding 'fix' value.
-
-  Then, using the given `fixes` map, we replace each `fix` key occurrence
-  with the corresponding `fix` value.
+  If a `fixes` map is given, all occurrences of each `fix` key in the
+  `title` will be replaced with the corresponding `fix` value.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Formatter
       iex> Formatter.titlecase(" son   of a gun ", %{
-      ...>   ~r/\sof\s/i => " of ",
-      ...>   ~r/\sa\s/i  => " a "
+      ...>   ~r[\sof\s]i => "\sof\s",
+      ...>   ~r[\sa\s]i  => "\sa\s"
       ...> })
       "Son of a Gun"
 
       iex> alias IO.ANSI.Table.Formatter
       iex> Formatter.titlecase("_date___of_birth_", %{
-      ...>   ~r/\sof\s/i => " of "
+      ...>   ~r[\sof\s]i => "\sof\s"
       ...> })
       "Date of Birth"
 

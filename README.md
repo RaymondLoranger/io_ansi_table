@@ -24,6 +24,7 @@ In your project's `config/config.exs` file, you should then configure:
   - headers
   - header fixes
   - key headers
+  - margins
 
 Here is an example, if your table relates to NOAA Observations:
 
@@ -42,7 +43,7 @@ config :io_ansi_table, header_fixes: %{
 config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
 ```
 
-You can also position the table by specifying up to 3 margins:
+Here is an example to position the table by specifying up to 3 margins:
 
 ```elixir
 config :io_ansi_table, margins: [
