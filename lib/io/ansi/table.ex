@@ -2,6 +2,8 @@
 defmodule IO.ANSI.Table do
   @moduledoc false
 
+  alias IO.ANSI.Table.Style
+
   # Functions for iex session...
   # E.g. IO.ANSI.Table.print_people :green_mult
 
@@ -61,6 +63,12 @@ defmodule IO.ANSI.Table do
       headers: headers(), key_headers: key_headers(),
       header_fixes: header_fixes(), margins: margins()
     )
+  end
+
+  def styles do
+    " &style&filler - &note (rank &rank)"
+    |> Style.texts(&IO.puts/1)
+    |> length
   end
 
   def people_sorted do

@@ -131,24 +131,24 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :normal,
-      odd_row:   :light_blue_background,
+      even_row:  :light_blue_background,
+      odd_row:   :normal,
       bottom:    :normal
     },
     key_attrs: %{
       top:       :normal,
       header:    [:light_yellow, :underline],
       separator: :normal,
-      even_row:  :light_cyan,
-      odd_row:   [:light_cyan, :light_blue_background],
+      even_row:  [:light_cyan, :light_blue_background],
+      odd_row:   :light_cyan,
       bottom:    :normal
     },
     non_key_attrs: %{
       top:       :normal,
       header:    :light_yellow,
       separator: :normal,
-      even_row:  :normal,
-      odd_row:   [:normal, :light_blue_background],
+      even_row:  [:normal, :light_blue_background],
+      odd_row:   :normal,
       bottom:    :normal
     }
   },
@@ -235,24 +235,24 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :normal,
-      odd_row:   :light_blue_background,
+      even_row:  :light_blue_background,
+      odd_row:   :normal,
       bottom:    :normal
     },
     key_attrs: %{
       top:       :light_yellow,
       header:    [:light_green, :underline],
       separator: :light_yellow,
-      even_row:  :light_cyan,
-      odd_row:   [:light_cyan, :light_blue_background],
+      even_row:  [:light_cyan, :light_blue_background],
+      odd_row:   :light_cyan,
       bottom:    :light_yellow
     },
     non_key_attrs: %{
       top:       :light_yellow,
       header:    :light_green,
       separator: :light_yellow,
-      even_row:  :light_yellow,
-      odd_row:   [:light_yellow, :light_blue_background],
+      even_row:  [:light_yellow, :light_blue_background],
+      odd_row:   :light_yellow,
       bottom:    :light_yellow
     }
   },
@@ -339,24 +339,24 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :normal,
-      odd_row:   :light_blue_background,
+      even_row:  :light_blue_background,
+      odd_row:   :normal,
       bottom:    :normal
     },
     key_attrs: %{
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
-      even_row:  :light_magenta,
-      odd_row:   [:light_magenta, :light_blue_background],
+      even_row:  [:light_magenta, :light_blue_background],
+      odd_row:   :light_magenta,
       bottom:    :light_green
     },
     non_key_attrs: %{
       top:       :light_green,
       header:    :light_red,
       separator: :light_green,
-      even_row:  :light_green,
-      odd_row:   [:light_green, :light_blue_background],
+      even_row:  [:light_green, :light_blue_background],
+      odd_row:   :light_green,
       bottom:    :light_green
     }
   },
@@ -443,24 +443,24 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :normal,
-      odd_row:   :light_blue_background,
+      even_row:  :light_blue_background,
+      odd_row:   :normal,
       bottom:    :normal
     },
     key_attrs: %{
       top:       :light_magenta,
       header:    [:light_green, :underline],
       separator: :light_magenta,
-      even_row:  :light_cyan,
-      odd_row:   [:light_cyan, :light_blue_background],
+      even_row:  [:light_cyan, :light_blue_background],
+      odd_row:   :light_cyan,
       bottom:    :light_magenta
     },
     non_key_attrs: %{
       top:       :light_magenta,
       header:    :light_green,
       separator: :light_magenta,
-      even_row:  :light_yellow,
-      odd_row:   [:light_yellow, :light_blue_background],
+      even_row:  [:light_yellow, :light_blue_background],
+      odd_row:   :light_yellow,
       bottom:    :light_magenta
     }
   },
@@ -890,24 +890,24 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :normal,
-      odd_row:   :light_blue_background,
+      even_row:  :light_blue_background,
+      odd_row:   :normal,
       bottom:    :normal
     },
     key_attrs: %{
       top:       :normal,
       header:    [:blue, :light_yellow_background],
       separator: :normal,
-      even_row:  :light_yellow,
-      odd_row:   [:light_yellow, :light_blue_background],
+      even_row:  [:light_yellow, :light_blue_background],
+      odd_row:   :light_yellow,
       bottom:    :normal
     },
     non_key_attrs: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :normal,
-      odd_row:   [:normal, :light_blue_background],
+      even_row:  [:normal, :light_blue_background],
+      odd_row:   :normal,
       bottom:    :normal
     }
   },
