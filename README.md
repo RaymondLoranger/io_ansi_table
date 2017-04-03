@@ -2,7 +2,7 @@
 # IO ANSI Table
 
 Prints data to STDOUT in a table with borders and colors.
-Can choose a table style among the 25 already predefined.
+Can choose a table style among the 30 already predefined.
 
 ## Using
 
@@ -37,9 +37,9 @@ config :io_ansi_table, headers: [
 ]
 
 config :io_ansi_table, header_fixes: %{
-  ~r[\sid$]i       => "\sID",
-  ~r[\smph$]i      => "\sMPH",
-  ~r[\srfc(\d+)$]i => "\sRFC-\\1"
+  ~r[ id$]i       => " ID",
+  ~r[ mph$]i      => " MPH",
+  ~r[ rfc(\d+)$]i => " RFC-\\1"
 }
 
 config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
@@ -61,7 +61,7 @@ The above margins represent the default table position.
 
 ```elixir
 config :io_ansi_table, headers: [:name, :date_of_birth, :likes]
-config :io_ansi_table, header_fixes: %{~r[\sof\s]i => "\sof\s"}
+config :io_ansi_table, header_fixes: %{~r[ of ]i => " of "}
 config :io_ansi_table, key_headers: [:date_of_birth]
 config :io_ansi_table, margins: [
   top:    2, # line(s) before table
@@ -85,7 +85,7 @@ N.B. If you are on Windows, run command `chcp 65001` for the UTF-8 code page.
 
 ## Customization
 
-You can create new table styles or modify any of the 25 predefined ones
+You can create new table styles or modify any of the 30 predefined ones
 by changing the dependency's `config/config.exs` file. You would then need to
 run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 

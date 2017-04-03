@@ -97,6 +97,61 @@ config :io_ansi_table, table_styles: %{
       bottom:    :normal
     }
   },
+  light_alt: %{
+    note: "light colors, alternating row colors",
+    rank: 15,
+    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
+    borders: %{
+      #           left  inner  right dash
+      top:       {"┌─", "─┬─", "─┐", "─"},
+      header:    {"│" ,  "│",   "│", nil},
+      separator: {"├─", "─┼─", "─┤", "─"},
+      even_row:  {"│" ,  "│",   "│", nil},
+      odd_row:   {"│" ,  "│",   "│", nil},
+      bottom:    {"└─", "─┴─", "─┘", "─"}
+    },
+    border_widths: %{
+      #           left    inner      right
+      top:       {[2, 0], [0, 3, 0], [0, 2]},
+      header:    {[1, 1], [1, 1, 1], [1, 1]},
+      separator: {[2, 0], [0, 3, 0], [0, 2]},
+      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
+      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
+      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
+    },
+    border_attrs: %{
+      top:       :light_white,
+      header:    :light_white,
+      separator: :light_white,
+      even_row:  :light_white,
+      odd_row:   :light_white,
+      bottom:    :light_white
+    },
+    filler_attrs: %{
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      even_row:  :normal,
+      odd_row:   :light_blue_background,
+      bottom:    :normal
+    },
+    key_attrs: %{
+      top:       :normal,
+      header:    [:light_yellow, :underline],
+      separator: :normal,
+      even_row:  :light_cyan,
+      odd_row:   [:light_cyan, :light_blue_background],
+      bottom:    :normal
+    },
+    non_key_attrs: %{
+      top:       :normal,
+      header:    :light_yellow,
+      separator: :normal,
+      even_row:  :normal,
+      odd_row:   [:normal, :light_blue_background],
+      bottom:    :normal
+    }
+  },
   medium: %{
     note: "medium colors",
     rank: 20,
@@ -143,6 +198,61 @@ config :io_ansi_table, table_styles: %{
       header:    :light_green,
       separator: :light_yellow,
       row:       :light_yellow,
+      bottom:    :light_yellow
+    }
+  },
+  medium_alt: %{
+    note: "medium colors, alternating row colors",
+    rank: 25,
+    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
+    borders: %{
+      #           left  inner  right dash
+      top:       {"╔═", "═╤═", "═╗", "═"},
+      header:    {"║",   "│" ,  "║", nil},
+      separator: {"╟─", "─┼─", "─╢", "─"},
+      even_row:  {"║" ,  "│" ,  "║", nil},
+      odd_row:   {"║" ,  "│" ,  "║", nil},
+      bottom:    {"╚═", "═╧═", "═╝", "═"}
+    },
+    border_widths: %{
+      #           left    inner      right
+      top:       {[2, 0], [0, 3, 0], [0, 2]},
+      header:    {[1, 1], [1, 1, 1], [1, 1]},
+      separator: {[2, 0], [0, 3, 0], [0, 2]},
+      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
+      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
+      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
+    },
+    border_attrs: %{
+      top:       :light_yellow,
+      header:    :light_yellow,
+      separator: :light_yellow,
+      even_row:  :light_yellow,
+      odd_row:   :light_yellow,
+      bottom:    :light_yellow
+    },
+    filler_attrs: %{
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      even_row:  :normal,
+      odd_row:   :light_blue_background,
+      bottom:    :normal
+    },
+    key_attrs: %{
+      top:       :light_yellow,
+      header:    [:light_green, :underline],
+      separator: :light_yellow,
+      even_row:  :light_cyan,
+      odd_row:   [:light_cyan, :light_blue_background],
+      bottom:    :light_yellow
+    },
+    non_key_attrs: %{
+      top:       :light_yellow,
+      header:    :light_green,
+      separator: :light_yellow,
+      even_row:  :light_yellow,
+      odd_row:   [:light_yellow, :light_blue_background],
       bottom:    :light_yellow
     }
   },
@@ -195,6 +305,61 @@ config :io_ansi_table, table_styles: %{
       bottom:    :light_green
     }
   },
+  dark_alt: %{
+    note: "dark colors, alternating row colors",
+    rank: 35,
+    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
+    borders: %{
+      #           left  inner  right dash
+      top:       {"╔═", "═╦═", "═╗", "═"},
+      header:    {"║" ,  "║" ,  "║", nil},
+      separator: {"╠═", "═╬═", "═╣", "═"},
+      even_row:  {"║" ,  "║" ,  "║", nil},
+      odd_row:   {"║" ,  "║" ,  "║", nil},
+      bottom:    {"╚═", "═╩═", "═╝", "═"}
+    },
+    border_widths: %{
+      #           left    inner      right
+      top:       {[2, 0], [0, 3, 0], [0, 2]},
+      header:    {[1, 1], [1, 1, 1], [1, 1]},
+      separator: {[2, 0], [0, 3, 0], [0, 2]},
+      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
+      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
+      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
+    },
+    border_attrs: %{
+      top:       :light_green,
+      header:    :light_green,
+      separator: :light_green,
+      even_row:  :light_green,
+      odd_row:   :light_green,
+      bottom:    :light_green
+    },
+    filler_attrs: %{
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      even_row:  :normal,
+      odd_row:   :light_blue_background,
+      bottom:    :normal
+    },
+    key_attrs: %{
+      top:       :light_green,
+      header:    [:light_white, :light_red_background],
+      separator: :light_green,
+      even_row:  :light_magenta,
+      odd_row:   [:light_magenta, :light_blue_background],
+      bottom:    :light_green
+    },
+    non_key_attrs: %{
+      top:       :light_green,
+      header:    :light_red,
+      separator: :light_green,
+      even_row:  :light_green,
+      odd_row:   [:light_green, :light_blue_background],
+      bottom:    :light_green
+    }
+  },
   pretty: %{
     note: "multicolored",
     rank: 40,
@@ -241,6 +406,61 @@ config :io_ansi_table, table_styles: %{
       header:    :light_green,
       separator: :light_magenta,
       row:       :light_yellow,
+      bottom:    :light_magenta
+    }
+  },
+  pretty_alt: %{
+    note: "multicolored, alternating row colors",
+    rank: 45,
+    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
+    borders: %{
+      #           left  inner  right dash
+      top:       {"╔═", "═╦═", "═╗", "═"},
+      header:    {"║" ,  "║" ,  "║", nil},
+      separator: {"╠═", "═╬═", "═╣", "═"},
+      even_row:  {"║" ,  "║" ,  "║", nil},
+      odd_row:   {"║" ,  "║" ,  "║", nil},
+      bottom:    {"╚═", "═╩═", "═╝", "═"}
+    },
+    border_widths: %{
+      #           left    inner      right
+      top:       {[2, 0], [0, 3, 0], [0, 2]},
+      header:    {[1, 1], [1, 1, 1], [1, 1]},
+      separator: {[2, 0], [0, 3, 0], [0, 2]},
+      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
+      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
+      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
+    },
+    border_attrs: %{
+      top:       :light_magenta,
+      header:    :light_magenta,
+      separator: :light_magenta,
+      even_row:  :light_magenta,
+      odd_row:   :light_magenta,
+      bottom:    :light_magenta
+    },
+    filler_attrs: %{
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      even_row:  :normal,
+      odd_row:   :light_blue_background,
+      bottom:    :normal
+    },
+    key_attrs: %{
+      top:       :light_magenta,
+      header:    [:light_green, :underline],
+      separator: :light_magenta,
+      even_row:  :light_cyan,
+      odd_row:   [:light_cyan, :light_blue_background],
+      bottom:    :light_magenta
+    },
+    non_key_attrs: %{
+      top:       :light_magenta,
+      header:    :light_green,
+      separator: :light_magenta,
+      even_row:  :light_yellow,
+      odd_row:   [:light_yellow, :light_blue_background],
       bottom:    :light_magenta
     }
   },
@@ -633,6 +853,61 @@ config :io_ansi_table, table_styles: %{
       header:    :normal,
       separator: :normal,
       row:       :normal,
+      bottom:    :normal
+    }
+  },
+  dotted_alt: %{
+    note: "slightly colored, alternating row colors",
+    rank: 125,
+    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
+    borders: %{
+      #           left  inner  right dash
+      top:       {"┏╍", "╍┳╍", "╍┓", "╍"},
+      header:    {"┇" ,  "┇" ,  "┇", nil},
+      separator: {"┣╍", "╍╋╍", "╍┫", "╍"},
+      even_row:  {"┇" ,  "┇" ,  "┇", nil},
+      odd_row:   {"┇" ,  "┇" ,  "┇", nil},
+      bottom:    {"┗╍", "╍┻╍", "╍┛", "╍"}
+    },
+    border_widths: %{
+      #           left    inner      right
+      top:       {[2, 0], [0, 3, 0], [0, 2]},
+      header:    {[1, 1], [1, 1, 1], [1, 1]},
+      separator: {[2, 0], [0, 3, 0], [0, 2]},
+      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
+      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
+      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
+    },
+    border_attrs: %{
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      even_row:  :normal,
+      odd_row:   :normal,
+      bottom:    :normal
+    },
+    filler_attrs: %{
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      even_row:  :normal,
+      odd_row:   :light_blue_background,
+      bottom:    :normal
+    },
+    key_attrs: %{
+      top:       :normal,
+      header:    [:blue, :light_yellow_background],
+      separator: :normal,
+      even_row:  :light_yellow,
+      odd_row:   [:light_yellow, :light_blue_background],
+      bottom:    :normal
+    },
+    non_key_attrs: %{
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      even_row:  :normal,
+      odd_row:   [:normal, :light_blue_background],
       bottom:    :normal
     }
   },

@@ -106,7 +106,7 @@ defmodule IO.ANSI.Table.StyleTest do
 
   describe "IO.ANSI.Table.Style.texts/1" do
     test "retrieves a list of interpolated texts (one per table style)" do
-      assert length(Style.texts "&style") == 25 # table styles
+      assert length(Style.texts "&style") == 30 # table styles
       assert List.last(Style.texts "  • &tag&filler (&note)")
       == "  • green-mult     (green header, 3 repeating row colors)"
       assert List.last(Style.texts "  - `&style`&filler - &note")
