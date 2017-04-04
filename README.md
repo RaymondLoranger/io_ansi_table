@@ -2,7 +2,7 @@
 # IO ANSI Table
 
 Prints data to STDOUT in a table with borders and colors.
-Can choose a table style among the 30 already predefined.
+Can choose a table style among the 35 already predefined.
 
 ## Using
 
@@ -85,7 +85,7 @@ N.B. If you are on Windows, run command `chcp 65001` for the UTF-8 code page.
 
 ## Customization
 
-You can create new table styles or modify any of the 30 predefined ones
+You can create new table styles or modify any of the 35 predefined ones
 by changing the dependency's `config/config.exs` file. You would then need to
 run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 

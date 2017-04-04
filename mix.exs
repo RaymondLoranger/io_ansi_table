@@ -24,7 +24,7 @@ defmodule IO.ANSI.Table.Mixfile do
   defp description do
     """
     Prints data to STDOUT in a table with borders and colors.
-    Can choose a table style among the 30 already predefined.
+    Can choose a table style among the 35 already predefined.
     """
   end
 
