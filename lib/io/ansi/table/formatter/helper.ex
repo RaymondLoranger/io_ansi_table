@@ -127,8 +127,29 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     - `:row_1`    - first row type of repeating group of 3
     - `:row_2`    - second row type of repeating group of 3
     - `:row_3`    - third row type of repeating group of 3
+
+  ## Examples
+
+      alias IO.ANSI.Table.Formatter.Helper
+      helper = %Helper{
+        rows: [
+          ["Ottawa", "Canada" , "1,142,700"],
+          ["Zagreb", "Croatia", "  685,500"],
+          ["Paris" , "France" , "9,854,000"]
+        ],
+        headers: ["city", "country", "population"],
+        key_headers: ["country"],
+        header_fixes: %{},
+        margin: "\s\s\s",
+        widths: [6, 7, 10],
+        style: :pretty_alt
+      }
+      Enum.each [:top, :header, :separator], &Helper.write(helper, &1)
+  ## ![write_header](images/write_header.png)
+      Helper.write helper, [:even_row, :odd_row]
+  ## ![write_rows](images/write_rows.png)
   """
-  @spec write(%__MODULE__{}, atom) :: :ok
+  @spec write(%__MODULE__{}, atom | [atom]) :: :ok
   def write(helper = %__MODULE__{widths: widths, style: style}, type)
     when type in [:top, :separator, :bottom]
   do
