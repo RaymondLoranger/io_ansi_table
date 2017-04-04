@@ -187,14 +187,15 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   end
 
   @doc """
-  Takes a list of `elements` and 3 delimiters (`left`, `inner` and `right`).
+  Takes a list of `elements` and a tuple of 3 `delimiters` (left,
+  inner and right).
 
-  Expands the list of `elements` by combining the delimiters.
+  Expands the list of `elements` by combining the `delimiters`.
 
-  The `inner` delimiter is inserted between all `elements` and
-  the result is then surrounded by the `left` and `right` delimiters.
+  The inner `delimiter` is inserted between all `elements` and
+  the result is then surrounded by the left and right `delimiters`.
 
-  Returns a flattened list in case any `element` or delimiter is a list.
+  Returns a flattened list in case any `element` or `delimiter` is a list.
 
   ## Examples
 
@@ -229,8 +230,30 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     List.flatten [left] ++ Enum.intersperse(elems, inner) ++ [right]
   end
 
+  @doc """
+  Takes a list of `elements` and a tuple of 3 `borders` (left, inner
+  and right).
+
+  Will expand the list of `elements` by combining "fillers" and `borders`.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Formatter.Helper
+      iex> elements = ["Number", "Created At", "Title"]
+      iex> borders = {"<", "~", ">"}
+      iex> Helper.items(elements, borders)
+      [
+        "<", "",
+        "Number", "",
+        "", "~", "",
+        "Created At", "",
+        "", "~", "",
+        "Title", "",
+        "", ">"
+      ]
+  """
   @spec items([String.t], {String.t, String.t, String.t}) :: [String.t]
-  defp items(elems, {left_border, inner_border, right_border}) do
+  def items(elems, {left_border, inner_border, right_border}) do
     expand(elems, {
       [    [    left_border,  ""]],
       ["", ["", inner_border, ""]],
@@ -238,8 +261,45 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     })
   end
 
-  @spec attrs([any], [any], atom, atom) :: [any]
-  defp attrs(headers, key_headers, style, type) do
+  @doc """
+  Returns the list of attributes for a given table `style` and line/row `type`.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Formatter.Helper
+      iex> headers = ["Number", "Created At", "Title"]
+      iex> key_headers = ["Created At"]
+      iex> style = :dark
+      iex> type = :header
+      iex> Helper.attrs(headers, key_headers, style, type)
+      [
+        :light_green, :normal,                          # left border
+        :light_red, :normal,                            # non key column
+        :normal, :light_green, :normal,                 # inner border
+        [:light_white, :light_red_background], :normal, # key column
+        :normal, :light_green, :normal,                 # inner border
+        :light_red, :normal,                            # non key column
+        :normal, :light_green                           # right border
+      ]
+
+      iex> alias IO.ANSI.Table.Formatter.Helper
+      iex> headers = ["Number", "Created At", "Title"]
+      iex> key_headers = ["Created At"]
+      iex> style = :dark
+      iex> type = :row
+      iex> Helper.attrs(headers, key_headers, style, type)
+      [
+        :light_green, :normal,          # left border
+        :light_green, :normal,          # non key column
+        :normal, :light_green, :normal, # inner border
+        :light_magenta, :normal,        # key column
+        :normal, :light_green, :normal, # inner border
+        :light_green, :normal,          # non key column
+        :normal, :light_green           # right border
+      ]
+  """
+  @spec attrs([any], [any], atom, atom) :: [atom | [atom]]
+  def attrs(headers, key_headers, style, type) do
     border_attr  = Style.border_attr(style, type)
     filler_attr  = Style.filler_attr(style, type)
     key_attr     = Style.key_attr(style, type)
@@ -254,13 +314,29 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     |> Enum.map(&(elem &1, 0)) # unwrap attributes
   end
 
+  @doc """
+  Takes a list of column `widths`, a list of `elements` and a tuple
+  of 3 `border widths` (left, inner and right).
+
+  Returns the widths of `elements` and their "fillers" combined with
+  `border widths`.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Formatter.Helper
+      iex> widths = [6, 13, 11]
+      iex> elements = ["Number", "Created At", "Title"]
+      iex> border_widths = {[1, 1], [1, 1, 1], [1, 1]}
+      iex> Helper.widths(widths, elements, border_widths)
+      [1, 1, 6, 0, 1, 1, 1, 10, 3, 1, 1, 1, 5, 6, 1, 1]
+  """
   @spec widths([non_neg_integer], [String.t], {[...], [...], [...]})
     :: [non_neg_integer]
-  defp widths(elem_widths, elems, {
+  def widths(widths, elems, {
     left_border_width, inner_border_width, right_border_width
   })
   do
-    elem_widths
+    widths
     |> Enum.zip(elems) #      ┌─elem length──┐  ┌──filler length───┐
     |> Enum.map(fn {w, e} -> [String.length(e), w - String.length(e)] end)
     |> expand({left_border_width, inner_border_width, right_border_width})
@@ -287,7 +363,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> Helper.format(widths, attrs)
       "\e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
   """
-  @spec format([non_neg_integer], [[atom] | atom]) :: String.t
+  @spec format([non_neg_integer], [atom | [atom]]) :: String.t
   def format(widths, attrs) do
     fragments = # => chardata (list of strings and/or improper lists)
       widths

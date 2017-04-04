@@ -225,21 +225,21 @@ defmodule IO.ANSI.Table.Formatter do
   whitespace characters are treated as a single occurrence.
   Leading and trailing whitespace characters are removed.
 
-  If a `fixes` map is given, all occurrences of each `fix` key in the
+  If a map of `fixes` is given, all occurrences of each `fix` key in the
   `title` will be replaced with the corresponding `fix` value.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Formatter
       iex> Formatter.titlecase(" son   of a gun ", %{
-      ...>   ~r[\sof\s]i => "\sof\s",
-      ...>   ~r[\sa\s]i  => "\sa\s"
+      ...>   ~r[ of ]i => " of ",
+      ...>   ~r[ a ]i  => " a "
       ...> })
       "Son of a Gun"
 
       iex> alias IO.ANSI.Table.Formatter
       iex> Formatter.titlecase("_date___of_birth_", %{
-      ...>   ~r[\sof\s]i => "\sof\s"
+      ...>   ~r[ of ]i => " of "
       ...> })
       "Date of Birth"
 

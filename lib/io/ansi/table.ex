@@ -66,7 +66,7 @@ defmodule IO.ANSI.Table do
   end
 
   def styles do
-    " &style&filler - &note (rank &rank)"
+    " &style&filler - &rank - &note"
     |> Style.texts(&IO.puts/1)
     |> length
   end

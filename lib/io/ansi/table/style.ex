@@ -243,7 +243,7 @@ defmodule IO.ANSI.Table.Style do
     - `&tag`    - table style tag (e.g. "light")
     - `&filler` - padding after &style or &tag
     - `&note`   - table style note
-    - `&rank`   - table style rank
+    - `&rank`   - table style rank (3 digits)
   """
   @spec texts(String.t, (String.t -> any)) :: [any]
   def texts(template, fun \\ &(&1)) when is_function(fun, 1) do
@@ -255,15 +255,16 @@ defmodule IO.ANSI.Table.Style do
 
   @spec interpolate({atom, map}, String.t) :: String.t
   defp interpolate({style, %{note: note, rank: rank}}, template) do
+    import String, only: [duplicate: 2, replace: 3, slice: 2]
     {style, tag, rank} = {inspect(style), tag_for(style), to_string(rank)}
-    filler = String.duplicate "\s", @max_length - String.length(style)
+    filler = duplicate "\s", @max_length - String.length(style)
     template
-    |> String.replace("&style", style)
-    |> String.replace("&tag", tag)
-    |> String.replace("&filler", filler)
-    |> String.replace("&note", note)
-    |> String.replace("&rank", rank)
-    |> String.replace(~r/ +. *$/u, "") # e.g. erase trailing " - "
-    |> String.replace(~r/ +\(\) *$/, "") # erase trailing " () "
+    |> replace("&style", style)
+    |> replace("&tag", tag)
+    |> replace("&filler", filler)
+    |> replace("&note", note)
+    |> replace("&rank", slice("0#{rank}", -3..-1))
+    |> replace(~r/ +. *$/u, "") # e.g. erase trailing " - "
+    |> replace(~r/ +\(\) *$/, "") # erase trailing " () "
   end
 end
