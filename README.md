@@ -83,8 +83,7 @@ Formatter.print_table(people, 3, true, :dark)
 
 N.B. If you are on Windows, run command `chcp 65001` for the UTF-8 code page.
 
-These 2 packages use the `io_ansi_table` as a dependency to tabulate data
-retrieved from the web:
+These 2 packages use `io_ansi_table` as a dependency to tabulate data retrieved from the web:
   - [github_issues](https://hex.pm/packages/github_issues)
   - [noaa_observations](https://hex.pm/packages/noaa_observations)
 
