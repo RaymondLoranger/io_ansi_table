@@ -57,7 +57,7 @@ config :io_ansi_table, margins: [
 
 The above margins represent the default table position.
 
-## Example
+## Examples
 
 ```elixir
 config :io_ansi_table, headers: [:name, :date_of_birth, :likes]
@@ -79,9 +79,13 @@ people = [
 ]
 Formatter.print_table(people, 3, true, :dark)
 ```
-## ![print_table_people](images/print_table_people.png)
+[print_table_people](images/print_table_people.png)
 
 N.B. If you are on Windows, run command `chcp 65001` for the UTF-8 code page.
+
+These 2 packages use the `io_ansi_table` as a dependency:
+  - [github_ssues](https://hex.pm/packages/github_issues)
+  - [noaa_observations](https://hex.pm/packages/noaa_observations)
 
 ## Customization
 
