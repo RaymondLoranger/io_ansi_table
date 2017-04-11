@@ -8,8 +8,7 @@ defmodule IO.ANSI.Table do
   # E.g. IO.ANSI.Table.print_people :green_mult
 
   def people do
-    [
-      %{
+    [ %{
         name: "Mike", likes: "ski, arts", date_of_birth: "1992-04-15",
         height: ~s[6' 0"], weight: "176 lb", bmi: 23.9
       },

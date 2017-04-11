@@ -10,7 +10,7 @@ To use `IO ANSI Table` in your Mix project, first add it as a dependency:
 
 ```elixir
 def deps do
-  [{:io_ansi_table, "~> 0.1", app: false}]
+  [{:io_ansi_table, "~> 0.1"}]
 end
 ```
 

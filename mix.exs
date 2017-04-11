@@ -2,9 +2,8 @@ defmodule IO.ANSI.Table.Mixfile do
   use Mix.Project
 
   def project do
-    [
-      app: :io_ansi_table,
-      version: "0.1.10",
+    [ app: :io_ansi_table,
+      version: "0.1.11",
       elixir: "~> 1.4",
       build_embedded: Mix.env == :prod,
       start_permanent: Mix.env == :prod,
@@ -29,8 +28,7 @@ defmodule IO.ANSI.Table.Mixfile do
   end
 
   defp package do
-    [
-      files: ["lib", "mix.exs", "README*", "config/config.exs"],
+    [ files: ["lib", "mix.exs", "README*", "config/config.exs"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}
@@ -55,8 +53,7 @@ defmodule IO.ANSI.Table.Mixfile do
   #
   # Type "mix help deps" for more examples and options
   defp deps do
-    [
-      {:earmark, "~> 1.0", only: :dev},
+    [ {:earmark, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
       {:dialyxir, "~> 0.4", only: :dev, runtime: false}
     ]
