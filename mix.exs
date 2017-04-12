@@ -55,7 +55,7 @@ defmodule IO.ANSI.Table.Mixfile do
   defp deps do
     [ {:earmark, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.14", only: :dev, runtime: false},
-      {:dialyxir, "~> 0.4", only: :dev, runtime: false}
+      {:dialyxir, "== 0.4.4", only: :dev, runtime: false}
     ]
   end
 
@@ -64,9 +64,9 @@ defmodule IO.ANSI.Table.Mixfile do
   end
 
   defp copy_images(_) do
-    File.cp_r "images", "doc/images", fn src, dst ->
-      IO.gets(~s|Overwriting "#{dst}" with "#{src}".\nProceed? [Yn]\s|)
-      in ["y\n", "Y\n"]
+    File.cp_r "images", "doc/images", fn src, dst -> src || dst # => true
+      # IO.gets(~s|Overwriting "#{dst}" with "#{src}".\nProceed? [Yn]\s|)
+      # in ["y\n", "Y\n"]
     end
   end
 end
