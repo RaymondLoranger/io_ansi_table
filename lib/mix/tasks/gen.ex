@@ -1,4 +1,6 @@
 defmodule Mix.Tasks.Gen do
+  @moduledoc false
+
   # use Mix.Task # otherwise dialyzer complains
 
   def run(_args) do
