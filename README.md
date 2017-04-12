@@ -81,7 +81,7 @@ Formatter.print_table(people, 3, true, :dark)
 ```
 ## ![print_table_people](images/print_table_people.png)
 
-N.B. If you are on Windows, run command `chcp 65001` for the UTF-8 code page.
+N.B. On Windows, run command `chcp 65001` (in **Powershell**) for the UTF-8 code page.
 
 These 2 packages use `io_ansi_table` as a dependency to tabulate data retrieved from the web:
   - [github_issues](https://hex.pm/packages/github_issues)
