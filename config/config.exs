@@ -22,9 +22,9 @@ config :elixir, ansi_enabled: true # mix messages in colors
 #     ]
 #
 #     config :io_ansi_table, header_fixes: %{
-#       ~r[\sid$]i       => "\sID",
-#       ~r[\smph$]i      => "\sMPH",
-#       ~r[\srfc(\d+)$]i => "\sRFC-\\1"
+#       ~r[ id$]i       => " ID",
+#       ~r[ mph$]i      => " MPH",
+#       ~r[ rfc(\d+)$]i => " RFC-\\1"
 #     }
 #
 #     config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]

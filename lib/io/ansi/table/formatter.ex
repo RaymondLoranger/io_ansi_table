@@ -7,9 +7,7 @@ defmodule IO.ANSI.Table.Formatter do
   a list of values identified by successive headers.
   """
 
-  alias IO.ANSI.Table.Config
-  alias IO.ANSI.Table.Formatter.Helper
-  alias IO.ANSI.Table.Style
+  alias IO.ANSI.Table.{Config, Formatter.Helper, Style}
 
   @doc """
   Takes a list of key-value `collections`, the (maximum) number of
@@ -62,7 +60,7 @@ defmodule IO.ANSI.Table.Formatter do
         people, 3, true, :dark,
         headers: [:name, :date_of_birth, :likes],
         key_headers: [:date_of_birth],
-        header_fixes: %{~r[\sof\s]i => "\sof\s"},
+        header_fixes: %{~r[ of ]i => " of "},
         margins: [top: 2, bottom: 2, left: 2]
       )
   ## ![print_table_people](images/print_table_people.png)
@@ -78,7 +76,7 @@ defmodule IO.ANSI.Table.Formatter do
       ...>     people, 3, false, :dashed,
       ...>     headers: [:name, :date_of_birth, :likes],
       ...>     key_headers: [:date_of_birth],
-      ...>     header_fixes: %{~r[\sof\s]i => "\sof\s"},
+      ...>     header_fixes: %{~r[ of ]i => " of "},
       ...>     margins: [top: 0, bottom: 0, left: 0]
       ...>   )
       ...> end
@@ -92,8 +90,8 @@ defmodule IO.ANSI.Table.Formatter do
       +------+---------------+-----------+
       \"""
   """
-  @spec print_table([map | Keyword.t], integer, boolean, atom, Keyword.t)
-    :: :ok
+  @spec print_table([map | Keyword.t], integer, boolean, atom, Keyword.t) ::
+    :ok
   def print_table(collections, count, bell, style, options \\ []) do
     headers = Keyword.get(options, :headers, Config.headers)
     key_headers = Keyword.get(options, :key_headers, Config.key_headers)
@@ -101,7 +99,7 @@ defmodule IO.ANSI.Table.Formatter do
     margins = Config.margins Keyword.get(options, :margins)
     collections =
       collections
-      |> Stream.map(&Map.take &1, headers) # optional
+      |> Stream.map(&take &1, headers) # optional
       |> Enum.sort_by(&key_for &1, key_headers)
       |> Enum.take(count)
     widths =
@@ -112,6 +110,14 @@ defmodule IO.ANSI.Table.Formatter do
     Helper.print_table(
       rows, headers, key_headers, header_fixes, margins, widths, style, bell
     )
+  end
+
+  @spec take(map | Keyword.t, [any]) :: map | Keyword.t
+  defp take(collection, headers) when is_map(collection) do
+    Map.take collection, headers
+  end
+  defp take(collection, headers) when is_list(collection) do
+    Keyword.take collection, headers
   end
 
   @doc """
@@ -254,8 +260,8 @@ defmodule IO.ANSI.Table.Formatter do
     title =
       title
       |> to_string
-      |> split(~r/(_|\s)+/, trim: true)
-      |> map_join("\s", &(upcase(first &1) <> slice &1, 1..-1))
+      |> split(~r/(_| )+/, trim: true)
+      |> map_join(" ", &(upcase(first &1) <> slice &1, 1..-1))
     reduce fixes, title, &replace(&2, elem(&1, 0), elem(&1, 1))
   end
 end

@@ -4,8 +4,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   Prints a table of rows with headers, applying a table style (configurable).
   """
 
-  alias IO.ANSI.Table.Formatter
-  alias IO.ANSI.Table.Style
+  alias IO.ANSI.Table.{Formatter, Formatter.Helper, Style}
 
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
   @external_resource Path.expand Mix.Project.config[:config_path]
@@ -16,12 +15,12 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     header_fixes: nil, margin: nil, widths: nil, style: nil
 
   @doc """
-  Creates a new table formatter helper (struct).
+  Creates a table formatter helper (struct).
   """
   @spec new([[String.t]], [any], [any], map, String.t, [non_neg_integer], atom)
-  :: %__MODULE__{}
+  :: %Helper{}
   def new(rows, headers, key_headers, header_fixes, margin, widths, style) do
-    %__MODULE__{
+    %Helper{
       rows: rows, headers: headers, key_headers: key_headers,
       header_fixes: header_fixes, margin: margin, widths: widths, style: style
     }
@@ -98,7 +97,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     header_fixes, margins, widths, style, bell
   )
   do
-    margin = String.duplicate "\s", margins[:left]
+    margin = String.duplicate " ", margins[:left]
     helper = new(
       rows, headers, key_headers, header_fixes, margin, widths, style
     )
@@ -116,7 +115,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     - `:top`       - top line
     - `:header`    - line of table header(s)
     - `:separator` - separator line
-    - `row types`  - list of related row type(s)
+    - `row types`  - list of _related_ row type(s)
     - `:bottom`    - bottom line
 
   ## Row types
@@ -149,32 +148,30 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       Helper.write helper, [:even_row, :odd_row]
   ## ![write_rows](images/write_rows.png)
   """
-  @spec write(%__MODULE__{}, atom | [atom]) :: :ok
-  def write(helper = %__MODULE__{widths: widths, style: style}, type)
-    when type in [:top, :separator, :bottom]
+  @spec write(%Helper{}, atom | [atom]) :: :ok
+  def write(helper = %Helper{widths: widths, style: style}, type) when
+    type in [:top, :separator, :bottom]
   do
     widths
     |> Enum.map(&String.duplicate Style.dash(style, type), &1)
     |> write(type, helper)
   end
-  def write(helper = %__MODULE__{
-    headers: headers, header_fixes: header_fixes
-  }, type) when type == :header
+  def write(
+    helper = %Helper{headers: headers, header_fixes: header_fixes}, type
+  ) when type == :header
   do
     headers
     |> Enum.map(&Formatter.titlecase &1, header_fixes)
     |> write(type, helper)
   end
-  def write(helper = %__MODULE__{rows: rows}, type)
-    when is_list(type)
-  do
+  def write(helper = %Helper{rows: rows}, type) when is_list(type) do
     rows
     |> Stream.zip(Stream.cycle type)
     |> Enum.each(&write elem(&1, 0), elem(&1, 1), helper)
   end
 
-  @spec write([String.t], atom, %__MODULE__{}) :: :ok
-  defp write(elems, type, %__MODULE__{
+  @spec write([String.t], atom, %Helper{}) :: :ok
+  defp write(elems, type, %Helper{
     rows: _rows, headers: headers, key_headers: key_headers,
     margin: margin, widths: widths, style: style
   })
@@ -209,8 +206,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> elements = ["Number", "Created At", "Title"]
       iex> delimiters = {["<", " "], [" ", "~", " "], [" ", ">"]}
       iex> Helper.expand(elements, delimiters)
-      [
-        "<", " ",
+      [ "<", " ",
         "Number",
         " ", "~", " ",
         "Created At",
@@ -242,8 +238,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> elements = ["Number", "Created At", "Title"]
       iex> borders = {"<", "~", ">"}
       iex> Helper.items(elements, borders)
-      [
-        "<", "",
+      [ "<", "",
         "Number", "",
         "", "~", "",
         "Created At", "",
@@ -272,8 +267,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> style = :dark
       iex> type = :header
       iex> Helper.attrs(headers, key_headers, style, type)
-      [
-        :light_green, :normal,                          # left border
+      [ :light_green, :normal,                          # left border
         :light_red, :normal,                            # non key column
         :normal, :light_green, :normal,                 # inner border
         [:light_white, :light_red_background], :normal, # key column
@@ -288,8 +282,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> style = :dark
       iex> type = :row
       iex> Helper.attrs(headers, key_headers, style, type)
-      [
-        :light_green, :normal,          # left border
+      [ :light_green, :normal,          # left border
         :light_green, :normal,          # non key column
         :normal, :light_green, :normal, # inner border
         :light_magenta, :normal,        # key column
@@ -316,7 +309,11 @@ defmodule IO.ANSI.Table.Formatter.Helper do
 
   @doc """
   Takes a list of column `widths`, a list of `elements` and a tuple
-  of 3 `border widths` (left, inner and right).
+  of 3 multipart `border widths` (left, inner and right):
+
+    - `left`  - widths of left border and "filler"
+    - `inner` - widths of "filler", inner border and "filler"
+    - `right` - widths of "filler" and right border
 
   Returns the widths of `elements` and their "fillers" combined with
   `border widths`.
@@ -330,8 +327,8 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> Helper.widths(widths, elements, border_widths)
       [1, 1, 6, 0, 1, 1, 1, 10, 3, 1, 1, 1, 5, 6, 1, 1]
   """
-  @spec widths([non_neg_integer], [String.t], {[...], [...], [...]})
-    :: [non_neg_integer]
+  @spec widths([non_neg_integer], [String.t], {[...], [...], [...]}) ::
+    [non_neg_integer]
   def widths(widths, elems, {
     left_border_width, inner_border_width, right_border_width
   })
@@ -351,9 +348,10 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   (escape sequences).
 
   Here are a few ANSI color codes:
-  - light yellow - \\e[93m
-  - light cyan   - \\e[96m
-  - reset        - \\e[0m
+
+    - light yellow - \\e[93m
+    - light cyan   - \\e[96m
+    - reset        - \\e[0m
 
   ## Examples
 

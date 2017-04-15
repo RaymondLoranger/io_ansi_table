@@ -256,14 +256,14 @@ defmodule IO.ANSI.Table.Style do
   @spec interpolate({atom, map}, String.t) :: String.t
   defp interpolate({style, %{note: note, rank: rank}}, template) do
     import String, only: [duplicate: 2, replace: 3, slice: 2]
-    {style, tag, rank} = {inspect(style), tag_for(style), to_string(rank)}
-    filler = duplicate "\s", @max_length - String.length(style)
+    {style, tag} = {inspect(style), tag_for(style)}
+    filler = duplicate " ", @max_length - String.length(style)
     template
     |> replace("&style", style)
     |> replace("&tag", tag)
     |> replace("&filler", filler)
     |> replace("&note", note)
-    |> replace("&rank", slice("0#{rank}", -3..-1))
+    |> replace("&rank", slice("0#{rank}", -3..-1)) # last 3 digits
     |> replace(~r/ +. *$/u, "") # e.g. erase trailing " - "
     |> replace(~r/ +\(\) *$/, "") # erase trailing " () "
   end
