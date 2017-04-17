@@ -9,18 +9,20 @@ defmodule IE do
   # Examples:
   #   require IE
   #   IE.use
-  #   IE.print_people :green_mult
-  #   IE.print_people :as_keywords, :black_mult
-  #   IE.styles
-  #   IE.people
-  #   IE.people :as_keywords
-  #   IE.people_sorted
-  #   IE.key_for(List.first IE.people)
-  #   IE.key_for(List.first IE.people :as_keywords)
+  #   print_people :green_mult
+  #   print_people :as_keywords, :black_mult
+  #   styles()
+  #   people()
+  #   people :as_keywords
+  #   people_sorted()
+  #   key_for(List.first people())
+  #   key_for(List.first people :as_keywords)
 
   defmacro use do
     quote do
+      import IE
       alias IO.ANSI.Table.{Config, Formatter, Formatter.Helper, Style}
+      :ok
     end
   end
 

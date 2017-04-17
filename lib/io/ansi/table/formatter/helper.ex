@@ -334,8 +334,11 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   })
   do
     widths
-    |> Enum.zip(elems) #      ┌─elem length──┐  ┌──filler length───┐
-    |> Enum.map(fn {w, e} -> [String.length(e), w - String.length(e)] end)
+    |> Enum.zip(elems)
+    |> Enum.map(fn {w, e} ->
+      #┌─────elem length──────┐  ┌──────filler length───────┐
+      [min(String.length(e), w), w - min(String.length(e), w)]
+    end)
     |> expand({left_border_width, inner_border_width, right_border_width})
   end
 

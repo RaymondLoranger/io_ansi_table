@@ -31,7 +31,8 @@ defmodule IO.ANSI.Table.Formatter do
   The columns are identified by successive `headers` in order.
 
   We calculate the width of each column to fit the longest element
-  in that column, also considering the `header` itself.
+  in that column, also considering the `header` itself. However, the
+  `max width` option prevails.
 
   If the number of `collections` given is positive, we format
   the first _n_ `collections` in the list once sorted. If negative,
