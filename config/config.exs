@@ -45,7 +45,7 @@ config :io_ansi_table, default_margins: [ # default table position:
   bottom: 1, # line(s) after table
   left:   2  # space(s) left of table
 ]
-config :io_ansi_table, max_width_range: 7..77
+config :io_ansi_table, max_width_range: 7..99
 config :io_ansi_table, table_styles: %{
   light: %{
     note: "light colors",

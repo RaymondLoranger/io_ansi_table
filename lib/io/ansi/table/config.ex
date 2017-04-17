@@ -46,7 +46,7 @@ defmodule IO.ANSI.Table.Config do
 
       iex> alias IO.ANSI.Table.Config
       iex> Config.max_width
-      77
+      99
   """
   @spec max_width :: non_neg_integer
   def max_width do
