@@ -21,7 +21,7 @@ defmodule IO.ANSI.Table.Formatter do
   `collections` to format, whether to ring the `bell`, a table `style` and
   up to five `options`:
 
-    - `headers`      - (keys)
+    - `headers`      - to identify each column (keys)
     - `key headers`  - to sort the `collections` on
     - `header fixes` - to alter the `headers`
     - `margins`      - to position the table
@@ -35,7 +35,7 @@ defmodule IO.ANSI.Table.Formatter do
   `max width` option prevails.
 
   If the number of `collections` given is positive, we format
-  the first _n_ `collections` in the list once sorted. If negative,
+  the first _n_ `collections` in the list, once sorted. If negative,
   the last _n_ ones.
 
   ## Parameters
