@@ -10,7 +10,9 @@ defmodule IE do
   #   require IE
   #   IE.use
   #   print_people :green_mult
+  #   print_people :green_mult, 9
   #   print_people :as_keywords, :black_mult
+  #   print_people :as_keywords, :black_mult, 9
   #   styles()
   #   people()
   #   people :as_keywords
@@ -86,6 +88,24 @@ defmodule IE do
       people(:as_keywords), length(people()), true, style,
       headers: headers(), key_headers: key_headers(),
       header_fixes: header_fixes(), margins: margins()
+    )
+  end
+
+  def print_people(style, max_width) do
+    Formatter.print_table(
+      people(), length(people()), true, style,
+      headers: headers(), key_headers: key_headers(),
+      header_fixes: header_fixes(), margins: margins(),
+      max_width: max_width
+    )
+  end
+
+  def print_people(:as_keywords, style, max_width) do
+    Formatter.print_table(
+      people(:as_keywords), length(people()), true, style,
+      headers: headers(), key_headers: key_headers(),
+      header_fixes: header_fixes(), margins: margins(),
+      max_width: max_width
     )
   end
 
