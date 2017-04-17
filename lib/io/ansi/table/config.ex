@@ -40,7 +40,7 @@ defmodule IO.ANSI.Table.Config do
   end
 
   @doc """
-  Retrieves the max column width of a table.
+  Retrieves the maximum column width of a table.
 
   ## Examples
 

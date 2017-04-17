@@ -44,8 +44,7 @@ defmodule IO.ANSI.Table.Formatter do
     - `count`       - number of collections to format (integer)
     - `bell`        - ring the bell? (boolean)
     - `style`       - table style (atom)
-    - `options`     - headers, key headers, header fixes,
-                      margins and max width (keyword)
+    - `options`     - up to five options as described (keyword)
 
   ## Options
 
@@ -53,7 +52,7 @@ defmodule IO.ANSI.Table.Formatter do
     - `:key_headers`  - defaults to config value `:key_headers` (list)
     - `:header_fixes` - defaults to config value `:header_fixes` (map)
     - `:margins`      - defaults to config value `:margins` (keyword)
-    - `:max_width`    - defaults to config value `:max_width` (integer)
+    - `:max_width`    - defaults to config value `:max_width` (non neg integer)
 
   ## Table styles
 
