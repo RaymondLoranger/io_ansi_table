@@ -40,13 +40,12 @@ config :elixir, ansi_enabled: true # mix messages in colors
 # The above margins represent the default table position.
 
 config :io_ansi_table, ansi_enabled: true # table formatting in colors
-
 config :io_ansi_table, default_margins: [ # default table position:
   top:    1, # line(s) before table
   bottom: 1, # line(s) after table
   left:   2  # space(s) left of table
 ]
-
+config :io_ansi_table, max_width_range: 7..77
 config :io_ansi_table, table_styles: %{
   light: %{
     note: "light colors",

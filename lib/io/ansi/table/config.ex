@@ -8,6 +8,8 @@ defmodule IO.ANSI.Table.Config do
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
   @default_margins   Application.get_env(@app, :default_margins)
+  @max_width_range   Application.get_env(@app, :max_width_range)
+  @upper_max_width   @max_width_range.last
 
   @doc """
   Retrieves the headers of a table.
@@ -35,6 +37,20 @@ defmodule IO.ANSI.Table.Config do
   @spec key_headers :: [any]
   def key_headers do
     Application.get_env(@app, :key_headers, [])
+  end
+
+  @doc """
+  Retrieves the max column width of a table.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Config
+      iex> Config.max_width
+      77
+  """
+  @spec max_width :: non_neg_integer
+  def max_width do
+    Application.get_env(@app, :max_width, @upper_max_width)
   end
 
   @doc """

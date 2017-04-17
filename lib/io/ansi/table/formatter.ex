@@ -9,15 +9,23 @@ defmodule IO.ANSI.Table.Formatter do
 
   alias IO.ANSI.Table.{Config, Formatter.Helper, Style}
 
+  Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
+  @external_resource Path.expand Mix.Project.config[:config_path]
+  @app               Mix.Project.config[:app]
+  @max_width_range   Application.get_env(@app, :max_width_range)
+  @lower_max_width   @max_width_range.first
+  @upper_max_width   @max_width_range.last
+
   @doc """
   Takes a list of key-value `collections`, the (maximum) number of
   `collections` to format, whether to ring the `bell`, a table `style` and
-  up to four `options`:
+  up to five `options`:
 
-    - `headers` (keys)
-    - `key headers` to sort the `collections` on
-    - `header fixes` to alter the `headers`
-    - `margins` to position the table
+    - `headers`      - (keys)
+    - `key headers`  - to sort the `collections` on
+    - `header fixes` - to alter the `headers`
+    - `margins`      - to position the table
+    - `max width`    - to cap column widths
 
   Prints a table to STDOUT of the values in each selected `collection`.
   The columns are identified by successive `headers` in order.
@@ -35,7 +43,8 @@ defmodule IO.ANSI.Table.Formatter do
     - `count`       - number of collections to format (integer)
     - `bell`        - ring the bell? (boolean)
     - `style`       - table style (atom)
-    - `options`     - headers, key headers, header fixes and margins (keyword)
+    - `options`     - headers, key headers, header fixes,
+                      margins and max width (keyword)
 
   ## Options
 
@@ -43,6 +52,7 @@ defmodule IO.ANSI.Table.Formatter do
     - `:key_headers`  - defaults to config value `:key_headers` (list)
     - `:header_fixes` - defaults to config value `:header_fixes` (map)
     - `:margins`      - defaults to config value `:margins` (keyword)
+    - `:max_width`    - defaults to config value `:max_width` (integer)
 
   ## Table styles
 
@@ -97,6 +107,7 @@ defmodule IO.ANSI.Table.Formatter do
     key_headers = Keyword.get(options, :key_headers, Config.key_headers)
     header_fixes = Keyword.get(options, :header_fixes, Config.header_fixes)
     margins = Config.margins Keyword.get(options, :margins)
+    max_width = Keyword.get(options, :max_width, Config.max_width)
     collections =
       collections
       |> Stream.map(&take &1, headers) # optional
@@ -105,7 +116,7 @@ defmodule IO.ANSI.Table.Formatter do
     widths =
       [Map.new(headers, &{&1, titlecase(&1, header_fixes)}) | collections]
       |> columns(headers)
-      |> widths # => max widths of column values or headers
+      |> widths(max_width) # => max widths of column values or headers
     rows = rows(collections, headers)
     Helper.print_table(
       rows, headers, key_headers, header_fixes, margins, widths, style, bell
@@ -204,7 +215,7 @@ defmodule IO.ANSI.Table.Formatter do
 
   @doc """
   Given a list of `columns` (string sublists), returns a list containing
-  the maximum width of each `column`.
+  the maximum width of each `column` capped by `maximum width`.
 
   ## Examples
 
@@ -217,11 +228,22 @@ defmodule IO.ANSI.Table.Formatter do
       iex> data = [[":cat", "{1, 2}", "007"], ["mongoose", ":ant", "3.1416"]]
       iex> Formatter.widths(data)
       [6, 8]
+
+      iex> alias IO.ANSI.Table.Formatter
+      iex> data = [[":cat", "{1, 2}", "007"], ["mongoose", ":ant", "3.1416"]]
+      iex> Formatter.widths(data, 7)
+      [6, 7]
   """
-  @spec widths([[String.t]]) :: [non_neg_integer]
-  def widths(columns) do
-    for column <- columns, do: column |> Enum.map(&String.length/1) |> Enum.max
+  @spec widths([[String.t]], non_neg_integer) :: [non_neg_integer]
+  def widths(columns, max_width \\ @upper_max_width)
+  def widths(columns, max_width) when
+    is_integer(max_width) and max_width >= @lower_max_width
+  do
+    for column <- columns do
+      column |> Enum.map(&String.length/1) |> Enum.max |> min(max_width)
+    end
   end
+  def widths(columns, _max_width), do: widths(columns, @lower_max_width)
 
   @doc ~S"""
   Uppercases the first letter of every "word" of a `title` (must be
