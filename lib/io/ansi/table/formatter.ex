@@ -144,7 +144,7 @@ defmodule IO.ANSI.Table.Formatter do
       iex> Formatter.key_for(collection, keys)
       "3.014"
   """
-  @spec key_for([map | Keyword.t], [any]) :: String.t
+  @spec key_for(map | Keyword.t, [any]) :: String.t
   def key_for(collection, keys) do
     Enum.map_join keys, &collection[&1]
   end

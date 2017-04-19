@@ -12,7 +12,7 @@ defmodule IO.ANSI.Table.Style do
   Module.register_attribute __MODULE__, :style_lengths, accumulate: true
 
   @doc """
-  Retrieves the table `style` for a given table style `tag`.
+  Retrieves the table style for a given table style `tag`.
 
   ## Examples
 
@@ -28,7 +28,7 @@ defmodule IO.ANSI.Table.Style do
   def style_for(tag)
 
   @doc """
-  Retrieves the table style `tag` for a given table `style`.
+  Retrieves the table style tag for a given table `style`.
 
   ## Examples
 
@@ -67,7 +67,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.line_types(:green_alt)
       [:top, :header, :separator, [:even_row, :odd_row]]
   """
-  @spec line_types(atom) :: [atom] | nil
+  @spec line_types(atom) :: [atom | [atom]] | nil
   def line_types(style)
 
   for {style, %{line_types: line_types}} <- @styles do
@@ -119,16 +119,18 @@ defmodule IO.ANSI.Table.Style do
   def borders(_style, _type), do: nil
 
   @doc """
-  Retrieves the border widths of a given table `style` and line/row `type`.
+  Retrieves the 3 multipart border widths (left, inner and right)
+  of a given table `style` and line/row `type`. The widths are multipart to
+  account for the "fillers" preceding/following the borders.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.border_widths(:plain, :bottom)
+      iex> Style.border_widths(:plain, :bottom) # borders: "└─", "─┴─", "─┘"
       {[2, 0], [0, 3, 0], [0, 2]}
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.border_widths(:plain, :header)
+      iex> Style.border_widths(:plain, :header) # borders: "│" ,  "│" ,  "│"
       {[1, 1], [1, 1, 1], [1, 1]}
   """
   @spec border_widths(atom, atom) :: {[...], [...], [...]} | nil
