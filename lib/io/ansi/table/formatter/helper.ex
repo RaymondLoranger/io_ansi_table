@@ -186,7 +186,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     |> Enum.each(&write elem(&1, 0), elem(&1, 1), helper)
   end
 
-  @spec write([String.t], Formatter.line_type | Formatter.row_type, Helper.t)
+  @spec write([String.t], Style.line_type | Style.row_type, Helper.t)
   :: :ok
   defp write(elems, type, %Helper{
     rows: _rows, headers: headers, key_headers: key_headers,
@@ -310,7 +310,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   """
   @spec attrs(
     [Formatter.collection_key], [Formatter.collection_key],
-    Style.t, Formatter.line_type | Formatter.row_type
+    Style.t, Style.line_type | Style.row_type
   ) :: [Style.attr]
   def attrs(headers, key_headers, style, type) do
     border_attr  = Style.border_attr(style, type)
