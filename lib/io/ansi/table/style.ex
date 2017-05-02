@@ -4,6 +4,11 @@ defmodule IO.ANSI.Table.Style do
   Defines functions to retrieve properties of predefined table styles.
   """
 
+  @type attr :: [atom] | atom
+  @type line_type :: :top | :header | :separator | :bottom
+  @type row_type :: :row | :even_row | :odd_row | :row_1 | :row_2 | :row_3
+  @type t :: atom
+
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
@@ -40,7 +45,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.tag_for(:green_alt)
       "green-alt"
   """
-  @spec tag_for(atom) :: String.t | nil
+  @spec tag_for(t) :: String.t | nil
   def tag_for(style)
 
   for {style, %{}} <- @styles do
@@ -67,7 +72,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.line_types(:green_alt)
       [:top, :header, :separator, [:even_row, :odd_row]]
   """
-  @spec line_types(atom) :: [atom | [atom]] | nil
+  @spec line_types(t) :: [line_type | [row_type]] | nil
   def line_types(style)
 
   for {style, %{line_types: line_types}} <- @styles do
@@ -88,7 +93,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.dash(:dark, :row)
       nil
   """
-  @spec dash(atom, atom) :: String.t | nil
+  @spec dash(t, line_type | row_type) :: String.t | nil
   def dash(style, type)
 
   @doc """
@@ -104,7 +109,8 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.borders(:cyan, :row)
       {"║", "║", "║"}
   """
-  @spec borders(atom, atom) :: {String.t, String.t, String.t} | nil
+  @spec borders(t, line_type | row_type) ::
+    {String.t, String.t, String.t} | nil
   def borders(style, type)
 
   for {style, %{borders: borders}} <- @styles do
@@ -133,7 +139,8 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.border_widths(:plain, :header) # borders: "│" ,  "│" ,  "│"
       {[1, 1], [1, 1, 1], [1, 1]}
   """
-  @spec border_widths(atom, atom) :: {[...], [...], [...]} | nil
+  @spec border_widths(t, line_type | row_type) ::
+    {[...], [...], [...]} | nil
   def border_widths(style, type)
 
   for {style, %{border_widths: border_widths}} <- @styles do
@@ -154,7 +161,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.border_attr(:green, :top)
       [:light_yellow, :light_green_background]
   """
-  @spec border_attr(atom, atom) :: [atom] | atom | nil
+  @spec border_attr(t, line_type | row_type) :: attr | nil
   def border_attr(style, type)
 
   for {style, %{border_attrs: border_attrs}} <- @styles do
@@ -173,7 +180,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.filler_attr(:mixed, :row)
       :light_green_background
   """
-  @spec filler_attr(atom, atom) :: [atom] | atom | nil
+  @spec filler_attr(t, line_type | row_type) :: attr | nil
   def filler_attr(style, type)
 
   for {style, %{filler_attrs: filler_attrs}} <- @styles do
@@ -196,7 +203,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.key_attr(:light, :header)
       [:light_yellow, :underline]
   """
-  @spec key_attr(atom, atom) :: [atom] | atom | nil
+  @spec key_attr(t, line_type | row_type) :: attr | nil
   def key_attr(style, type)
 
   for {style, %{key_attrs: key_attrs}} <- @styles do
@@ -215,7 +222,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.non_key_attr(:cyan, :row)
       [:black, :light_cyan_background]
   """
-  @spec non_key_attr(atom, atom) :: [atom] | atom | nil
+  @spec non_key_attr(t, line_type | row_type) :: attr | nil
   def non_key_attr(style, type)
 
   for {style, %{non_key_attrs: non_key_attrs}} <- @styles do
@@ -255,7 +262,7 @@ defmodule IO.ANSI.Table.Style do
     |> Enum.map(&fun.(&1))
   end
 
-  @spec interpolate({atom, map}, String.t) :: String.t
+  @spec interpolate({t, map}, String.t) :: String.t
   defp interpolate({style, %{note: note, rank: rank}}, template) do
     import String, only: [duplicate: 2, replace: 3, slice: 2]
     {style, tag} = {inspect(style), tag_for(style)}

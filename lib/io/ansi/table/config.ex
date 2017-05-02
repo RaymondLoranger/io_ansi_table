@@ -4,6 +4,8 @@ defmodule IO.ANSI.Table.Config do
   Defines functions to retrieve table config properties at **runtime**.
   """
 
+  alias IO.ANSI.Table.Formatter
+
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
@@ -20,7 +22,7 @@ defmodule IO.ANSI.Table.Config do
       iex> Config.headers
       [:unknown]
   """
-  @spec headers :: [any]
+  @spec headers :: [Formatter.collection_key]
   def headers do
     Application.get_env(@app, :headers, [:unknown])
   end
@@ -34,7 +36,7 @@ defmodule IO.ANSI.Table.Config do
       iex> Config.key_headers
       []
   """
-  @spec key_headers :: [any]
+  @spec key_headers :: [Formatter.collection_key]
   def key_headers do
     Application.get_env(@app, :key_headers, [])
   end
@@ -48,7 +50,7 @@ defmodule IO.ANSI.Table.Config do
       iex> Config.max_width
       99
   """
-  @spec max_width :: non_neg_integer
+  @spec max_width :: Formatter.column_width
   def max_width do
     Application.get_env(@app, :max_width, @upper_max_width)
   end

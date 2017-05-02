@@ -14,12 +14,28 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   defstruct rows: nil, headers: nil, key_headers: nil,
     header_fixes: nil, margin: nil, widths: nil, style: nil
 
+  @type t :: %Helper{
+    rows: [Formatter.row] | nil,
+    headers: [Formatter.collection_key] | nil,
+    key_headers: [Formatter.collection_key] | nil,
+    header_fixes: map | nil,
+    margin: String.t | nil,
+    widths: [Formatter.column_width] | nil,
+    style: Style.t | nil
+  }
+
   @doc """
   Creates a table formatter helper (struct).
   """
-  @spec new([[String.t]], [any], [any], map, String.t, [non_neg_integer], atom)
-  :: %Helper{}
-  def new(rows, headers, key_headers, header_fixes, margin, widths, style) do
+  @spec new(
+    [Formatter.row], [Formatter.collection_key], [Formatter.collection_key],
+    map, String.t, [Formatter.column_width], Style.t
+  ) :: Helper.t
+  def new(
+    rows, headers, key_headers,
+    header_fixes, margin, widths, style
+  )
+  do
     %Helper{
       rows: rows, headers: headers, key_headers: key_headers,
       header_fixes: header_fixes, margin: margin, widths: widths, style: style
@@ -89,8 +105,8 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       \""" <> "\\n\\n"
   """
   @spec print_table(
-    [[String.t]], [any], [any],
-    map, Keyword.t, [non_neg_integer], atom, boolean
+    [Formatter.row], [Formatter.collection_key], [Formatter.collection_key],
+    map, Keyword.t, [Formatter.column_width], Style.t, boolean
   ) :: :ok
   def print_table(
     rows, headers, key_headers,
@@ -148,7 +164,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       Helper.write helper, [:even_row, :odd_row]
   ## ![write_rows](images/write_rows.png)
   """
-  @spec write(%Helper{}, atom | [atom]) :: :ok
+  @spec write(Helper.t, Style.line_type | [Style.row_type]) :: :ok
   def write(helper = %Helper{widths: widths, style: style}, type) when
     type in [:top, :separator, :bottom]
   do
@@ -170,10 +186,11 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     |> Enum.each(&write elem(&1, 0), elem(&1, 1), helper)
   end
 
-  @spec write([String.t], atom, %Helper{}) :: :ok
+  @spec write([String.t], Formatter.line_type | Formatter.row_type, Helper.t)
+  :: :ok
   defp write(elems, type, %Helper{
     rows: _rows, headers: headers, key_headers: key_headers,
-    margin: margin, widths: widths, style: style
+    header_fixes: _header_fixes, margin: margin, widths: widths, style: style
   })
   do
     items = items(elems, Style.borders(style, type))
@@ -291,7 +308,10 @@ defmodule IO.ANSI.Table.Formatter.Helper do
         :normal, :light_green           # right border
       ]
   """
-  @spec attrs([any], [any], atom, atom) :: [atom | [atom]]
+  @spec attrs(
+    [Formatter.collection_key], [Formatter.collection_key],
+    Style.t, Formatter.line_type | Formatter.row_type
+  ) :: [Style.attr]
   def attrs(headers, key_headers, style, type) do
     border_attr  = Style.border_attr(style, type)
     filler_attr  = Style.filler_attr(style, type)
@@ -327,8 +347,8 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> Helper.widths(widths, elements, border_widths)
       [1, 1, 6, 0, 1, 1, 1, 10, 3, 1, 1, 1, 5, 6, 1, 1]
   """
-  @spec widths([non_neg_integer], [String.t], {[...], [...], [...]}) ::
-    [non_neg_integer]
+  @spec widths([Formatter.column_width], [String.t], {[...], [...], [...]})
+  :: [non_neg_integer]
   def widths(widths, elems, {
     left_border_width, inner_border_width, right_border_width
   })
@@ -364,7 +384,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> Helper.format(widths, attrs)
       "\e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
   """
-  @spec format([non_neg_integer], [atom | [atom]]) :: String.t
+  @spec format([non_neg_integer], [Style.attr]) :: String.t
   def format(widths, attrs) do
     fragments = # => chardata (list of strings and/or improper lists)
       widths

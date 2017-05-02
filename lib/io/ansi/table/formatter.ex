@@ -9,6 +9,12 @@ defmodule IO.ANSI.Table.Formatter do
 
   alias IO.ANSI.Table.{Config, Formatter.Helper, Style}
 
+  @type collection :: map | Keyword.t
+  @type collection_key :: String.t | atom | charlist
+  @type column :: [String.t]
+  @type column_width :: non_neg_integer
+  @type row :: [String.t]
+
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
@@ -100,8 +106,8 @@ defmodule IO.ANSI.Table.Formatter do
       +------+---------------+-----------+
       \"""
   """
-  @spec print_table([map | Keyword.t], integer, boolean, atom, Keyword.t) ::
-    :ok
+  @spec print_table([collection], integer, boolean, Style.t, Keyword.t)
+  :: :ok
   def print_table(collections, count, bell, style, options \\ []) do
     headers = Keyword.get(options, :headers, Config.headers)
     key_headers = Keyword.get(options, :key_headers, Config.key_headers)
@@ -123,7 +129,7 @@ defmodule IO.ANSI.Table.Formatter do
     )
   end
 
-  @spec take(map | Keyword.t, [any]) :: map | Keyword.t
+  @spec take(collection, [collection_key]) :: collection
   defp take(collection, headers) when is_map(collection) do
     Map.take collection, headers
   end
@@ -144,7 +150,7 @@ defmodule IO.ANSI.Table.Formatter do
       iex> Formatter.key_for(collection, keys)
       "3.014"
   """
-  @spec key_for(map | Keyword.t, [any]) :: String.t
+  @spec key_for(collection, [collection_key]) :: String.t
   def key_for(collection, keys) do
     Enum.map_join keys, &collection[&1]
   end
@@ -174,7 +180,7 @@ defmodule IO.ANSI.Table.Formatter do
       iex> Formatter.columns(list, [3, :one, '2'])
       [["three", "6"], ["1", "4"], ["2.0", "5"]]
   """
-  @spec columns([map | Keyword.t], [any]) :: [[String.t]]
+  @spec columns([collection], [collection_key]) :: [column]
   def columns(collections, keys) do
     for key <- keys do
       for collection <- collections, do: to_string collection[key]
@@ -206,7 +212,7 @@ defmodule IO.ANSI.Table.Formatter do
       iex> Formatter.rows(list, [3, :one, '2'])
       [["three", "1", "2.0"], ["6", "4", "5"]]
   """
-  @spec rows([map | Keyword.t], [any]) :: [[String.t]]
+  @spec rows([collection], [collection_key]) :: [row]
   def rows(collections, keys) do
     for collection <- collections do
       for key <- keys, do: to_string collection[key]
@@ -234,7 +240,7 @@ defmodule IO.ANSI.Table.Formatter do
       iex> Formatter.widths(data, 7)
       [6, 7]
   """
-  @spec widths([[String.t]], non_neg_integer) :: [non_neg_integer]
+  @spec widths([column], non_neg_integer) :: [column_width]
   def widths(columns, max_width \\ @upper_max_width)
   def widths(columns, max_width) when
     is_integer(max_width) and max_width >= @lower_max_width
@@ -275,7 +281,7 @@ defmodule IO.ANSI.Table.Formatter do
       iex> Formatter.titlecase(:" _an_ _oDD case_ ")
       "An ODD Case"
   """
-  @spec titlecase(any, map) :: String.t
+  @spec titlecase(collection_key, map) :: String.t
   def titlecase(title, fixes \\ %{}) do
     import Enum, only: [map_join: 3, reduce: 3]
     import String, only: [first: 1, replace: 3, slice: 2, split: 3, upcase: 1]
