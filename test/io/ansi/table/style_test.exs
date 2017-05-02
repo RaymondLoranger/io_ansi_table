@@ -68,8 +68,8 @@ defmodule IO.ANSI.Table.StyleTest do
     test "retrieves the border attribute of a table style and line/row type"
     do
       assert Style.border_attr(:medium   , :bottom) == :light_yellow
-      assert Style.border_attr(:black_alt, :top   )
-      == [:black, :black_background]
+      assert Style.border_attr(:blue_alt , :top   )
+      == [:blue, :blue_background]
       assert Style.border_attr(:heavy    , :top   ) == nil
     end
   end

@@ -11,8 +11,8 @@ defmodule IE do
   #   IE.use
   #   print_people :green_mult
   #   print_people :green_mult, 9
-  #   print_people :as_keywords, :black_mult
-  #   print_people :as_keywords, :black_mult, 9
+  #   print_people :as_keywords, :blue_mult
+  #   print_people :as_keywords, :blue_mult, 9
   #   styles()
   #   people()
   #   people :as_keywords

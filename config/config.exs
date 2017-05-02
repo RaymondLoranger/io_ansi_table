@@ -1656,8 +1656,8 @@ config :io_ansi_table, table_styles: %{
       bottom:    [:light_green, :light_green_background]
     }
   },
-  black_alt: %{
-    note: "black header, alternating row colors",
+  blue_alt: %{
+    note: "blue header, alternating row colors",
     rank: 220,
     line_types: [:top, :header, :separator, [:even_row, :odd_row]],
     borders: %{
@@ -1679,40 +1679,40 @@ config :io_ansi_table, table_styles: %{
       bottom:    {[2, 0], [0, 3, 0], [0, 2]}
     },
     border_attrs: %{
-      top:       [:black, :black_background],
-      header:    [:black, :black_background],
-      separator: [:black, :black_background],
+      top:       [:blue, :blue_background],
+      header:    [:blue, :blue_background],
+      separator: [:blue, :blue_background],
       even_row:  [:light_black, :light_black_background],
       odd_row:   [:light_yellow, :light_yellow_background],
-      bottom:    [:black, :black_background]
+      bottom:    [:blue, :blue_background]
     },
     filler_attrs: %{
-      top:       :black_background,
-      header:    :black_background,
-      separator: :black_background,
+      top:       :blue_background,
+      header:    :blue_background,
+      separator: :blue_background,
       even_row:  :light_black_background,
       odd_row:   :light_yellow_background,
-      bottom:    :black_background
+      bottom:    :blue_background
     },
     key_attrs: %{
-      top:       [:black, :black_background],
-      header:    [:light_yellow, :black_background, :underline],
-      separator: [:black, :black_background],
+      top:       [:blue, :blue_background],
+      header:    [:light_yellow, :blue_background, :underline],
+      separator: [:blue, :blue_background],
       even_row:  [:light_blue, :light_black_background],
       odd_row:   [:light_blue, :light_yellow_background],
-      bottom:    [:black, :black_background]
+      bottom:    [:blue, :blue_background]
     },
     non_key_attrs: %{
-      top:       [:black, :black_background],
-      header:    [:light_yellow, :black_background],
-      separator: [:black, :black_background],
+      top:       [:blue, :blue_background],
+      header:    [:light_yellow, :blue_background],
+      separator: [:blue, :blue_background],
       even_row:  [:black, :light_black_background],
       odd_row:   [:black, :light_yellow_background],
-      bottom:    [:black, :black_background]
+      bottom:    [:blue, :blue_background]
     }
   },
-  black_mult: %{
-    note: "black header, 3 repeating row colors",
+  blue_mult: %{
+    note: "blue header, 3 repeating row colors",
     rank: 230,
     line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3]],
     borders: %{
@@ -1736,40 +1736,40 @@ config :io_ansi_table, table_styles: %{
       bottom:    {[2, 0], [0, 3, 0], [0, 2]}
     },
     border_attrs: %{
-      top:       [:black, :black_background],
-      header:    [:black, :black_background],
-      separator: [:black, :black_background],
+      top:       [:blue, :blue_background],
+      header:    [:blue, :blue_background],
+      separator: [:blue, :blue_background],
       row_1:     [:light_black, :light_black_background],
       row_2:     [:light_yellow, :light_yellow_background],
       row_3:     [:light_cyan, :light_cyan_background],
-      bottom:    [:black, :black_background]
+      bottom:    [:blue, :blue_background]
     },
     filler_attrs: %{
-      top:       :black_background,
-      header:    :black_background,
-      separator: :black_background,
+      top:       :blue_background,
+      header:    :blue_background,
+      separator: :blue_background,
       row_1:     :light_black_background,
       row_2:     :light_yellow_background,
       row_3:     :light_cyan_background,
-      bottom:    :black_background
+      bottom:    :blue_background
     },
     key_attrs: %{
-      top:       [:black, :black_background],
-      header:    [:light_yellow, :black_background, :underline],
-      separator: [:black, :black_background],
+      top:       [:blue, :blue_background],
+      header:    [:light_yellow, :blue_background, :underline],
+      separator: [:blue, :blue_background],
       row_1:     [:light_blue, :light_black_background],
       row_2:     [:light_blue, :light_yellow_background],
       row_3:     [:light_blue, :light_cyan_background],
-      bottom:    [:black, :black_background]
+      bottom:    [:blue, :blue_background]
     },
     non_key_attrs: %{
-      top:       [:black, :black_background],
-      header:    [:light_yellow, :black_background],
-      separator: [:black, :black_background],
+      top:       [:blue, :blue_background],
+      header:    [:light_yellow, :blue_background],
+      separator: [:blue, :blue_background],
       row_1:     [:black, :light_black_background],
       row_2:     [:black, :light_yellow_background],
       row_3:     [:black, :light_cyan_background],
-      bottom:    [:black, :black_background]
+      bottom:    [:blue, :blue_background]
     }
   },
   green_alt: %{
