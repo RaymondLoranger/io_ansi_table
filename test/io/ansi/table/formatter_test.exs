@@ -24,7 +24,7 @@ defmodule IO.ANSI.Table.FormatterTest do
     test "fake maps sorted on :key", %{fake_maps: fake_maps} do
       assert fake_maps
       |> Enum.sort_by(&TF.key_for &1, [:key])
-      |> Enum.map(&(&1.key))
+      |> Enum.map(& &1.key)
       == ~w/a b c x y z/
     end
   end
@@ -93,9 +93,9 @@ defmodule IO.ANSI.Table.FormatterTest do
     end
   end
 
-  describe "IO.ANSI.Table.Formatter.widths/1" do
+  describe "IO.ANSI.Table.Formatter.column_widths/1" do
     test "returns max column widths", %{maps: maps} do
-      assert TF.columns(maps, [:c4, :c1, :c2]) |> TF.widths == [7, 5, 6]
+      assert TF.columns(maps, [:c4, :c1, :c2]) |> TF.column_widths == [7, 5, 6]
     end
   end
 end

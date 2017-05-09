@@ -10,7 +10,7 @@ To use `IO ANSI Table` in your Mix project, first add it as a dependency:
 
 ```elixir
 def deps do
-  [{:io_ansi_table, "~> 0.1"}]
+  [{:io_ansi_table, "~> 0.2"}]
 end
 ```
 
@@ -24,8 +24,9 @@ Then run `mix deps.get` to install all dependencies or more specifically:
 In your project's `config/config.exs` file, you should then configure:
 
   - headers
-  - header fixes
   - key headers
+  - header fixes
+  - align attrs
   - margins
 
 Here is an example, if your table relates to NOAA Observations:
@@ -36,16 +37,21 @@ config :io_ansi_table, headers: [
   "location", "observation_time_rfc822"
 ]
 
+config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
+
 config :io_ansi_table, header_fixes: %{
   ~r[ id$]i       => " ID",
   ~r[ mph$]i      => " MPH",
   ~r[ rfc(\d+)$]i => " RFC-\\1"
 }
 
-config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
+config :io_ansi_table, align_attrs: %{
+  "station_id" => :center,
+  "wind_mph"   => :right
+}
 ```
 
-Here is an example to position the table by specifying up to 3 margins:
+And here is how to position the table by specifying up to 3 margins:
 
 ```elixir
 config :io_ansi_table, margins: [
@@ -61,13 +67,10 @@ The above margins represent the default table position.
 
 ```elixir
 config :io_ansi_table, headers: [:name, :date_of_birth, :likes]
-config :io_ansi_table, header_fixes: %{~r[ of ]i => " of "}
 config :io_ansi_table, key_headers: [:date_of_birth]
-config :io_ansi_table, margins: [
-  top:    2, # line(s) before table
-  bottom: 2, # line(s) after table
-  left:   2  # space(s) left of table
-]
+config :io_ansi_table, header_fixes: %{~r[ of ]i => " of "}
+config :io_ansi_table, align_attrs: %{date_of_birth: :right}
+config :io_ansi_table, margins: [top: 2, bottom: 2]
 ```
 
 ```elixir
@@ -83,7 +86,7 @@ Formatter.print_table(people, 3, true, :dark)
 
 N.B. On Windows, run command `chcp 65001` (in **Powershell**) for the UTF-8 code page.
 
-These 2 packages use `io_ansi_table` as a dependency to tabulate data retrieved from the web:
+These 2 packages use `io_ansi_table` as a dependency to tabulate data fetched from the web:
   - [github_issues](https://hex.pm/packages/github_issues)
   - [noaa_observations](https://hex.pm/packages/noaa_observations)
 
@@ -93,9 +96,10 @@ You can create new table styles or modify any of the 35 predefined ones
 by changing the dependency's `config/config.exs` file. You would then need to
 run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
-## Current version
+## Latest version
 
-The current version supports:
+The latest version supports:
 
   - multiple key headers
   - alternating row attributes
+  - alignment of column elements

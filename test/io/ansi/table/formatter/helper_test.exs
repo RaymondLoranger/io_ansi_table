@@ -15,13 +15,11 @@ defmodule IO.ANSI.Table.Formatter.HelperTest do
   end
 
   describe "IO.ANSI.Table.Formatter.Helper.expand/2" do
-    test "expands elements correctly", %{
-      elements: elements, delimiters: delimiters
-    }
+    test "expands elements correctly",
+      %{elements: elements, delimiters: delimiters}
     do
-      assert Helper.expand(elements, delimiters) == [
-        "{", "Number", "│", "Created At", "│", "Title", "}"
-      ]
+      assert Helper.expand(elements, delimiters)
+      == ["{", "Number", "│", "Created At", "│", "Title", "}"]
     end
   end
 end

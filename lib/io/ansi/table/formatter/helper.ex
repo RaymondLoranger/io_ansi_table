@@ -9,43 +9,32 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
-  @ansi_enabled      Application.get_env(@app, :ansi_enabled)
+  @ansi_enabled      Application.get_env @app, :ansi_enabled
 
-  defstruct rows: nil, headers: nil, key_headers: nil,
-    header_fixes: nil, margin: nil, widths: nil, style: nil
+  defstruct rows: nil, headers: nil, column_types: nil, align_attrs: nil,
+    left_margin: nil, column_widths: nil, style: nil
 
+  @type align_attr :: :left | :center | :right
+  @type column_type :: :key | :non_key
+  @type elem :: String.t
+  @type header :: String.t
+  @type item :: String.t
+  @type item_width :: non_neg_integer
   @type t :: %Helper{
     rows: [Formatter.row] | nil,
-    headers: [Formatter.collection_key] | nil,
-    key_headers: [Formatter.collection_key] | nil,
-    header_fixes: map | nil,
-    margin: String.t | nil,
-    widths: [Formatter.column_width] | nil,
+    headers: [header] | nil,
+    column_types: [column_type] | nil,
+    align_attrs: [align_attr] | nil,
+    left_margin: String.t | nil,
+    column_widths: [Formatter.column_width] | nil,
     style: Style.t | nil
   }
 
   @doc """
-  Creates a table formatter helper (struct).
-  """
-  @spec new(
-    [Formatter.row], [Formatter.collection_key], [Formatter.collection_key],
-    map, String.t, [Formatter.column_width], Style.t
-  ) :: Helper.t
-  def new(
-    rows, headers, key_headers,
-    header_fixes, margin, widths, style
-  )
-  do
-    %Helper{
-      rows: rows, headers: headers, key_headers: key_headers,
-      header_fixes: header_fixes, margin: margin, widths: widths, style: style
-    }
-  end
-
-  @doc """
   Takes a list of `rows` (string sublists), a list of `headers`, a list
-  of `key headers`, a map of `header fixes`, a keyword list of `margins`,
-  a list of column `widths`, a table `style` and whether to ring the `bell`.
+  of `key headers`, a map of `header fixes`, a map of `align attributes`,
+  a keyword list of `margins`, a list of `column widths`, a table `style`
+  and whether to ring the `bell`.
 
   Prints a table to STDOUT of the strings in each `row`.
   The columns are identified by successive `headers`.
@@ -59,68 +48,75 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       alias IO.ANSI.Table.Formatter.Helper
       capitals = [
         ["Ottawa", "Canada" , "1,142,700"],
-        ["Zagreb", "Croatia", "  685,500"],
+        ["Zagreb", "Croatia",   "685,500"],
         ["Paris" , "France" , "9,854,000"]
       ]
       headers = ['city', 'country', 'population']
       key_headers = ['country']
       header_fixes = %{}
+      align_attrs = %{'population' => :right}
       margins = [top: 2, bottom: 2, left: 2]
-      widths = [6, 7, 10]
-      table_style = :medium
-      bell = true
+      column_widths = [6, 7, 10]
+      style = :medium
+      bell? = true
       Helper.print_table(
         capitals, headers, key_headers,
-        header_fixes, margins, widths, table_style, bell
+        header_fixes, align_attrs, margins, column_widths, style, bell?
       )
   ## ![print_table_capitals](images/print_table_capitals.png)
-      iex> alias IO.ANSI.Table.Formatter.Helper
       iex> alias ExUnit.CaptureIO
+      iex> alias IO.ANSI.Table.Formatter.Helper
       iex> capitals = [
       ...>   ["Ottawa", "Canada" , "1,142,700"],
-      ...>   ["Zagreb", "Croatia", "  685,500"],
+      ...>   ["Zagreb", "Croatia",   "685,500"],
       ...>   ["Paris" , "France" , "9,854,000"]
       ...> ]
       iex> headers = ['city', :country, "population"]
       iex> key_headers = [:country]
       iex> header_fixes = %{}
+      iex> align_attrs = %{"population" => :right}
       iex> margins = [top: 2, bottom: 2, left: 3]
-      iex> widths = [6, 7, 10]
-      iex> table_style = :dashed
-      iex> bell = false
+      iex> column_widths = [6, 7, 10]
+      iex> style = :dashed
+      iex> bell? = false
       iex> CaptureIO.capture_io fn ->
       ...>   Helper.print_table(
       ...>     capitals, headers, key_headers,
-      ...>     header_fixes, margins, widths, table_style, bell
+      ...>     header_fixes, align_attrs, margins, column_widths, style, bell?
       ...>   )
       ...> end
       "\\n\\n" <> \"""
          +--------+---------+------------+
          | City   | Country | Population |
          +--------+---------+------------+
-         | Ottawa | Canada  | 1,142,700  |
-         | Zagreb | Croatia |   685,500  |
-         | Paris  | France  | 9,854,000  |
+         | Ottawa | Canada  |  1,142,700 |
+         | Zagreb | Croatia |    685,500 |
+         | Paris  | France  |  9,854,000 |
          +--------+---------+------------+
       \""" <> "\\n\\n"
   """
   @spec print_table(
     [Formatter.row], [Formatter.collection_key], [Formatter.collection_key],
-    map, Keyword.t, [Formatter.column_width], Style.t, boolean
+    map, map, Keyword.t, [Formatter.column_width], Style.t, boolean
   ) :: :ok
   def print_table(
     rows, headers, key_headers,
-    header_fixes, margins, widths, style, bell
+    header_fixes, align_attrs, margins, column_widths, style, bell?
   )
   do
-    margin = String.duplicate " ", margins[:left]
-    helper = new(
-      rows, headers, key_headers, header_fixes, margin, widths, style
-    )
-    IO.write String.duplicate("\n", margins[:top])
+    left_margin = String.duplicate " ", margins[:left]
+    align_attrs = Enum.map headers, &Map.get(align_attrs, &1, :left)
+    column_types = Enum.map headers, & &1 in key_headers && :key || :non_key
+    headers = Enum.map headers, &Formatter.titlecase(&1, header_fixes)
+    helper = %Helper{
+      rows: rows, headers: headers, column_types: column_types,
+      align_attrs: align_attrs, left_margin: left_margin,
+      column_widths: column_widths, style: style
+    }
+    IO.write String.duplicate "\n", margins[:top]
     Enum.each Style.line_types(style), &write(helper, &1)
-    IO.write String.duplicate("\n", margins[:bottom])
-    IO.write bell && "\a" || ""
+    IO.write String.duplicate "\n", margins[:bottom]
+    IO.write bell? && "\a" || ""
   end
 
   @doc """
@@ -149,14 +145,14 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       helper = %Helper{
         rows: [
           ["Ottawa", "Canada" , "1,142,700"],
-          ["Zagreb", "Croatia", "  685,500"],
+          ["Zagreb", "Croatia",   "685,500"],
           ["Paris" , "France" , "9,854,000"]
         ],
-        headers: ["city", "country", "population"],
-        key_headers: ["country"],
-        header_fixes: %{},
-        margin: "\s\s\s",
-        widths: [6, 7, 10],
+        headers: ["City", "Country", "Population"],
+        column_types: [:non_key, :key, :non_key],
+        align_attrs: [:left, :left, :right],
+        left_margin: "\s\s\s",
+        column_widths: [6, 7, 10],
         style: :pretty_alt
       }
       Enum.each [:top, :header, :separator], &Helper.write(helper, &1)
@@ -164,47 +160,56 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       Helper.write helper, [:even_row, :odd_row]
   ## ![write_rows](images/write_rows.png)
   """
-  @spec write(Helper.t, Style.line_type | [Style.row_type]) :: :ok
-  def write(helper = %Helper{widths: widths, style: style}, type) when
-    type in [:top, :separator, :bottom]
+  @spec write(t, Style.line_type | [Style.row_type]) :: :ok
+  def write(
+    %Helper{column_widths: column_widths, style: style} = helper,
+    type
+  ) when type in [:top, :separator, :bottom]
   do
-    widths
+    column_widths
     |> Enum.map(&String.duplicate Style.dash(style, type), &1)
     |> write(type, helper)
   end
   def write(
-    helper = %Helper{headers: headers, header_fixes: header_fixes}, type
+    %Helper{headers: headers} = helper,
+    type
   ) when type == :header
   do
-    headers
-    |> Enum.map(&Formatter.titlecase &1, header_fixes)
-    |> write(type, helper)
+    write(headers, type, helper)
   end
-  def write(helper = %Helper{rows: rows}, type) when is_list(type) do
+  def write(
+    %Helper{rows: rows} = helper,
+    type
+  ) when is_list(type)
+  do
     rows
     |> Stream.zip(Stream.cycle type)
     |> Enum.each(&write elem(&1, 0), elem(&1, 1), helper)
   end
 
-  @spec write([String.t], Style.line_type | Style.row_type, Helper.t)
-  :: :ok
-  defp write(elems, type, %Helper{
-    rows: _rows, headers: headers, key_headers: key_headers,
-    header_fixes: _header_fixes, margin: margin, widths: widths, style: style
-  })
+  @spec write([elem], Style.line_type | Style.row_type, t) :: :ok
+  defp write(
+    elems, type,
+    %Helper{
+      rows: _rows, headers: _headers, column_types: column_types,
+      align_attrs: align_attrs, left_margin: left_margin,
+      column_widths: column_widths, style: style
+    }
+  )
   do
     items = items(elems, Style.borders(style, type))
-    attrs = attrs(headers, key_headers, style, type)
-    widths = widths(widths, elems, Style.border_widths(style, type))
-    IO.write margin
-    :io.format(format(widths, attrs), items)
+    item_attrs = item_attrs(column_types, style, type)
+    item_widths = item_widths(
+      column_widths, elems, align_attrs, Style.border_widths(style, type)
+    )
+    IO.write left_margin
+    :io.format(format(item_widths, item_attrs), items)
   end
 
   @doc """
-  Takes a list of `elements` and a tuple of 3 `delimiters` (left,
-  inner and right).
+  Takes an enumerable and a tuple of 3 `delimiters` (left, inner and right).
 
-  Expands the list of `elements` by combining the `delimiters`.
+  Expands the `elements` in the enumerable by combining the `delimiters`.
 
   The inner `delimiter` is inserted between all `elements` and
   the result is then surrounded by the left and right `delimiters`.
@@ -238,7 +243,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> Helper.expand(elements, delimiters)
       [1, 1, 6, 1, 1, 1, 10, 1, 1, 1, 5, 1, 1]
   """
-  @spec expand([any], {any, any, any}) :: [any]
+  @spec expand(Enumerable.t, {any, any, any}) :: [any]
   def expand(elems, {left, inner, right}) do
     List.flatten [left] ++ Enum.intersperse(elems, inner) ++ [right]
   end
@@ -247,7 +252,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   Takes a list of `elements` and a tuple of 3 `borders` (left, inner
   and right).
 
-  Will expand the list of `elements` by combining "fillers" and `borders`.
+  Expands the list of `elements` by combining "fillers" and `borders`.
 
   ## Examples
 
@@ -255,81 +260,80 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> elements = ["Number", "Created At", "Title"]
       iex> borders = {"<", "~", ">"}
       iex> Helper.items(elements, borders)
-      [ "<", "",
-        "Number", "",
-        "", "~", "",
-        "Created At", "",
-        "", "~", "",
-        "Title", "",
-        "", ">"
+      [ "<", "",              # left border, filler
+        "", "Number", "",     # filler, element, filler
+        "", "~", "",          # filler, inner border, filler
+        "", "Created At", "", # filler, element, filler
+        "", "~", "",          # filler, inner border, filler
+        "", "Title", "",      # filler, element, filler
+        "", ">"               # filler, right border
       ]
   """
-  @spec items([String.t], {String.t, String.t, String.t}) :: [String.t]
+  @spec items([elem], Style.borders) :: [item]
   def items(elems, {left_border, inner_border, right_border}) do
-    expand(elems, {
-      [    [    left_border,  ""]],
-      ["", ["", inner_border, ""]],
-      ["", ["", right_border    ]]
-    })
+    expand elems, {
+      [    [    left_border,  ""], ""],
+      ["", ["", inner_border, ""], ""],
+      ["", ["", right_border    ]    ]
+    }
   end
 
   @doc """
-  Returns the list of attributes for a given table `style` and line/row `type`.
+  Returns the list of attributes based on the given `column types`,
+  table `style` and line/row `type`.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Formatter.Helper
-      iex> headers = ["Number", "Created At", "Title"]
-      iex> key_headers = ["Created At"]
-      iex> style = :dark
+      iex> column_types = [:non_key, :key, :non_key]
+      iex> style = :medium
       iex> type = :header
-      iex> Helper.attrs(headers, key_headers, style, type)
-      [ :light_green, :normal,                          # left border
-        :light_red, :normal,                            # non key column
-        :normal, :light_green, :normal,                 # inner border
-        [:light_white, :light_red_background], :normal, # key column
-        :normal, :light_green, :normal,                 # inner border
-        :light_red, :normal,                            # non key column
-        :normal, :light_green                           # right border
+      iex> Helper.item_attrs(column_types, style, type)
+      [ :light_yellow, :normal,                       # left border
+        :normal, :light_green, :normal,               # non key column
+        :normal, :light_yellow, :normal,              # inner border
+        :normal, [:light_green, :underline], :normal, # key column
+        :normal, :light_yellow, :normal,              # inner border
+        :normal, :light_green, :normal,               # non key column
+        :normal, :light_yellow                        # right border
       ]
 
       iex> alias IO.ANSI.Table.Formatter.Helper
-      iex> headers = ["Number", "Created At", "Title"]
-      iex> key_headers = ["Created At"]
+      iex> column_types = [:non_key, :key, :non_key]
       iex> style = :dark
       iex> type = :row
-      iex> Helper.attrs(headers, key_headers, style, type)
-      [ :light_green, :normal,          # left border
-        :light_green, :normal,          # non key column
-        :normal, :light_green, :normal, # inner border
-        :light_magenta, :normal,        # key column
-        :normal, :light_green, :normal, # inner border
-        :light_green, :normal,          # non key column
-        :normal, :light_green           # right border
+      iex> Helper.item_attrs(column_types, style, type)
+      [ :light_green, :normal,            # left border
+        :normal, :light_green, :normal,   # non key column
+        :normal, :light_green, :normal,   # inner border
+        :normal, :light_magenta, :normal, # key column
+        :normal, :light_green, :normal,   # inner border
+        :normal, :light_green, :normal,   # non key column
+        :normal, :light_green             # right border
       ]
   """
-  @spec attrs(
-    [Formatter.collection_key], [Formatter.collection_key],
-    Style.t, Style.line_type | Style.row_type
-  ) :: [Style.attr]
-  def attrs(headers, key_headers, style, type) do
-    border_attr  = Style.border_attr(style, type)
-    filler_attr  = Style.filler_attr(style, type)
-    key_attr     = Style.key_attr(style, type)
-    non_key_attr = Style.non_key_attr(style, type)
-    headers
-    |> Enum.map(&(&1 in key_headers && {key_attr} || {non_key_attr}))
-    |> expand({ # wrap attributes in braces to prevent flattening
-      [               [               {border_attr}, {filler_attr}]],
-      [{filler_attr}, [{filler_attr}, {border_attr}, {filler_attr}]],
-      [{filler_attr}, [{filler_attr}, {border_attr}               ]]
+  @spec item_attrs([column_type], Style.t, Style.line_type | Style.row_type) ::
+    [Style.attr]
+  def item_attrs(column_types, style, type) do
+    # wrap attributes in braces to prevent flattening
+    border_attr  = {Style.border_attr(style, type)}
+    filler_attr  = {Style.filler_attr(style, type)}
+    key_attr     = {Style.key_attr(style, type)}
+    non_key_attr = {Style.non_key_attr(style, type)}
+    column_types
+    |> Enum.map(& &1 == :key && key_attr || non_key_attr)
+    |> expand({
+      [             [             border_attr, filler_attr], filler_attr],
+      [filler_attr, [filler_attr, border_attr, filler_attr], filler_attr],
+      [filler_attr, [filler_attr, border_attr             ]             ]
     })
-    |> Enum.map(&(elem &1, 0)) # unwrap attributes
+    |> Enum.map(& elem &1, 0) # unwrap attributes
   end
 
   @doc """
-  Takes a list of column `widths`, a list of `elements` and a tuple
-  of 3 multipart `border widths` (left, inner and right):
+  Takes a list of `column widths`, a list of `elements`, a list of
+  `align attributes` and a tuple of 3 multipart `border widths`
+  (left, inner and right):
 
     - `left`  - widths of left border and "filler"
     - `inner` - widths of "filler", inner border and "filler"
@@ -341,32 +345,57 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   ## Examples
 
       iex> alias IO.ANSI.Table.Formatter.Helper
-      iex> widths = [6, 13, 11]
-      iex> elements = ["Number", "Created At", "Title"]
+      iex> column_widths = [7, 13, 11]
+      iex> elems = ["Number", "Created At", "Title"]
+      iex> align_attrs = [:right, :center, :left]
       iex> border_widths = {[1, 1], [1, 1, 1], [1, 1]}
-      iex> Helper.widths(widths, elements, border_widths)
-      [1, 1, 6, 0, 1, 1, 1, 10, 3, 1, 1, 1, 5, 6, 1, 1]
+      iex> Helper.item_widths(column_widths, elems, align_attrs, border_widths)
+      [1, 1, 1, 6, 0, 1, 1, 1, 1, 10, 2, 1, 1, 1, 0, 5, 6, 1, 1]
   """
-  @spec widths([Formatter.column_width], [String.t], {[...], [...], [...]})
-  :: [non_neg_integer]
-  def widths(widths, elems, {
-    left_border_width, inner_border_width, right_border_width
-  })
+  @spec item_widths(
+    [Formatter.column_width], [elem], [align_attr],
+    Style.border_widths
+  ) :: [item_width]
+  def item_widths(
+    column_widths, elems, align_attrs,
+    {left_border_widths, inner_border_widths, right_border_widths}
+  )
   do
-    widths
-    |> Enum.zip(elems)
-    |> Enum.map(fn {w, e} ->
-      #┌─────elem length──────┐  ┌──────filler length───────┐
-      [min(String.length(e), w), w - min(String.length(e), w)]
-    end)
-    |> expand({left_border_width, inner_border_width, right_border_width})
+    Stream.zip([column_widths, elems, align_attrs])
+    |> Stream.map(&column_widths &1)
+    |> expand({left_border_widths, inner_border_widths, right_border_widths})
+  end
+
+  @spec column_widths({Formatter.column_width, elem, align_attr}) ::
+    [non_neg_integer]
+  defp column_widths {column_width, elem, :left} do
+    elem_width = min String.length(elem), column_width
+    left_filler_width = 0
+    right_filler_width = column_width - elem_width
+    [left_filler_width, elem_width, right_filler_width]
+  end
+  defp column_widths {column_width, elem, :right} do
+    elem_width = min String.length(elem), column_width
+    left_filler_width = column_width - elem_width
+    right_filler_width = 0
+    [left_filler_width, elem_width, right_filler_width]
+  end
+  defp column_widths {column_width, elem, :center} do
+    elem_width = min String.length(elem), column_width
+    left_filler_width = div column_width - elem_width, 2
+    right_filler_width = column_width - left_filler_width - elem_width
+    [left_filler_width, elem_width, right_filler_width]
+  end
+  defp column_widths {column_width, elem, _faulty} do
+    column_widths {column_width, elem, :left}
   end
 
   @doc ~S"""
-  Takes a list of `widths` and a list of corresponding `attributes`.
+  Takes a list of `item widths` and a list of corresponding
+  `item attributes`.
 
-  Returns an Erlang io format reflecting these `widths` and `attributes`.
-  It consists of a string with embedded
+  Returns an Erlang io format reflecting these `item widths` and
+  `item attributes`. It consists of a string with embedded
   [ANSI color codes](https://gist.github.com/chrisopedia/8754917)
   (escape sequences).
 
@@ -379,16 +408,16 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   ## Examples
 
       iex> alias IO.ANSI.Table.Formatter.Helper
-      iex> widths = [2, 0, 6]
-      iex> attrs = [:light_yellow, :normal, :light_cyan]
-      iex> Helper.format(widths, attrs)
+      iex> item_widths = [2, 0, 6]
+      iex> item_attrs = [:light_yellow, :normal, :light_cyan]
+      iex> Helper.format(item_widths, item_attrs)
       "\e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
   """
   @spec format([non_neg_integer], [Style.attr]) :: String.t
-  def format(widths, attrs) do
+  def format(item_widths, item_attrs) do
     fragments = # => chardata (list of strings and/or improper lists)
-      widths
-      |> Enum.zip(attrs)
+      item_widths
+      |> Enum.zip(item_attrs)
       |> Enum.map(fn {width, attr} ->
         case attr do
           :normal -> "~-#{width}ts" # t for Unicode translation

@@ -3,8 +3,8 @@
 
 defmodule IO.ANSI.Table.Formatter do
   @moduledoc """
-  Prints a table applying a table style. Each row is
-  a list of values identified by successive headers.
+  Prints a table to STDOUT applying a table style to a list of key-value
+  collections.
   """
 
   alias IO.ANSI.Table.{Config, Formatter.Helper, Style}
@@ -18,18 +18,19 @@ defmodule IO.ANSI.Table.Formatter do
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
-  @max_width_range   Application.get_env(@app, :max_width_range)
+  @max_width_range   Application.get_env @app, :max_width_range
   @lower_max_width   @max_width_range.first
   @upper_max_width   @max_width_range.last
 
   @doc """
   Takes a list of key-value `collections`, the (maximum) number of
   `collections` to format, whether to ring the `bell`, a table `style` and
-  up to five `options`:
+  up to six `options`:
 
     - `headers`      - to identify each column (keys)
     - `key headers`  - to sort the `collections` on
     - `header fixes` - to alter the `headers`
+    - `align attrs`  - to align column elements
     - `margins`      - to position the table
     - `max width`    - to cap column widths
 
@@ -48,17 +49,18 @@ defmodule IO.ANSI.Table.Formatter do
 
     - `collections` - list of collections (maps or keywords)
     - `count`       - number of collections to format (integer)
-    - `bell`        - ring the bell? (boolean)
+    - `bell?`       - ring the bell? (boolean)
     - `style`       - table style (atom)
-    - `options`     - up to five options as described (keyword)
+    - `options`     - up to six options as described (keyword)
 
   ## Options
 
-    - `:headers`      - defaults to config value `:headers` (list)
-    - `:key_headers`  - defaults to config value `:key_headers` (list)
-    - `:header_fixes` - defaults to config value `:header_fixes` (map)
-    - `:margins`      - defaults to config value `:margins` (keyword)
-    - `:max_width`    - defaults to config value `:max_width` (non neg integer)
+    - `:headers`      - defaults to config for `:headers` (list)
+    - `:key_headers`  - defaults to config for `:key_headers` (list)
+    - `:header_fixes` - defaults to config for `:header_fixes` (map)
+    - `:align_attrs`  - defaults to config for `:align_attrs` (map)
+    - `:margins`      - defaults to config for `:margins` (keyword)
+    - `:max_width`    - defaults to config for `:max_width` (non neg integer)
 
   ## Table styles
 
@@ -77,11 +79,12 @@ defmodule IO.ANSI.Table.Formatter do
         headers: [:name, :date_of_birth, :likes],
         key_headers: [:date_of_birth],
         header_fixes: %{~r[ of ]i => " of "},
+        align_attrs: %{date_of_birth: :right},
         margins: [top: 2, bottom: 2, left: 2]
       )
   ## ![print_table_people](images/print_table_people.png)
-      iex> alias IO.ANSI.Table.Formatter
       iex> alias ExUnit.CaptureIO
+      iex> alias IO.ANSI.Table.Formatter
       iex> people = [
       ...>   %{name: "Mike", likes: "ski, arts", date_of_birth: "1992-04-15"},
       ...>   %{name: "Mary", likes: "reading"  , date_of_birth: "1985-07-11"},
@@ -93,6 +96,7 @@ defmodule IO.ANSI.Table.Formatter do
       ...>     headers: [:name, :date_of_birth, :likes],
       ...>     key_headers: [:date_of_birth],
       ...>     header_fixes: %{~r[ of ]i => " of "},
+      ...>     align_attrs: %{date_of_birth: :right},
       ...>     margins: [top: 0, bottom: 0, left: 0]
       ...>   )
       ...> end
@@ -100,18 +104,19 @@ defmodule IO.ANSI.Table.Formatter do
       +------+---------------+-----------+
       | Name | Date of Birth | Likes     |
       +------+---------------+-----------+
-      | Ray  | 1977-08-28    | cycling   |
-      | Mary | 1985-07-11    | reading   |
-      | Mike | 1992-04-15    | ski, arts |
+      | Ray  |    1977-08-28 | cycling   |
+      | Mary |    1985-07-11 | reading   |
+      | Mike |    1992-04-15 | ski, arts |
       +------+---------------+-----------+
       \"""
   """
-  @spec print_table([collection], integer, boolean, Style.t, Keyword.t)
-  :: :ok
-  def print_table(collections, count, bell, style, options \\ []) do
+  @spec print_table([collection], integer, boolean, Style.t, Keyword.t) ::
+    :ok
+  def print_table(collections, count, bell?, style, options \\ []) do
     headers = Keyword.get(options, :headers, Config.headers)
     key_headers = Keyword.get(options, :key_headers, Config.key_headers)
     header_fixes = Keyword.get(options, :header_fixes, Config.header_fixes)
+    align_attrs = Keyword.get(options, :align_attrs, Config.align_attrs)
     margins = Config.margins Keyword.get(options, :margins)
     max_width = Keyword.get(options, :max_width, Config.max_width)
     collections =
@@ -119,13 +124,14 @@ defmodule IO.ANSI.Table.Formatter do
       |> Stream.map(&take &1, headers) # optional
       |> Enum.sort_by(&key_for &1, key_headers)
       |> Enum.take(count)
-    widths =
+    column_widths =
       [Map.new(headers, &{&1, titlecase(&1, header_fixes)}) | collections]
       |> columns(headers)
-      |> widths(max_width) # => max widths of column values or headers
+      |> column_widths(max_width) # => max widths of column values or headers
     rows = rows(collections, headers)
     Helper.print_table(
-      rows, headers, key_headers, header_fixes, margins, widths, style, bell
+      rows, headers, key_headers,
+      header_fixes, align_attrs, margins, column_widths, style, bell?
     )
   end
 
@@ -166,18 +172,18 @@ defmodule IO.ANSI.Table.Formatter do
 
       iex> alias IO.ANSI.Table.Formatter
       iex> list = [
-      ...>   %{"a" => "1", "b" => "2", "c" => "3"},
-      ...>   %{"a" => "4", "b" => "5", "c" => "6"}
+      ...>   %{a: 1, b: 2, c: 3},
+      ...>   %{a: 4, b: 5, c: 6}
       ...> ]
-      iex> Formatter.columns(list, ["c", "a"])
+      iex> Formatter.columns list, [:c, :a]
       [["3", "6"], ["1", "4"]]
 
       iex> alias IO.ANSI.Table.Formatter
       iex> list = [
-      ...>   %{:one => "1", '2' => 2.0, 3 => :three},
-      ...>   %{:one => '4', '2' => "5", 3 => 000006}
+      ...>   %{:one => "1", '2' => 2.0, "3" => :three},
+      ...>   %{:one => '4', '2' => "5", "3" => 000006}
       ...> ]
-      iex> Formatter.columns(list, [3, :one, '2'])
+      iex> Formatter.columns list, ["3", :one, '2']
       [["three", "6"], ["1", "4"], ["2.0", "5"]]
   """
   @spec columns([collection], [collection_key]) :: [column]
@@ -198,18 +204,18 @@ defmodule IO.ANSI.Table.Formatter do
 
       iex> alias IO.ANSI.Table.Formatter
       iex> list = [
-      ...>   %{"a" => "1", "b" => "2", "c" => "3"},
-      ...>   %{"a" => "4", "b" => "5", "c" => "6"}
+      ...>   %{a: 1, b: 2, c: 3},
+      ...>   %{a: 4, b: 5, c: 6}
       ...> ]
-      iex> Formatter.rows(list, ["c", "a"])
+      iex> Formatter.rows list, [:c, :a]
       [["3", "1"], ["6", "4"]]
 
       iex> alias IO.ANSI.Table.Formatter
       iex> list = [
-      ...>   %{:one => "1", '2' => 2.0, 3 => :three},
-      ...>   %{:one => '4', '2' => "5", 3 => 000006}
+      ...>   %{:one => "1", '2' => 2.0, "3" => :three},
+      ...>   %{:one => '4', '2' => "5", "3" => 000006}
       ...> ]
-      iex> Formatter.rows(list, [3, :one, '2'])
+      iex> Formatter.rows list, ["3", :one, '2']
       [["three", "1", "2.0"], ["6", "4", "5"]]
   """
   @spec rows([collection], [collection_key]) :: [row]
@@ -221,35 +227,32 @@ defmodule IO.ANSI.Table.Formatter do
 
   @doc """
   Given a list of `columns` (string sublists), returns a list containing
-  the maximum width of each `column` capped by `maximum width`.
+  the width of each `column` capped by `maximum width`.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Formatter
       iex> data = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
-      iex> Formatter.widths(data)
+      iex> Formatter.column_widths(data)
       [6, 8]
 
       iex> alias IO.ANSI.Table.Formatter
-      iex> data = [[":cat", "{1, 2}", "007"], ["mongoose", ":ant", "3.1416"]]
-      iex> Formatter.widths(data)
-      [6, 8]
-
-      iex> alias IO.ANSI.Table.Formatter
-      iex> data = [[":cat", "{1, 2}", "007"], ["mongoose", ":ant", "3.1416"]]
-      iex> Formatter.widths(data, 7)
+      iex> data = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
+      iex> Formatter.column_widths(data, 7)
       [6, 7]
   """
-  @spec widths([column], non_neg_integer) :: [column_width]
-  def widths(columns, max_width \\ @upper_max_width)
-  def widths(columns, max_width) when
+  @spec column_widths([column], non_neg_integer) :: [column_width]
+  def column_widths(columns, max_width \\ @upper_max_width)
+  def column_widths(columns, max_width) when
     is_integer(max_width) and max_width >= @lower_max_width
   do
     for column <- columns do
       column |> Enum.map(&String.length/1) |> Enum.max |> min(max_width)
     end
   end
-  def widths(columns, _max_width), do: widths(columns, @lower_max_width)
+  def column_widths(columns, _max_width) do
+    column_widths(columns, @lower_max_width)
+  end
 
   @doc ~S"""
   Uppercases the first letter of every "word" of a `title` (must be
@@ -265,20 +268,20 @@ defmodule IO.ANSI.Table.Formatter do
   ## Examples
 
       iex> alias IO.ANSI.Table.Formatter
-      iex> Formatter.titlecase(" son   of a gun ", %{
+      iex> Formatter.titlecase " son   of a gun ", %{
       ...>   ~r[ of ]i => " of ",
       ...>   ~r[ a ]i  => " a "
-      ...> })
+      ...> }
       "Son of a Gun"
 
       iex> alias IO.ANSI.Table.Formatter
-      iex> Formatter.titlecase("_date___of_birth_", %{
+      iex> Formatter.titlecase "_date___of_birth_", %{
       ...>   ~r[ of ]i => " of "
-      ...> })
+      ...> }
       "Date of Birth"
 
       iex> alias IO.ANSI.Table.Formatter
-      iex> Formatter.titlecase(:" _an_ _oDD case_ ")
+      iex> Formatter.titlecase :" _an_ _oDD case_ "
       "An ODD Case"
   """
   @spec titlecase(collection_key, map) :: String.t

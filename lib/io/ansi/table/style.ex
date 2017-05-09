@@ -5,6 +5,16 @@ defmodule IO.ANSI.Table.Style do
   """
 
   @type attr :: [atom] | atom
+  # {left_border, inner_border, right_border}
+  @type borders :: {String.t, String.t, String.t}
+  @type border_widths :: {
+  # [left_border_width, filler_width]
+    [non_neg_integer],
+  # [filler_width, inner_border_width, filler_width]
+    [non_neg_integer],
+  # [filler_width, right_border_width]
+    [non_neg_integer]
+  }
   @type line_type :: :top | :header | :separator | :bottom
   @type row_type :: :row | :even_row | :odd_row | :row_1 | :row_2 | :row_3
   @type t :: atom
@@ -12,7 +22,7 @@ defmodule IO.ANSI.Table.Style do
   Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
   @external_resource Path.expand Mix.Project.config[:config_path]
   @app               Mix.Project.config[:app]
-  @styles            Application.get_env(@app, :table_styles)
+  @styles            Application.get_env @app, :table_styles
 
   Module.register_attribute __MODULE__, :style_lengths, accumulate: true
 
@@ -29,7 +39,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.style_for("green-alt")
       {:ok, :green_alt}
   """
-  @spec style_for(String.t) :: {:ok, atom} | :error
+  @spec style_for(String.t) :: {:ok, t} | :error
   def style_for(tag)
 
   @doc """
@@ -109,8 +119,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.borders(:cyan, :row)
       {"║", "║", "║"}
   """
-  @spec borders(t, line_type | row_type) ::
-    {String.t, String.t, String.t} | nil
+  @spec borders(t, line_type | row_type) :: borders | nil
   def borders(style, type)
 
   for {style, %{borders: borders}} <- @styles do
@@ -139,8 +148,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.border_widths(:plain, :header) # borders: "│" ,  "│" ,  "│"
       {[1, 1], [1, 1, 1], [1, 1]}
   """
-  @spec border_widths(t, line_type | row_type) ::
-    {[...], [...], [...]} | nil
+  @spec border_widths(t, line_type | row_type) :: border_widths | nil
   def border_widths(style, type)
 
   for {style, %{border_widths: border_widths}} <- @styles do
@@ -255,9 +263,9 @@ defmodule IO.ANSI.Table.Style do
     - `&rank`   - table style rank (3 digits)
   """
   @spec texts(String.t, (String.t -> any)) :: [any]
-  def texts(template, fun \\ &(&1)) when is_function(fun, 1) do
+  def texts(template, fun \\ & &1) when is_function(fun, 1) do
     @styles
-    |> Enum.sort(&(elem(&1, 1).rank <= elem(&2, 1).rank))
+    |> Enum.sort(& elem(&1, 1).rank <= elem(&2, 1).rank)
     |> Stream.map(&interpolate &1, template)
     |> Enum.map(&fun.(&1))
   end

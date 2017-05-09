@@ -9,7 +9,7 @@ defmodule IO.ANSI.Table.StyleTest do
   doctest Style
 
   test "Is it really that easy?" do
-    assert Code.ensure_loaded?(Style)
+    assert Code.ensure_loaded? Style
   end
 
   describe "IO.ANSI.Table.Style.style_for/1" do
@@ -60,17 +60,20 @@ defmodule IO.ANSI.Table.StyleTest do
       == {[2, 0], [0, 3, 0], [0, 2]}
       assert Style.border_widths(:light , :row   )
       == {[1, 1], [1, 1, 1], [1, 1]}
-      assert Style.border_widths(:heavy , :bottom) == nil
+      assert Style.border_widths(:heavy , :bottom)
+      == nil
     end
   end
 
   describe "IO.ANSI.Table.Style.border_attr/2" do
     test "retrieves the border attribute of a table style and line/row type"
     do
-      assert Style.border_attr(:medium   , :bottom) == :light_yellow
-      assert Style.border_attr(:blue_alt , :top   )
-      == [:blue, :blue_background]
-      assert Style.border_attr(:heavy    , :top   ) == nil
+      assert Style.border_attr(:medium   , :bottom)
+      == :light_yellow
+      assert Style.border_attr(:cyan_alt , :top   )
+      == [:cyan, :cyan_background]
+      assert Style.border_attr(:heavy    , :top   )
+      == nil
     end
   end
 
@@ -90,17 +93,20 @@ defmodule IO.ANSI.Table.StyleTest do
       == [:light_green, :underline]
       assert Style.key_attr(:cyan  , :row   )
       == [:light_blue, :light_cyan_background]
-      assert Style.key_attr(:cyan  , :middle) == nil
+      assert Style.key_attr(:cyan  , :middle)
+      == nil
     end
   end
 
   describe "IO.ANSI.Table.Style.non_key_attr/2" do
     test "retrieves the non key attribute of a table style and line/row type"
     do
-      assert Style.non_key_attr(:medium, :header) == :light_green
+      assert Style.non_key_attr(:medium, :header)
+      == :light_green
       assert Style.non_key_attr(:cyan  , :bottom)
       == [:light_blue, :light_cyan_background]
-      assert Style.non_key_attr(:cyan  , :middle) == nil
+      assert Style.non_key_attr(:cyan  , :middle)
+      == nil
     end
   end
 

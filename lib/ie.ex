@@ -11,8 +11,8 @@ defmodule IE do
   #   IE.use
   #   print_people :green_mult
   #   print_people :green_mult, 9
-  #   print_people :as_keywords, :blue_mult
-  #   print_people :as_keywords, :blue_mult, 9
+  #   print_people :as_keywords, :cyan_mult
+  #   print_people :as_keywords, :cyan_mult, 9
   #   styles()
   #   people()
   #   people :as_keywords
@@ -54,7 +54,7 @@ defmodule IE do
   end
 
   def people(:as_keywords) do
-    Enum.map(IE.people, &Keyword.new/1) # people as keywords
+    Enum.map IE.people, &Keyword.new/1 # people as keywords
   end
 
   def headers do
@@ -71,6 +71,12 @@ defmodule IE do
     }
   end
 
+  def align_attrs do
+    %{:date_of_birth => :center,
+      :weight        => :right
+    }
+  end
+
   def margins do
     [top: 0, bottom: 0, left: 2]
   end
@@ -79,7 +85,8 @@ defmodule IE do
     Formatter.print_table(
       people(), length(people()), true, style,
       headers: headers(), key_headers: key_headers(),
-      header_fixes: header_fixes(), margins: margins()
+      header_fixes: header_fixes(), margins: margins(),
+      align_attrs: align_attrs()
     )
   end
 
@@ -87,7 +94,8 @@ defmodule IE do
     Formatter.print_table(
       people(:as_keywords), length(people()), true, style,
       headers: headers(), key_headers: key_headers(),
-      header_fixes: header_fixes(), margins: margins()
+      header_fixes: header_fixes(), margins: margins(),
+      align_attrs: align_attrs()
     )
   end
 
@@ -96,7 +104,7 @@ defmodule IE do
       people(), length(people()), true, style,
       headers: headers(), key_headers: key_headers(),
       header_fixes: header_fixes(), margins: margins(),
-      max_width: max_width
+      align_attrs: align_attrs(), max_width: max_width
     )
   end
 
@@ -105,7 +113,7 @@ defmodule IE do
       people(:as_keywords), length(people()), true, style,
       headers: headers(), key_headers: key_headers(),
       header_fixes: header_fixes(), margins: margins(),
-      max_width: max_width
+      align_attrs: align_attrs(), max_width: max_width
     )
   end
 
