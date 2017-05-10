@@ -279,7 +279,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   end
 
   @doc """
-  Returns the list of attributes based on the given `column types`,
+  Returns a list of attributes based on the given `column types`,
   table `style` and line/row `type`.
 
   ## Examples
@@ -303,13 +303,13 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> style = :dark
       iex> type = :row
       iex> Helper.item_attrs(column_types, style, type)
-      [ :light_green, :normal,            # left border
-        :normal, :light_green, :normal,   # non key column
-        :normal, :light_green, :normal,   # inner border
-        :normal, :light_magenta, :normal, # key column
-        :normal, :light_green, :normal,   # inner border
-        :normal, :light_green, :normal,   # non key column
-        :normal, :light_green             # right border
+      [ :light_green, :normal,          # left border
+        :normal, :light_green, :normal, # non key column
+        :normal, :light_green, :normal, # inner border
+        :normal, :light_white, :normal, # key column
+        :normal, :light_green, :normal, # inner border
+        :normal, :light_green, :normal, # non key column
+        :normal, :light_green           # right border
       ]
   """
   @spec item_attrs([column_type], Style.t, Style.line_type | Style.row_type) ::
@@ -413,7 +413,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> Helper.format(item_widths, item_attrs)
       "\e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
   """
-  @spec format([non_neg_integer], [Style.attr]) :: String.t
+  @spec format([item_width], [Style.attr]) :: String.t
   def format(item_widths, item_attrs) do
     fragments = # => chardata (list of strings and/or improper lists)
       item_widths

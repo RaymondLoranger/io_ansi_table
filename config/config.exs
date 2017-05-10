@@ -191,8 +191,8 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :green_background,
+      row_2:     :light_blue_background,
       row_3:     :normal,
       bottom:    :normal
     },
@@ -200,8 +200,8 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    [:light_yellow, :underline],
       separator: :normal,
-      row_1:     [:light_cyan, :light_blue_background],
-      row_2:     [:light_cyan, :magenta_background],
+      row_1:     [:light_cyan, :green_background],
+      row_2:     [:light_cyan, :light_blue_background],
       row_3:     :light_cyan,
       bottom:    :normal
     },
@@ -209,8 +209,8 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :light_yellow,
       separator: :normal,
-      row_1:     [:normal, :light_blue_background],
-      row_2:     [:normal, :magenta_background],
+      row_1:     [:normal, :green_background],
+      row_2:     [:normal, :light_blue_background],
       row_3:     :normal,
       bottom:    :normal
     }
@@ -356,8 +356,8 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :green_background,
+      row_2:     :light_blue_background,
       row_3:     :normal,
       bottom:    :normal
     },
@@ -365,8 +365,8 @@ config :io_ansi_table, table_styles: %{
       top:       :light_yellow,
       header:    [:light_green, :underline],
       separator: :light_yellow,
-      row_1:     [:light_cyan, :light_blue_background],
-      row_2:     [:light_cyan, :magenta_background],
+      row_1:     [:light_cyan, :green_background],
+      row_2:     [:light_cyan, :light_blue_background],
       row_3:     :light_cyan,
       bottom:    :light_yellow
     },
@@ -374,8 +374,8 @@ config :io_ansi_table, table_styles: %{
       top:       :light_yellow,
       header:    :light_green,
       separator: :light_yellow,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
+      row_1:     [:light_yellow, :green_background],
+      row_2:     [:light_yellow, :light_blue_background],
       row_3:     :light_yellow,
       bottom:    :light_yellow
     }
@@ -418,7 +418,7 @@ config :io_ansi_table, table_styles: %{
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
-      row:       :light_magenta,
+      row:       :light_white,
       bottom:    :light_green
     },
     non_key_attrs: %{
@@ -471,8 +471,8 @@ config :io_ansi_table, table_styles: %{
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
-      even_row:  [:light_magenta, :light_blue_background],
-      odd_row:   :light_magenta,
+      even_row:  [:light_white, :light_blue_background],
+      odd_row:   :light_white,
       bottom:    :light_green
     },
     non_key_attrs: %{
@@ -521,8 +521,8 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :green_background,
+      row_2:     :light_blue_background,
       row_3:     :normal,
       bottom:    :normal
     },
@@ -530,17 +530,17 @@ config :io_ansi_table, table_styles: %{
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
-      row_1:     [:light_magenta, :light_blue_background],
-      row_2:     [:light_magenta, :magenta_background],
-      row_3:     :light_magenta,
+      row_1:     [:light_white, :green_background],
+      row_2:     [:light_white, :light_blue_background],
+      row_3:     :light_white,
       bottom:    :light_green
     },
     non_key_attrs: %{
       top:       :light_green,
       header:    :light_red,
       separator: :light_green,
-      row_1:     [:light_green, :light_blue_background],
-      row_2:     [:light_green, :magenta_background],
+      row_1:     [:light_green, :green_background],
+      row_2:     [:light_green, :light_blue_background],
       row_3:     :light_green,
       bottom:    :light_green
     }
@@ -686,8 +686,8 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :green_background,
+      row_2:     :light_blue_background,
       row_3:     :normal,
       bottom:    :normal
     },
@@ -695,8 +695,8 @@ config :io_ansi_table, table_styles: %{
       top:       :light_magenta,
       header:    [:light_green, :underline],
       separator: :light_magenta,
-      row_1:     [:light_cyan, :light_blue_background],
-      row_2:     [:light_cyan, :magenta_background],
+      row_1:     [:light_cyan, :green_background],
+      row_2:     [:light_cyan, :light_blue_background],
       row_3:     :light_cyan,
       bottom:    :light_magenta
     },
@@ -704,8 +704,8 @@ config :io_ansi_table, table_styles: %{
       top:       :light_magenta,
       header:    :light_green,
       separator: :light_magenta,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
+      row_1:     [:light_yellow, :green_background],
+      row_2:     [:light_yellow, :light_blue_background],
       row_3:     :light_yellow,
       bottom:    :light_magenta
     }
@@ -1089,9 +1089,9 @@ config :io_ansi_table, table_styles: %{
     },
     key_attrs: %{
       top:       :normal,
-      header:    [:blue, :light_yellow_background],
+      header:    [:black, :light_yellow_background],
       separator: :normal,
-      row:       :light_yellow,
+      row:       :light_green,
       bottom:    :normal
     },
     non_key_attrs: %{
@@ -1142,10 +1142,10 @@ config :io_ansi_table, table_styles: %{
     },
     key_attrs: %{
       top:       :normal,
-      header:    [:blue, :light_yellow_background],
+      header:    [:black, :light_yellow_background],
       separator: :normal,
-      even_row:  [:light_yellow, :light_blue_background],
-      odd_row:   :light_yellow,
+      even_row:  [:light_green, :light_blue_background],
+      odd_row:   :light_green,
       bottom:    :normal
     },
     non_key_attrs: %{
@@ -1194,26 +1194,26 @@ config :io_ansi_table, table_styles: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :green_background,
+      row_2:     :light_blue_background,
       row_3:     :normal,
       bottom:    :normal
     },
     key_attrs: %{
       top:       :normal,
-      header:    [:blue, :light_yellow_background],
+      header:    [:black, :light_yellow_background],
       separator: :normal,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
-      row_3:     :light_yellow,
+      row_1:     [:light_green, :green_background],
+      row_2:     [:light_green, :light_blue_background],
+      row_3:     :light_green,
       bottom:    :normal
     },
     non_key_attrs: %{
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     [:normal, :light_blue_background],
-      row_2:     [:normal, :magenta_background],
+      row_1:     [:normal, :green_background],
+      row_2:     [:normal, :light_blue_background],
       row_3:     :normal,
       bottom:    :normal
     }
