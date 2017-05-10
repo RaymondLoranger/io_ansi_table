@@ -58,10 +58,10 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       margins = [top: 2, bottom: 2, left: 2]
       column_widths = [6, 7, 10]
       style = :medium
-      bell? = true
+      bell = true
       Helper.print_table(
         capitals, headers, key_headers,
-        header_fixes, align_attrs, margins, column_widths, style, bell?
+        header_fixes, align_attrs, margins, column_widths, style, bell
       )
   ## ![print_table_capitals](images/print_table_capitals.png)
       iex> alias ExUnit.CaptureIO
@@ -78,11 +78,11 @@ defmodule IO.ANSI.Table.Formatter.Helper do
       iex> margins = [top: 2, bottom: 2, left: 3]
       iex> column_widths = [6, 7, 10]
       iex> style = :dashed
-      iex> bell? = false
+      iex> bell = false
       iex> CaptureIO.capture_io fn ->
       ...>   Helper.print_table(
       ...>     capitals, headers, key_headers,
-      ...>     header_fixes, align_attrs, margins, column_widths, style, bell?
+      ...>     header_fixes, align_attrs, margins, column_widths, style, bell
       ...>   )
       ...> end
       "\\n\\n" <> \"""
@@ -101,7 +101,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
   ) :: :ok
   def print_table(
     rows, headers, key_headers,
-    header_fixes, align_attrs, margins, column_widths, style, bell?
+    header_fixes, align_attrs, margins, column_widths, style, bell
   )
   do
     left_margin = String.duplicate " ", margins[:left]
@@ -116,7 +116,7 @@ defmodule IO.ANSI.Table.Formatter.Helper do
     IO.write String.duplicate "\n", margins[:top]
     Enum.each Style.line_types(style), &write(helper, &1)
     IO.write String.duplicate "\n", margins[:bottom]
-    IO.write bell? && "\a" || ""
+    IO.write bell && "\a" || ""
   end
 
   @doc """

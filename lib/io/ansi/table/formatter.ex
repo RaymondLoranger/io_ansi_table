@@ -49,7 +49,7 @@ defmodule IO.ANSI.Table.Formatter do
 
     - `collections` - list of collections (maps or keywords)
     - `count`       - number of collections to format (integer)
-    - `bell?`       - ring the bell? (boolean)
+    - `bell`        - ring the bell? (boolean)
     - `style`       - table style (atom)
     - `options`     - up to six options as described (keyword)
 
@@ -112,7 +112,7 @@ defmodule IO.ANSI.Table.Formatter do
   """
   @spec print_table([collection], integer, boolean, Style.t, Keyword.t) ::
     :ok
-  def print_table(collections, count, bell?, style, options \\ []) do
+  def print_table(collections, count, bell, style, options \\ []) do
     headers = Keyword.get(options, :headers, Config.headers)
     key_headers = Keyword.get(options, :key_headers, Config.key_headers)
     header_fixes = Keyword.get(options, :header_fixes, Config.header_fixes)
@@ -131,7 +131,7 @@ defmodule IO.ANSI.Table.Formatter do
     rows = rows(collections, headers)
     Helper.print_table(
       rows, headers, key_headers,
-      header_fixes, align_attrs, margins, column_widths, style, bell?
+      header_fixes, align_attrs, margins, column_widths, style, bell
     )
   end
 
