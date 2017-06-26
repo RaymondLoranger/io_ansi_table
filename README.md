@@ -85,7 +85,7 @@ Formatter.print_table(people, 3, true, :dark)
 ## ![print_table_people](images/print_table_people.png)
 
 N.B. On Windows, run command `chcp 65001` (in **Powershell**) for the UTF-8
-code page (background color should be **navy blue** and font **Consolas**).
+code page (background color should be **DarkBlue** and font **Consolas**).
 
 These 2 packages use `io_ansi_table` as a dependency to tabulate data fetched
 from the web:
