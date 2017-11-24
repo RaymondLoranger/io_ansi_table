@@ -7,7 +7,7 @@ defmodule IO.ANSI.Table.Options do
   Each option of the keyword will override its configured counterpart.
   Normally you should configure all options except possibly `style`.
 
-  Here are configuration examples for each option:
+  Here are some configuration examples for each option:
 
   - `align_specs` - to align column elements (list)
 
