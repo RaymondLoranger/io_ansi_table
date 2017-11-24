@@ -53,7 +53,7 @@ config :io_ansi_table, margins: [top: 2, bottom: 2]
 ```
 
 ```elixir
-alias IO.ANSI.Table.Formatter
+alias IO.ANSI.Table
 people = [
   %{name: "Mike", likes: "ski, arts", date_of_birth: "1992-04-15"},
   %{name: "Mary", likes: "reading"  , date_of_birth: "1985-07-11"},
