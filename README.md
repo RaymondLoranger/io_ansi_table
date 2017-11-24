@@ -55,9 +55,9 @@ config :io_ansi_table, margins: [top: 2, bottom: 2]
 ```elixir
 alias IO.ANSI.Table
 people = [
-  %{name: "Mike", likes: "ski, arts", date_of_birth: "1992-04-15"},
-  %{name: "Mary", likes: "reading"  , date_of_birth: "1985-07-11"},
-  %{name: "Ray" , likes: "cycling"  , date_of_birth: "1977-08-28"}
+  %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
+  %{name: "Mary", likes: "reading"  , dob: "1985-07-11"},
+  %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"}
 ]
 Table.format(people, style: :dark)
 ```
