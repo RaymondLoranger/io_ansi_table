@@ -18,7 +18,7 @@ end
 ## Usage
 
 In `config/config.exs`, you should then configure the
-![:io_ansi_table options](https://hexdocs.pm/io_ansi_table/IO.ANSI.Table.html).
+[format options](https://hexdocs.pm/io_ansi_table/IO.ANSI.Table.html).
 
 Here is an example, if your table relates to NOAA Observations:
 
