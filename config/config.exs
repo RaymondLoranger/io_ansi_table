@@ -2,26 +2,15 @@
 # and its dependencies with the aid of the Mix.Config module.
 use Mix.Config
 
-# This configuration is loaded before any dependency and is restricted
-# to this project. If another project depends on this project, this
-# file won't be loaded nor affect the parent project. For this reason,
-# if you want to provide default values for your application for
-# 3rd-party users, it should be done in your "mix.exs" file.
+config :elixir, ansi_enabled: true # to allow mix messages in colors...
 
-# You can configure for your application as:
+# Examples of configuration to provide for the :io_ansi_table app:
 #
-#     config :io_ansi_table, key: :value
-
-config :elixir, ansi_enabled: true # mix messages in colors
-
-# Example of configuration to provide for the :io_ansi_table app:
 #
 #     config :io_ansi_table, headers: [
-#       "station_id", "weather", "temperature_string", "wind_mph",
-#       "location", "observation_time_rfc822"
+#       "station_id", "observation_time_rfc822", "wind_mph"
 #     ]
 #
-#     config :io_ansi_table, key_headers: ["temperature_string", "wind_mph"]
 #
 #     config :io_ansi_table, header_fixes: %{
 #       ~r[ id$]i       => " ID",
@@ -29,165 +18,192 @@ config :elixir, ansi_enabled: true # mix messages in colors
 #       ~r[ rfc(\d+)$]i => " RFC-\\1"
 #     }
 #
-#     config :io_ansi_table, align_attrs: %{
-#       "station_id" => :center,
-#       "wind_mph"   => :right
-#     }
+#
+#     config :io_ansi_table, align_specs: [
+#       center: "station_id", right: "wind_mph"
+#     ]
+#
+#
+#     config :io_ansi_table, bell: true
+#
+#
+#     config :io_ansi_table, count: 22
+#
 #
 #     config :io_ansi_table, margins: [
 #       top:    1, # line(s) before table
 #       bottom: 1, # line(s) after table
-#       left:   2  # space(s) left of table
+#       left:   3  # space(s) left of table
+#     ]
+#     config :io_ansi_table, margins: [
+#       left: 3 # space(s) left of table
 #     ]
 #
+#
 #     config :io_ansi_table, max_width: 88
+#
+#
+#     config :io_ansi_table, sort_specs: [
+#       "station_id", desc: "wind_mph"
+#     ]
+#     config :io_ansi_table, sort_specs: [
+#       asc: "station_id", desc: "wind_mph"
+#     ]
+#
+#
+#     config :io_ansi_table, sort_symbols: [
+#       asc: "▲", desc: "▼", pos: :trailing
+#     ]
+#     config :io_ansi_table, sort_symbols: [
+#       asc: "⬆"
+#     ]
+#     config :io_ansi_table, sort_symbols: [
+#       asc: "⬆", desc: "⬇", pos: :leading
+#     ]
+#     config :io_ansi_table, sort_symbols: [
+#       pos: [:leading, :trailing]
+#     ]
+#
+#
+#     config :io_ansi_table, style: :light
 
 config :io_ansi_table, ansi_enabled: true # table formatting in colors
-config :io_ansi_table, default_margins: [ # default table position:
+config :io_ansi_table, default_align_specs: [:undefined]
+config :io_ansi_table, default_bell: false
+config :io_ansi_table, default_count: 11
+config :io_ansi_table, default_headers: [:undefined]
+config :io_ansi_table, default_header_fixes: %{
+  " A "       => " a ",
+  " After "   => " after ",
+  " Along "   => " along ",
+  " An "      => " an ",
+  " And "     => " and ",
+  " Around "  => " around ",
+  " At "      => " at ",
+  " But "     => " but ",
+  " By "      => " by ",
+  " For "     => " for ",
+  " From "    => " from ",
+  " Not "     => " not ",
+  " Of "      => " of ",
+  " On "      => " on ",
+  " Or "      => " or ",
+  " So "      => " so ",
+  " The "     => " the ",
+  " To "      => " to ",
+  " With "    => " with ",
+  " Without " => " without ",
+  " Yet "     => " yet "
+}
+config :io_ansi_table, default_margins: [ # default table position
   top:    1, # line(s) before table
   bottom: 1, # line(s) after table
   left:   2  # space(s) left of table
 ]
+config :io_ansi_table, default_sort_specs: [:undefined]
+config :io_ansi_table, default_sort_symbols: [
+  asc: "↑", desc: "↓", pos: :trailing
+]
+config :io_ansi_table, default_style: :plain
 config :io_ansi_table, max_width_range: 7..99
-config :io_ansi_table, table_styles: %{
+config :io_ansi_table, options: [
+  :align_specs,  # to align column elements (list)
+  :bell,         # ring the bell? (boolean)
+  :count,        # number of `maps` to format (integer)
+  :headers,      # to identify each column (list)
+  :header_fixes, # to alter the `headers` (map)
+  :margins,      # to position the table (keyword)
+  :max_width,    # to cap column widths (non_neg_integer)
+  :sort_specs,   # to sort the `maps` (list)
+  :sort_symbols, # to denote sort direction (keyword)
+  :style         # table style (atom)
+]
+config :io_ansi_table, row_types: [
+  :even_row, :odd_row, :row, :row_1, :row_2, :row_3
+]
+config :io_ansi_table, rule_types: [:top, :separator, :bottom]
+config :io_ansi_table, table_styles: [
   light: %{
     note: "light colors",
     rank: 10,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│",   "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      row:       {"│" ,  "│",   "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_white,
-      header:    :light_white,
-      separator: :light_white,
-      row:       :light_white,
-      bottom:    :light_white
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│",   "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      row:       ["│" ,  "│",   "│", nil],
+      bottom:    ["└─", "─┴─", "─┘", "─"]
+    ],
+    border_attrs: :light_white,
+    filler_attrs: :normal,
+    key_attrs: [
       top:       :normal,
       header:    [:light_yellow, :underline],
       separator: :normal,
       row:       :light_cyan,
       bottom:    :normal
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :normal,
       header:    :light_yellow,
       separator: :normal,
       row:       :normal,
       bottom:    :normal
-    }
+    ]
   },
   light_alt: %{
     note: "light colors, alternating row colors",
     rank: 15,
-    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│",   "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      even_row:  {"│" ,  "│",   "│", nil},
-      odd_row:   {"│" ,  "│",   "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
-      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_white,
-      header:    :light_white,
-      separator: :light_white,
-      even_row:  :light_white,
-      odd_row:   :light_white,
-      bottom:    :light_white
-    },
-    filler_attrs: %{
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│",   "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      even_row:  ["│" ,  "│",   "│", nil],
+      odd_row:   ["│" ,  "│",   "│", nil],
+      bottom:    ["└─", "─┴─", "─┘", "─"]
+    ],
+    border_attrs: :light_white,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
       even_row:  :light_blue_background,
       odd_row:   :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :normal,
       header:    [:light_yellow, :underline],
       separator: :normal,
       even_row:  [:light_cyan, :light_blue_background],
       odd_row:   :light_cyan,
       bottom:    :normal
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :normal,
       header:    :light_yellow,
       separator: :normal,
       even_row:  [:normal, :light_blue_background],
       odd_row:   :normal,
       bottom:    :normal
-    }
+    ]
   },
   light_mult: %{
     note: "light colors, 3 repeating row colors",
     rank: 17,
-    line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│",   "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      row_1:     {"│" ,  "│",   "│", nil},
-      row_2:     {"│" ,  "│",   "│", nil},
-      row_3:     {"│" ,  "│",   "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row_1:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_2:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_3:     {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_white,
-      header:    :light_white,
-      separator: :light_white,
-      row_1:     :light_white,
-      row_2:     :light_white,
-      row_3:     :light_white,
-      bottom:    :light_white
-    },
-    filler_attrs: %{
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│",   "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      row_1:     ["│" ,  "│",   "│", nil],
+      row_2:     ["│" ,  "│",   "│", nil],
+      row_3:     ["│" ,  "│",   "│", nil],
+      bottom:    ["└─", "─┴─", "─┘", "─"]
+    ],
+    border_attrs: :light_white,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
@@ -195,8 +211,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     :magenta_background,
       row_3:     :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :normal,
       header:    [:light_yellow, :underline],
       separator: :normal,
@@ -204,8 +220,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:light_cyan, :magenta_background],
       row_3:     :light_cyan,
       bottom:    :normal
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :normal,
       header:    :light_yellow,
       separator: :normal,
@@ -213,146 +229,89 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:normal, :magenta_background],
       row_3:     :normal,
       bottom:    :normal
-    }
+    ]
   },
   medium: %{
     note: "medium colors",
     rank: 20,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╤═", "═╗", "═"},
-      header:    {"║",   "│" ,  "║", nil},
-      separator: {"╟─", "─┼─", "─╢", "─"},
-      row:       {"║" ,  "│" ,  "║", nil},
-      bottom:    {"╚═", "═╧═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_yellow,
-      header:    :light_yellow,
-      separator: :light_yellow,
-      row:       :light_yellow,
-      bottom:    :light_yellow
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╤═", "═╗", "═"],
+      header:    ["║",   "│" ,  "║", nil],
+      separator: ["╟─", "─┼─", "─╢", "─"],
+      row:       ["║" ,  "│" ,  "║", nil],
+      bottom:    ["╚═", "═╧═", "═╝", "═"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: :normal,
+    key_attrs: [
       top:       :light_yellow,
       header:    [:light_green, :underline],
       separator: :light_yellow,
       row:       :light_cyan,
       bottom:    :light_yellow
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_yellow,
       header:    :light_green,
       separator: :light_yellow,
       row:       :light_yellow,
       bottom:    :light_yellow
-    }
+    ]
   },
   medium_alt: %{
     note: "medium colors, alternating row colors",
     rank: 25,
-    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╤═", "═╗", "═"},
-      header:    {"║",   "│" ,  "║", nil},
-      separator: {"╟─", "─┼─", "─╢", "─"},
-      even_row:  {"║" ,  "│" ,  "║", nil},
-      odd_row:   {"║" ,  "│" ,  "║", nil},
-      bottom:    {"╚═", "═╧═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
-      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_yellow,
-      header:    :light_yellow,
-      separator: :light_yellow,
-      even_row:  :light_yellow,
-      odd_row:   :light_yellow,
-      bottom:    :light_yellow
-    },
-    filler_attrs: %{
+      top:       ["╔═", "═╤═", "═╗", "═"],
+      header:    ["║",   "│" ,  "║", nil],
+      separator: ["╟─", "─┼─", "─╢", "─"],
+      even_row:  ["║" ,  "│" ,  "║", nil],
+      odd_row:   ["║" ,  "│" ,  "║", nil],
+      bottom:    ["╚═", "═╧═", "═╝", "═"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
       even_row:  :light_blue_background,
       odd_row:   :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :light_yellow,
       header:    [:light_green, :underline],
       separator: :light_yellow,
       even_row:  [:light_cyan, :light_blue_background],
       odd_row:   :light_cyan,
       bottom:    :light_yellow
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_yellow,
       header:    :light_green,
       separator: :light_yellow,
       even_row:  [:light_yellow, :light_blue_background],
       odd_row:   :light_yellow,
       bottom:    :light_yellow
-    }
+    ]
   },
   medium_mult: %{
     note: "medium colors, 3 repeating row colors",
     rank: 27,
-    line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╤═", "═╗", "═"},
-      header:    {"║",   "│" ,  "║", nil},
-      separator: {"╟─", "─┼─", "─╢", "─"},
-      row_1:     {"║" ,  "│" ,  "║", nil},
-      row_2:     {"║" ,  "│" ,  "║", nil},
-      row_3:     {"║" ,  "│" ,  "║", nil},
-      bottom:    {"╚═", "═╧═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row_1:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_2:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_3:     {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_yellow,
-      header:    :light_yellow,
-      separator: :light_yellow,
-      row_1:     :light_yellow,
-      row_2:     :light_yellow,
-      row_3:     :light_yellow,
-      bottom:    :light_yellow
-    },
-    filler_attrs: %{
+      top:       ["╔═", "═╤═", "═╗", "═"],
+      header:    ["║",   "│" ,  "║", nil],
+      separator: ["╟─", "─┼─", "─╢", "─"],
+      row_1:     ["║" ,  "│" ,  "║", nil],
+      row_2:     ["║" ,  "│" ,  "║", nil],
+      row_3:     ["║" ,  "│" ,  "║", nil],
+      bottom:    ["╚═", "═╧═", "═╝", "═"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
@@ -360,8 +319,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     :magenta_background,
       row_3:     :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :light_yellow,
       header:    [:light_green, :underline],
       separator: :light_yellow,
@@ -369,8 +328,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:light_cyan, :magenta_background],
       row_3:     :light_cyan,
       bottom:    :light_yellow
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_yellow,
       header:    :light_green,
       separator: :light_yellow,
@@ -378,146 +337,89 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:light_yellow, :magenta_background],
       row_3:     :light_yellow,
       bottom:    :light_yellow
-    }
+    ]
   },
   dark: %{
     note: "dark colors",
     rank: 30,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_green,
-      header:    :light_green,
-      separator: :light_green,
-      row:       :light_green,
-      bottom:    :light_green
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: :light_green,
+    filler_attrs: :normal,
+    key_attrs: [
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
       row:       :light_white,
       bottom:    :light_green
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_green,
       header:    :light_red,
       separator: :light_green,
       row:       :light_green,
       bottom:    :light_green
-    }
+    ]
   },
   dark_alt: %{
     note: "dark colors, alternating row colors",
     rank: 35,
-    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      even_row:  {"║" ,  "║" ,  "║", nil},
-      odd_row:   {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
-      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_green,
-      header:    :light_green,
-      separator: :light_green,
-      even_row:  :light_green,
-      odd_row:   :light_green,
-      bottom:    :light_green
-    },
-    filler_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      even_row:  ["║" ,  "║" ,  "║", nil],
+      odd_row:   ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: :light_green,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
       even_row:  :light_blue_background,
       odd_row:   :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
       even_row:  [:light_white, :light_blue_background],
       odd_row:   :light_white,
       bottom:    :light_green
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_green,
       header:    :light_red,
       separator: :light_green,
       even_row:  [:light_green, :light_blue_background],
       odd_row:   :light_green,
       bottom:    :light_green
-    }
+    ]
   },
   dark_mult: %{
     note: "dark colors, 3 repeating row colors",
     rank: 37,
-    line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row_1:     {"║" ,  "║" ,  "║", nil},
-      row_2:     {"║" ,  "║" ,  "║", nil},
-      row_3:     {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row_1:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_2:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_3:     {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_green,
-      header:    :light_green,
-      separator: :light_green,
-      row_1:     :light_green,
-      row_2:     :light_green,
-      row_3:     :light_green,
-      bottom:    :light_green
-    },
-    filler_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row_1:     ["║" ,  "║" ,  "║", nil],
+      row_2:     ["║" ,  "║" ,  "║", nil],
+      row_3:     ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: :light_green,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
@@ -525,8 +427,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     :magenta_background,
       row_3:     :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
@@ -534,8 +436,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:light_white, :magenta_background],
       row_3:     :light_white,
       bottom:    :light_green
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_green,
       header:    :light_red,
       separator: :light_green,
@@ -543,146 +445,89 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:light_green, :magenta_background],
       row_3:     :light_green,
       bottom:    :light_green
-    }
+    ]
   },
   pretty: %{
     note: "multicolored",
     rank: 40,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_magenta,
-      header:    :light_magenta,
-      separator: :light_magenta,
-      row:       :light_magenta,
-      bottom:    :light_magenta
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: :light_magenta,
+    filler_attrs: :normal,
+    key_attrs: [
       top:       :light_magenta,
       header:    [:light_green, :underline],
       separator: :light_magenta,
       row:       :light_cyan,
       bottom:    :light_magenta
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_magenta,
       header:    :light_green,
       separator: :light_magenta,
       row:       :light_yellow,
       bottom:    :light_magenta
-    }
+    ]
   },
   pretty_alt: %{
     note: "multicolored, alternating row colors",
     rank: 45,
-    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      even_row:  {"║" ,  "║" ,  "║", nil},
-      odd_row:   {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
-      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_magenta,
-      header:    :light_magenta,
-      separator: :light_magenta,
-      even_row:  :light_magenta,
-      odd_row:   :light_magenta,
-      bottom:    :light_magenta
-    },
-    filler_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      even_row:  ["║" ,  "║" ,  "║", nil],
+      odd_row:   ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: :light_magenta,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
       even_row:  :light_blue_background,
       odd_row:   :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :light_magenta,
       header:    [:light_green, :underline],
       separator: :light_magenta,
       even_row:  [:light_cyan, :light_blue_background],
       odd_row:   :light_cyan,
       bottom:    :light_magenta
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_magenta,
       header:    :light_green,
       separator: :light_magenta,
       even_row:  [:light_yellow, :light_blue_background],
       odd_row:   :light_yellow,
       bottom:    :light_magenta
-    }
+    ]
   },
   pretty_mult: %{
     note: "multicolored, 3 repeating row colors",
     rank: 47,
-    line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row_1:     {"║" ,  "║" ,  "║", nil},
-      row_2:     {"║" ,  "║" ,  "║", nil},
-      row_3:     {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row_1:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_2:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_3:     {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_magenta,
-      header:    :light_magenta,
-      separator: :light_magenta,
-      row_1:     :light_magenta,
-      row_2:     :light_magenta,
-      row_3:     :light_magenta,
-      bottom:    :light_magenta
-    },
-    filler_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row_1:     ["║" ,  "║" ,  "║", nil],
+      row_2:     ["║" ,  "║" ,  "║", nil],
+      row_3:     ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: :light_magenta,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
@@ -690,8 +535,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     :magenta_background,
       row_3:     :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :light_magenta,
       header:    [:light_green, :underline],
       separator: :light_magenta,
@@ -699,8 +544,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:light_cyan, :magenta_background],
       row_3:     :light_cyan,
       bottom:    :light_magenta
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_magenta,
       header:    :light_green,
       separator: :light_magenta,
@@ -708,489 +553,279 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:light_yellow, :magenta_background],
       row_3:     :light_yellow,
       bottom:    :light_magenta
-    }
+    ]
   },
   cyan: %{
     note: "light cyan background",
     rank: 50,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       [:light_blue, :light_cyan_background],
-      header:    [:light_blue, :light_cyan_background],
-      separator: [:light_blue, :light_cyan_background],
-      row:       [:light_blue, :light_cyan_background],
-      bottom:    [:light_blue, :light_cyan_background]
-    },
-    filler_attrs: %{
-      top:       :light_cyan_background,
-      header:    :light_cyan_background,
-      separator: :light_cyan_background,
-      row:       :light_cyan_background,
-      bottom:    :light_cyan_background
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: [:light_blue, :light_cyan_background],
+    filler_attrs: :light_cyan_background,
+    key_attrs: [
       top:       [:light_blue, :light_cyan_background],
       header:    [:light_yellow, :light_red_background],
       separator: [:light_blue, :light_cyan_background],
       row:       [:light_blue, :light_cyan_background],
       bottom:    [:light_blue, :light_cyan_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_blue, :light_cyan_background],
       header:    [:light_red, :light_cyan_background],
       separator: [:light_blue, :light_cyan_background],
       row:       [:black, :light_cyan_background],
       bottom:    [:light_blue, :light_cyan_background]
-    }
+    ]
   },
   yellow: %{
     note: "light yellow background",
     rank: 60,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       [:green, :light_yellow_background],
-      header:    [:green, :light_yellow_background],
-      separator: [:green, :light_yellow_background],
-      row:       [:green, :light_yellow_background],
-      bottom:    [:green, :light_yellow_background]
-    },
-    filler_attrs: %{
-      top:       :light_yellow_background,
-      header:    :light_yellow_background,
-      separator: :light_yellow_background,
-      row:       :light_yellow_background,
-      bottom:    :light_yellow_background
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: [:green, :light_yellow_background],
+    filler_attrs: :light_yellow_background,
+    key_attrs: [
       top:       [:green, :light_yellow_background],
       header:    [:light_white, :light_red_background],
       separator: [:green, :light_yellow_background],
       row:       [:light_blue, :light_yellow_background],
       bottom:    [:green, :light_yellow_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:green, :light_yellow_background],
       header:    [:light_red, :light_yellow_background],
       separator: [:green, :light_yellow_background],
       row:       [:black, :light_yellow_background],
       bottom:    [:green, :light_yellow_background]
-    }
+    ]
   },
   green: %{
     note: "light green background",
     rank: 70,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_yellow, :light_green_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:light_yellow, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
-    },
-    filler_attrs: %{
-      top:       :light_green_background,
-      header:    :light_green_background,
-      separator: :light_green_background,
-      row:       :light_green_background,
-      bottom:    :light_green_background
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: [:light_yellow, :light_green_background],
+    filler_attrs: :light_green_background,
+    key_attrs: [
       top:       [:light_yellow, :light_green_background],
       header:    [:light_yellow, :light_red_background],
       separator: [:light_yellow, :light_green_background],
       row:       [:light_blue, :light_green_background],
       bottom:    [:light_yellow, :light_green_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_yellow, :light_green_background],
       header:    [:light_red, :light_green_background],
       separator: [:light_yellow, :light_green_background],
       row:       [:black, :light_green_background],
       bottom:    [:light_yellow, :light_green_background]
-    }
+    ]
   },
-  CYAN: %{
+  cyan_border: %{
     note: "light cyan border",
     rank: 80,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       [:light_cyan, :light_cyan_background],
-      header:    [:light_cyan, :light_cyan_background],
-      separator: [:light_cyan, :light_cyan_background],
-      row:       [:light_cyan, :light_cyan_background],
-      bottom:    [:light_cyan, :light_cyan_background]
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: [:light_cyan, :light_cyan_background],
+    filler_attrs: :normal,
+    key_attrs: [
       top:       [:light_cyan, :light_cyan_background],
       header:    :light_red,
       separator: [:light_cyan, :light_cyan_background],
       row:       :light_cyan,
       bottom:    [:light_cyan, :light_cyan_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_cyan, :light_cyan_background],
       header:    :light_magenta,
       separator: [:light_cyan, :light_cyan_background],
       row:       :normal,
       bottom:    [:light_cyan, :light_cyan_background]
-    }
+    ]
   },
-  YELLOW: %{
+  yellow_border: %{
     note: "light yellow border",
     rank: 90,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       [:light_yellow, :light_yellow_background],
-      header:    [:light_yellow, :light_yellow_background],
-      separator: [:light_yellow, :light_yellow_background],
-      row:       [:light_yellow, :light_yellow_background],
-      bottom:    [:light_yellow, :light_yellow_background]
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: [:light_yellow, :light_yellow_background],
+    filler_attrs: :normal,
+    key_attrs: [
       top:       [:light_yellow, :light_yellow_background],
       header:    :light_red,
       separator: [:light_yellow, :light_yellow_background],
       row:       :light_yellow,
       bottom:    [:light_yellow, :light_yellow_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_yellow, :light_yellow_background],
       header:    :light_magenta,
       separator: [:light_yellow, :light_yellow_background],
       row:       :normal,
       bottom:    [:light_yellow, :light_yellow_background]
-    }
+    ]
   },
-  GREEN: %{
+  green_border: %{
     note: "light green border",
     rank: 100,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       [:light_green, :light_green_background],
-      header:    [:light_green, :light_green_background],
-      separator: [:light_green, :light_green_background],
-      row:       [:light_green, :light_green_background],
-      bottom:    [:light_green, :light_green_background]
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: [:light_green, :light_green_background],
+    filler_attrs: :normal,
+    key_attrs: [
       top:       [:light_green, :light_green_background],
       header:    :light_red,
       separator: [:light_green, :light_green_background],
       row:       :light_green,
       bottom:    [:light_green, :light_green_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_green, :light_green_background],
       header:    :light_magenta,
       separator: [:light_green, :light_green_background],
       row:       :normal,
       bottom:    [:light_green, :light_green_background]
-    }
+    ]
   },
   mixed: %{
     note: "fillers revealed",
     rank: 110,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"╔═", "═╦═", "═╗", "═"},
-      header:    {"║" ,  "║" ,  "║", nil},
-      separator: {"╠═", "═╬═", "═╣", "═"},
-      row:       {"║" ,  "║" ,  "║", nil},
-      bottom:    {"╚═", "═╩═", "═╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       [:black, :light_yellow_background],
-      header:    [:black, :light_yellow_background],
-      separator: [:black, :light_yellow_background],
-      row:       [:black, :light_yellow_background],
-      bottom:    [:black, :light_yellow_background]
-    },
-    filler_attrs: %{
-      top:       :light_green_background,
-      header:    :light_green_background,
-      separator: :light_green_background,
-      row:       :light_green_background,
-      bottom:    :light_green_background
-    },
-    key_attrs: %{
+      top:       ["╔═", "═╦═", "═╗", "═"],
+      header:    ["║" ,  "║" ,  "║", nil],
+      separator: ["╠═", "═╬═", "═╣", "═"],
+      row:       ["║" ,  "║" ,  "║", nil],
+      bottom:    ["╚═", "═╩═", "═╝", "═"]
+    ],
+    border_attrs: [:black, :light_yellow_background],
+    filler_attrs: :light_green_background,
+    key_attrs: [
       top:       [:black, :light_yellow_background],
       header:    [:light_red, :reverse, :light_yellow_background],
       separator: [:black, :light_yellow_background],
       row:       [:light_blue, :light_yellow_background],
       bottom:    [:black, :light_yellow_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:black, :light_yellow_background],
       header:    [:light_magenta, :light_white_background],
       separator: [:black, :light_yellow_background],
       row:       [:light_black, :light_yellow_background],
       bottom:    [:black, :light_yellow_background]
-    }
+    ]
   },
   dotted: %{
     note: "slightly colored",
     rank: 120,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┏╍", "╍┳╍", "╍┓", "╍"},
-      header:    {"┇" ,  "┇" ,  "┇", nil},
-      separator: {"┣╍", "╍╋╍", "╍┫", "╍"},
-      row:       {"┇" ,  "┇" ,  "┇", nil},
-      bottom:    {"┗╍", "╍┻╍", "╍┛", "╍"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["┏╍", "╍┳╍", "╍┓", "╍"],
+      header:    ["┇" ,  "┇" ,  "┇", nil],
+      separator: ["┣╍", "╍╋╍", "╍┫", "╍"],
+      row:       ["┇" ,  "┇" ,  "┇", nil],
+      bottom:    ["┗╍", "╍┻╍", "╍┛", "╍"]
+    ],
+    border_attrs: :normal,
+    filler_attrs: :normal,
+    key_attrs: [
       top:       :normal,
       header:    [:light_white, :green_background],
       separator: :normal,
       row:       :light_green,
       bottom:    :normal
-    },
-    non_key_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    }
+    ],
+    non_key_attrs: :normal,
   },
   dotted_alt: %{
     note: "slightly colored, alternating row colors",
     rank: 125,
-    line_types: [:top, :header, :separator, [:even_row, :odd_row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┏╍", "╍┳╍", "╍┓", "╍"},
-      header:    {"┇" ,  "┇" ,  "┇", nil},
-      separator: {"┣╍", "╍╋╍", "╍┫", "╍"},
-      even_row:  {"┇" ,  "┇" ,  "┇", nil},
-      odd_row:   {"┇" ,  "┇" ,  "┇", nil},
-      bottom:    {"┗╍", "╍┻╍", "╍┛", "╍"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
-      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      even_row:  :normal,
-      odd_row:   :normal,
-      bottom:    :normal
-    },
-    filler_attrs: %{
+      top:       ["┏╍", "╍┳╍", "╍┓", "╍"],
+      header:    ["┇" ,  "┇" ,  "┇", nil],
+      separator: ["┣╍", "╍╋╍", "╍┫", "╍"],
+      even_row:  ["┇" ,  "┇" ,  "┇", nil],
+      odd_row:   ["┇" ,  "┇" ,  "┇", nil],
+      bottom:    ["┗╍", "╍┻╍", "╍┛", "╍"]
+    ],
+    border_attrs: :normal,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
       even_row:  :light_blue_background,
       odd_row:   :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :normal,
       header:    [:light_white, :green_background],
       separator: :normal,
       even_row:  [:light_green, :light_blue_background],
       odd_row:   :light_green,
       bottom:    :normal
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
       even_row:  [:normal, :light_blue_background],
       odd_row:   :normal,
       bottom:    :normal
-    }
+    ]
   },
   dotted_mult: %{
     note: "slightly colored, 3 repeating row colors",
     rank: 127,
-    line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┏╍", "╍┳╍", "╍┓", "╍"},
-      header:    {"┇" ,  "┇" ,  "┇", nil},
-      separator: {"┣╍", "╍╋╍", "╍┫", "╍"},
-      row_1:     {"┇" ,  "┇" ,  "┇", nil},
-      row_2:     {"┇" ,  "┇" ,  "┇", nil},
-      row_3:     {"┇" ,  "┇" ,  "┇", nil},
-      bottom:    {"┗╍", "╍┻╍", "╍┛", "╍"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row_1:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_2:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_3:     {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row_1:     :normal,
-      row_2:     :normal,
-      row_3:     :normal,
-      bottom:    :normal
-    },
-    filler_attrs: %{
+      top:       ["┏╍", "╍┳╍", "╍┓", "╍"],
+      header:    ["┇" ,  "┇" ,  "┇", nil],
+      separator: ["┣╍", "╍╋╍", "╍┫", "╍"],
+      row_1:     ["┇" ,  "┇" ,  "┇", nil],
+      row_2:     ["┇" ,  "┇" ,  "┇", nil],
+      row_3:     ["┇" ,  "┇" ,  "┇", nil],
+      bottom:    ["┗╍", "╍┻╍", "╍┛", "╍"]
+    ],
+    border_attrs: :normal,
+    filler_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
@@ -1198,8 +833,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     :magenta_background,
       row_3:     :normal,
       bottom:    :normal
-    },
-    key_attrs: %{
+    ],
+    key_attrs: [
       top:       :normal,
       header:    [:light_white, :green_background],
       separator: :normal,
@@ -1207,8 +842,8 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:light_green, :magenta_background],
       row_3:     :light_green,
       bottom:    :normal
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
@@ -1216,697 +851,400 @@ config :io_ansi_table, table_styles: %{
       row_2:     [:normal, :magenta_background],
       row_3:     :normal,
       bottom:    :normal
-    }
+    ]
   },
   dashed: %{
     note: "no colors",
     rank: 130,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"+-", "-+-", "-+", "-"},
-      header:    {"|" ,  "|" ,  "|", nil},
-      separator: {"+-", "-+-", "-+", "-"},
-      row:       {"|" ,  "|" ,  "|", nil},
-      bottom:    {"+-", "-+-", "-+", "-"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    non_key_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    }
+      top:       ["+-", "-+-", "-+", "-"],
+      header:    ["|" ,  "|" ,  "|", nil],
+      separator: ["+-", "-+-", "-+", "-"],
+      row:       ["|" ,  "|" ,  "|", nil],
+      bottom:    ["+-", "-+-", "-+", "-"]
+    ],
+    border_attrs:  :normal,
+    filler_attrs:  :normal,
+    key_attrs:     :normal,
+    non_key_attrs: :normal
   },
   plain: %{
     note: "slightly colored",
     rank: 140,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│" ,  "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      row:       {"│" ,  "│" ,  "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :light_yellow,
-      header:    :light_yellow,
-      separator: :light_yellow,
-      row:       :light_yellow,
-      bottom:    :light_yellow
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│" ,  "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      row:       ["│" ,  "│" ,  "│", nil],
+      bottom:    ["└─", "─┴─", "─┘", "─"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: :normal,
+    key_attrs: [
       top:       :light_yellow,
       header:    [:light_yellow, :underline],
       separator: :light_yellow,
       row:       :light_yellow,
       bottom:    :light_yellow
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       :light_yellow,
       header:    :light_yellow,
       separator: :light_yellow,
       row:       :normal,
       bottom:    :light_yellow
-    }
+    ]
   },
   test: %{
     note: "no colors",
     rank: 150,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│" ,  "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      row:       {"│" ,  "│" ,  "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row:       {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    non_key_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    }
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│" ,  "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      row:       ["│" ,  "│" ,  "│", nil],
+      bottom:    ["└─", "─┴─", "─┘", "─"]
+    ],
+    border_attrs:  :normal,
+    filler_attrs:  :normal,
+    key_attrs:     :normal,
+    non_key_attrs: :normal
   },
   bare: %{
     note: "no colors",
     rank: 160,
-    line_types: [:header, :separator, [:row]],
-    borders: %{
+    borders: [
       #           left inner  right dash
-      top:       {"",   ""  , "",   "" },
-      header:    {"",   "|" , "",   nil},
-      separator: {"",  "-+-", "",   "-"},
-      row:       {"",   "|" , "",   nil},
-      bottom:    {"",   ""  , "",   "" }
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[0, 0], [0, 0, 0], [0, 0]},
-      header:    {[0, 0], [1, 1, 1], [0, 0]},
-      separator: {[0, 0], [0, 3, 0], [0, 0]},
-      row:       {[0, 0], [1, 1, 1], [0, 0]},
-      bottom:    {[0, 0], [0, 0, 0], [0, 0]}
-    },
-    border_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    non_key_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    }
+      header:    ["",   "|" , "",   nil],
+      separator: ["",  "-+-", "",   "-"],
+      row:       ["",   "|" , "",   nil]
+    ],
+    border_attrs:  :normal,
+    filler_attrs:  :normal,
+    key_attrs:     :normal,
+    non_key_attrs: :normal
   },
   barish: %{
     note: "like bare but colored",
     rank: 170,
-    line_types: [:header, :separator, [:row]],
-    borders: %{
+    borders: [
       #           left inner  right dash
-      top:       {"",   ""  , "",   "" },
-      header:    {"",   "|" , "",   nil},
-      separator: {"",  "-+-", "",   "-"},
-      row:       {"",   "|" , "",   nil},
-      bottom:    {"",   ""  , "",   "" }
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[0, 0], [0, 0, 0], [0, 0]},
-      header:    {[0, 0], [1, 1, 1], [0, 0]},
-      separator: {[0, 0], [0, 3, 0], [0, 0]},
-      row:       {[0, 0], [1, 1, 1], [0, 0]},
-      bottom:    {[0, 0], [0, 0, 0], [0, 0]}
-    },
-    border_attrs: %{
-      top:       :light_yellow,
-      header:    :light_yellow,
-      separator: :light_yellow,
-      row:       :light_yellow,
-      bottom:    :light_yellow
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
-      top:       :light_yellow,
+      header:    ["",   "|" , "",   nil],
+      separator: ["",  "-+-", "",   "-"],
+      row:       ["",   "|" , "",   nil]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: :normal,
+    key_attrs: [
       header:    :light_green,
       separator: :light_yellow,
-      row:       :light_cyan,
-      bottom:    :light_yellow
-    },
-    non_key_attrs: %{
-      top:       :light_yellow,
+      row:       :light_cyan
+    ],
+    non_key_attrs: [
       header:    :normal,
       separator: :light_yellow,
-      row:       :normal,
-      bottom:    :light_yellow
-    }
+      row:       :normal
+    ]
   },
   green_padded: %{
     note: "like green but with extra padding",
     rank: 180,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left   inner    right  dash
-      top:       {"╔══", "══╦══", "══╗", "═"},
-      header:    {"║"  ,   "║"  ,   "║", nil},
-      separator: {"╠══", "══╬══", "══╣", "═"},
-      row:       {"║"  ,   "║"  ,   "║", nil},
-      bottom:    {"╚══", "══╩══", "══╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[3, 0], [0, 5, 0], [0, 3]},
-      header:    {[1, 2], [2, 1, 2], [2, 1]},
-      separator: {[3, 0], [0, 5, 0], [0, 3]},
-      row:       {[1, 2], [2, 1, 2], [2, 1]},
-      bottom:    {[3, 0], [0, 5, 0], [0, 3]}
-    },
-    border_attrs: %{
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_yellow, :light_green_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:light_yellow, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
-    },
-    filler_attrs: %{
-      top:       :light_green_background,
-      header:    :light_green_background,
-      separator: :light_green_background,
-      row:       :light_green_background,
-      bottom:    :light_green_background
-    },
-    key_attrs: %{
+      top:       ["╔══", "══╦══", "══╗", "═"],
+      header:    ["║"  ,   "║"  ,   "║", nil],
+      separator: ["╠══", "══╬══", "══╣", "═"],
+      row:       ["║"  ,   "║"  ,   "║", nil],
+      bottom:    ["╚══", "══╩══", "══╝", "═"]
+    ],
+    border_attrs: [:light_yellow, :light_green_background],
+    filler_attrs: :light_green_background,
+    key_attrs: [
       top:       [:light_yellow, :light_green_background],
       header:    [:light_yellow, :light_red_background],
       separator: [:light_yellow, :light_green_background],
       row:       [:light_blue, :light_green_background],
       bottom:    [:light_yellow, :light_green_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_yellow, :light_green_background],
       header:    [:light_red, :light_green_background],
       separator: [:light_yellow, :light_green_background],
       row:       [:black, :light_green_background],
       bottom:    [:light_yellow, :light_green_background]
-    }
+    ]
   },
   green_unpadded: %{
     note: "like green but without padding",
     rank: 190,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left inner right dash
-      top:       {"╔", "╦",  "╗",  "═"},
-      header:    {"║", "║",  "║",  nil},
-      separator: {"╠", "╬",  "╣",  "═"},
-      row:       {"║", "║",  "║",  nil},
-      bottom:    {"╚", "╩",  "╝",  "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[1, 0], [0, 1, 0], [0, 1]},
-      header:    {[1, 0], [0, 1, 0], [0, 1]},
-      separator: {[1, 0], [0, 1, 0], [0, 1]},
-      row:       {[1, 0], [0, 1, 0], [0, 1]},
-      bottom:    {[1, 0], [0, 1, 0], [0, 1]}
-    },
-    border_attrs: %{
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_yellow, :light_green_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:light_yellow, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
-    },
-    filler_attrs: %{
-      top:       :light_green_background,
-      header:    :light_green_background,
-      separator: :light_green_background,
-      row:       :light_green_background,
-      bottom:    :light_green_background
-    },
-    key_attrs: %{
+      top:       ["╔", "╦",  "╗",  "═"],
+      header:    ["║", "║",  "║",  nil],
+      separator: ["╠", "╬",  "╣",  "═"],
+      row:       ["║", "║",  "║",  nil],
+      bottom:    ["╚", "╩",  "╝",  "═"]
+    ],
+    border_attrs: [:light_yellow, :light_green_background],
+    filler_attrs: :light_green_background,
+    key_attrs: [
       top:       [:light_yellow, :light_green_background],
       header:    [:light_yellow, :light_red_background],
       separator: [:light_yellow, :light_green_background],
       row:       [:light_blue, :light_green_background],
       bottom:    [:light_yellow, :light_green_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_yellow, :light_green_background],
       header:    [:light_red, :light_green_background],
       separator: [:light_yellow, :light_green_background],
       row:       [:black, :light_green_background],
       bottom:    [:light_yellow, :light_green_background]
-    }
+    ]
   },
-  GREEN_PADDED: %{
-    note: "like GREEN but with extra padding",
+  green_border_padded: %{
+    note: "light green border with extra padding",
     rank: 200,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left   inner    right  dash
-      top:       {"╔══", "══╦══", "══╗", "═"},
-      header:    {"║"  ,   "║"  ,   "║", nil},
-      separator: {"╠══", "══╬══", "══╣", "═"},
-      row:       {"║"  ,   "║"  ,   "║", nil},
-      bottom:    {"╚══", "══╩══", "══╝", "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[3, 0], [0, 5, 0], [0, 3]},
-      header:    {[1, 2], [2, 1, 2], [2, 1]},
-      separator: {[3, 0], [0, 5, 0], [0, 3]},
-      row:       {[1, 2], [2, 1, 2], [2, 1]},
-      bottom:    {[3, 0], [0, 5, 0], [0, 3]}
-    },
-    border_attrs: %{
-      top:       [:light_green, :light_green_background],
-      header:    [:light_green, :light_green_background],
-      separator: [:light_green, :light_green_background],
-      row:       [:light_green, :light_green_background],
-      bottom:    [:light_green, :light_green_background]
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["╔══", "══╦══", "══╗", "═"],
+      header:    ["║"  ,   "║"  ,   "║", nil],
+      separator: ["╠══", "══╬══", "══╣", "═"],
+      row:       ["║"  ,   "║"  ,   "║", nil],
+      bottom:    ["╚══", "══╩══", "══╝", "═"]
+    ],
+    border_attrs: [:light_green, :light_green_background],
+    filler_attrs: :normal,
+    key_attrs: [
       top:       [:light_green, :light_green_background],
       header:    :light_red,
       separator: [:light_green, :light_green_background],
       row:       :light_green,
       bottom:    [:light_green, :light_green_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_green, :light_green_background],
       header:    :light_magenta,
       separator: [:light_green, :light_green_background],
       row:       :normal,
       bottom:    [:light_green, :light_green_background]
-    }
+    ]
   },
-  GREEN_UNPADDED: %{
-    note: "like GREEN but without padding",
+  green_border_unpadded: %{
+    note: "light green border without padding",
     rank: 210,
-    line_types: [:top, :header, :separator, [:row], :bottom],
-    borders: %{
+    borders: [
       #           left inner right dash
-      top:       {"╔", "╦",  "╗",  "═"},
-      header:    {"║", "║",  "║",  nil},
-      separator: {"╠", "╬",  "╣",  "═"},
-      row:       {"║", "║",  "║",  nil},
-      bottom:    {"╚", "╩",  "╝",  "═"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[1, 0], [0, 1, 0], [0, 1]},
-      header:    {[1, 0], [0, 1, 0], [0, 1]},
-      separator: {[1, 0], [0, 1, 0], [0, 1]},
-      row:       {[1, 0], [0, 1, 0], [0, 1]},
-      bottom:    {[1, 0], [0, 1, 0], [0, 1]}
-    },
-    border_attrs: %{
-      top:       [:light_green, :light_green_background],
-      header:    [:light_green, :light_green_background],
-      separator: [:light_green, :light_green_background],
-      row:       [:light_green, :light_green_background],
-      bottom:    [:light_green, :light_green_background]
-    },
-    filler_attrs: %{
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
-    },
-    key_attrs: %{
+      top:       ["╔", "╦",  "╗",  "═"],
+      header:    ["║", "║",  "║",  nil],
+      separator: ["╠", "╬",  "╣",  "═"],
+      row:       ["║", "║",  "║",  nil],
+      bottom:    ["╚", "╩",  "╝",  "═"]
+    ],
+    border_attrs: [:light_green, :light_green_background],
+    filler_attrs: :normal,
+    key_attrs: [
       top:       [:light_green, :light_green_background],
       header:    :light_red,
       separator: [:light_green, :light_green_background],
       row:       :light_green,
       bottom:    [:light_green, :light_green_background]
-    },
-    non_key_attrs: %{
+    ],
+    non_key_attrs: [
       top:       [:light_green, :light_green_background],
       header:    :light_magenta,
       separator: [:light_green, :light_green_background],
       row:       :normal,
       bottom:    [:light_green, :light_green_background]
-    }
+    ]
   },
   cyan_alt: %{
     note: "cyan header, alternating row colors",
     rank: 220,
-    line_types: [:top, :header, :separator, [:even_row, :odd_row]],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│",   "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      even_row:  {"│" ,  "│",   "│", nil},
-      odd_row:   {"│" ,  "│",   "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
-      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│",   "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      even_row:  ["│" ,  "│",   "│", nil],
+      odd_row:   ["│" ,  "│",   "│", nil]
+    ],
+    border_attrs: [
       top:       [:cyan, :cyan_background],
       header:    [:cyan, :cyan_background],
       separator: [:cyan, :cyan_background],
       even_row:  [:light_cyan, :light_cyan_background],
-      odd_row:   [:light_yellow, :light_yellow_background],
-      bottom:    [:cyan, :cyan_background]
-    },
-    filler_attrs: %{
+      odd_row:   [:light_yellow, :light_yellow_background]
+    ],
+    filler_attrs: [
       top:       :cyan_background,
       header:    :cyan_background,
       separator: :cyan_background,
       even_row:  :light_cyan_background,
-      odd_row:   :light_yellow_background,
-      bottom:    :cyan_background
-    },
-    key_attrs: %{
+      odd_row:   :light_yellow_background
+    ],
+    key_attrs: [
       top:       [:cyan, :cyan_background],
       header:    [:magenta, :cyan_background, :underline],
       separator: [:cyan, :cyan_background],
       even_row:  [:light_blue, :light_cyan_background],
-      odd_row:   [:light_blue, :light_yellow_background],
-      bottom:    [:cyan, :cyan_background]
-    },
-    non_key_attrs: %{
+      odd_row:   [:light_blue, :light_yellow_background]
+    ],
+    non_key_attrs: [
       top:       [:cyan, :cyan_background],
       header:    [:light_yellow, :cyan_background],
       separator: [:cyan, :cyan_background],
       even_row:  [:black, :light_cyan_background],
-      odd_row:   [:black, :light_yellow_background],
-      bottom:    [:cyan, :cyan_background]
-    }
+      odd_row:   [:black, :light_yellow_background]
+    ]
   },
   cyan_mult: %{
     note: "cyan header, 3 repeating row colors",
     rank: 230,
-    line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3]],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│",   "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      row_1:     {"│" ,  "│",   "│", nil},
-      row_2:     {"│" ,  "│",   "│", nil},
-      row_3:     {"│" ,  "│",   "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row_1:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_2:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_3:     {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│",   "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      row_1:     ["│" ,  "│",   "│", nil],
+      row_2:     ["│" ,  "│",   "│", nil],
+      row_3:     ["│" ,  "│",   "│", nil]
+    ],
+    border_attrs: [
       top:       [:cyan, :cyan_background],
       header:    [:cyan, :cyan_background],
       separator: [:cyan, :cyan_background],
       row_1:     [:light_cyan, :light_cyan_background],
       row_2:     [:light_yellow, :light_yellow_background],
-      row_3:     [:light_green, :light_green_background],
-      bottom:    [:cyan, :cyan_background]
-    },
-    filler_attrs: %{
+      row_3:     [:light_green, :light_green_background]
+    ],
+    filler_attrs: [
       top:       :cyan_background,
       header:    :cyan_background,
       separator: :cyan_background,
       row_1:     :light_cyan_background,
       row_2:     :light_yellow_background,
-      row_3:     :light_green_background,
-      bottom:    :cyan_background
-    },
-    key_attrs: %{
+      row_3:     :light_green_background
+    ],
+    key_attrs: [
       top:       [:cyan, :cyan_background],
       header:    [:magenta, :cyan_background, :underline],
       separator: [:cyan, :cyan_background],
       row_1:     [:light_blue, :light_cyan_background],
       row_2:     [:light_blue, :light_yellow_background],
-      row_3:     [:light_blue, :light_green_background],
-      bottom:    [:cyan, :cyan_background]
-    },
-    non_key_attrs: %{
+      row_3:     [:light_blue, :light_green_background]
+    ],
+    non_key_attrs: [
       top:       [:cyan, :cyan_background],
       header:    [:light_yellow, :cyan_background],
       separator: [:cyan, :cyan_background],
       row_1:     [:black, :light_cyan_background],
       row_2:     [:black, :light_yellow_background],
-      row_3:     [:black, :light_green_background],
-      bottom:    [:cyan, :cyan_background]
-    }
+      row_3:     [:black, :light_green_background]
+    ]
   },
   green_alt: %{
     note: "green header, alternating row colors",
     rank: 240,
-    line_types: [:top, :header, :separator, [:even_row, :odd_row]],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│",   "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      even_row:  {"│" ,  "│",   "│", nil},
-      odd_row:   {"│" ,  "│",   "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      even_row:  {[1, 1], [1, 1, 1], [1, 1]},
-      odd_row:   {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│",   "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      even_row:  ["│" ,  "│",   "│", nil],
+      odd_row:   ["│" ,  "│",   "│", nil]
+    ],
+    border_attrs: [
       top:       [:green, :green_background],
       header:    [:green, :green_background],
       separator: [:green, :green_background],
       even_row:  [:light_green, :light_green_background],
-      odd_row:   [:light_yellow, :light_yellow_background],
-      bottom:    [:green, :green_background]
-    },
-    filler_attrs: %{
+      odd_row:   [:light_yellow, :light_yellow_background]
+    ],
+    filler_attrs: [
       top:       :green_background,
       header:    :green_background,
       separator: :green_background,
       even_row:  :light_green_background,
-      odd_row:   :light_yellow_background,
-      bottom:    :green_background
-    },
-    key_attrs: %{
+      odd_row:   :light_yellow_background
+    ],
+    key_attrs: [
       top:       [:green, :green_background],
       header:    [:magenta, :green_background, :underline],
       separator: [:green, :green_background],
       even_row:  [:light_blue, :light_green_background],
-      odd_row:   [:light_blue, :light_yellow_background],
-      bottom:    [:green, :green_background]
-    },
-    non_key_attrs: %{
+      odd_row:   [:light_blue, :light_yellow_background]
+    ],
+    non_key_attrs: [
       top:       [:green, :green_background],
       header:    [:light_yellow, :green_background],
       separator: [:green, :green_background],
       even_row:  [:black, :light_green_background],
-      odd_row:   [:black, :light_yellow_background],
-      bottom:    [:green, :green_background]
-    }
+      odd_row:   [:black, :light_yellow_background]
+    ]
   },
   green_mult: %{
     note: "green header, 3 repeating row colors",
     rank: 250,
-    line_types: [:top, :header, :separator, [:row_1, :row_2, :row_3]],
-    borders: %{
+    borders: [
       #           left  inner  right dash
-      top:       {"┌─", "─┬─", "─┐", "─"},
-      header:    {"│" ,  "│",   "│", nil},
-      separator: {"├─", "─┼─", "─┤", "─"},
-      row_1:     {"│" ,  "│",   "│", nil},
-      row_2:     {"│" ,  "│",   "│", nil},
-      row_3:     {"│" ,  "│",   "│", nil},
-      bottom:    {"└─", "─┴─", "─┘", "─"}
-    },
-    border_widths: %{
-      #           left    inner      right
-      top:       {[2, 0], [0, 3, 0], [0, 2]},
-      header:    {[1, 1], [1, 1, 1], [1, 1]},
-      separator: {[2, 0], [0, 3, 0], [0, 2]},
-      row_1:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_2:     {[1, 1], [1, 1, 1], [1, 1]},
-      row_3:     {[1, 1], [1, 1, 1], [1, 1]},
-      bottom:    {[2, 0], [0, 3, 0], [0, 2]}
-    },
-    border_attrs: %{
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│",   "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      row_1:     ["│" ,  "│",   "│", nil],
+      row_2:     ["│" ,  "│",   "│", nil],
+      row_3:     ["│" ,  "│",   "│", nil]
+    ],
+    border_attrs: [
       top:       [:green, :green_background],
       header:    [:green, :green_background],
       separator: [:green, :green_background],
       row_1:     [:light_green, :light_green_background],
       row_2:     [:light_yellow, :light_yellow_background],
-      row_3:     [:light_cyan, :light_cyan_background],
-      bottom:    [:green, :green_background]
-    },
-    filler_attrs: %{
+      row_3:     [:light_cyan, :light_cyan_background]
+    ],
+    filler_attrs: [
       top:       :green_background,
       header:    :green_background,
       separator: :green_background,
       row_1:     :light_green_background,
       row_2:     :light_yellow_background,
-      row_3:     :light_cyan_background,
-      bottom:    :green_background
-    },
-    key_attrs: %{
+      row_3:     :light_cyan_background
+    ],
+    key_attrs: [
       top:       [:green, :green_background],
       header:    [:magenta, :green_background, :underline],
       separator: [:green, :green_background],
       row_1:     [:light_blue, :light_green_background],
       row_2:     [:light_blue, :light_yellow_background],
-      row_3:     [:light_blue, :light_cyan_background],
-      bottom:    [:green, :green_background]
-    },
-    non_key_attrs: %{
+      row_3:     [:light_blue, :light_cyan_background]
+    ],
+    non_key_attrs: [
       top:       [:green, :green_background],
       header:    [:light_yellow, :green_background],
       separator: [:green, :green_background],
       row_1:     [:black, :light_green_background],
       row_2:     [:black, :light_yellow_background],
-      row_3:     [:black, :light_cyan_background],
-      bottom:    [:green, :green_background]
-    }
+      row_3:     [:black, :light_cyan_background]
+    ]
   }
-}
+]
 
-#
-# And access this configuration in your application as:
-#
-#     Application.get_env(:io_ansi_table, :key)
-#
-# Or configure a 3rd-party app:
-#
-#     config :logger, level: :info
-#
+# Comment out to compile debug, info and warn messages...
+config :logger, compile_time_purge_level: :error
 
-# It is also possible to import configuration files, relative to this
-# directory. For example, you can emulate configuration per environment
-# by uncommenting the line below and defining dev.exs, test.exs and such.
-# Configuration from the imported file will override the ones defined
-# here (which is why it is important to import them last).
-#
+# Prevents runtime debug, info and warn messages...
+config :logger, level: :error
+
+# Listed by ascending log level...
+config :logger, :console, colors: [
+  debug: :light_cyan,
+  info:  :light_green,
+  warn:  :light_yellow,
+  error: :light_red
+]
+
 #     import_config "#{Mix.env}.exs"

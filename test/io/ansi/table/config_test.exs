@@ -1,4 +1,3 @@
-
 defmodule IO.ANSI.Table.ConfigTest do
   @moduledoc false
 

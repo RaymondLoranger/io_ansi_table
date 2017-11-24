@@ -1,97 +1,85 @@
-
 defmodule IO.ANSI.Table.Style do
-  @moduledoc """
-  Defines functions to retrieve properties of predefined table styles.
-  """
+  # @moduledoc """
+  # Defines functions returning the properties of configured table styles.
+  # """
+  @moduledoc false
 
-  @type attr :: [atom] | atom
-  # {left_border, inner_border, right_border}
-  @type borders :: {String.t, String.t, String.t}
-  @type border_widths :: {
-  # [left_border_width, filler_width]
-    [non_neg_integer],
-  # [filler_width, inner_border_width, filler_width]
-    [non_neg_integer],
-  # [filler_width, right_border_width]
-    [non_neg_integer]
-  }
-  @type line_type :: :top | :header | :separator | :bottom
-  @type row_type :: :row | :even_row | :odd_row | :row_1 | :row_2 | :row_3
+  use PersistConfig
+
+  alias IO.ANSI.Table.{Column, LineType}
+
+  @type attr :: atom | [atom]
+  @type border :: String.t
   @type t :: atom
 
-  Mix.Project.config[:config_path] |> Mix.Config.read! |> Mix.Config.persist
-  @external_resource Path.expand Mix.Project.config[:config_path]
-  @app               Mix.Project.config[:app]
-  @styles            Application.get_env @app, :table_styles
+  @styles Application.get_env(@app, :table_styles)
 
-  Module.register_attribute __MODULE__, :style_lengths, accumulate: true
+  Module.register_attribute(__MODULE__, :inner_lengths, accumulate: true)
+  Module.register_attribute(__MODULE__, :left_lengths, accumulate: true)
+  Module.register_attribute(__MODULE__, :line_types, accumulate: true)
+  Module.register_attribute(__MODULE__, :right_lengths, accumulate: true)
+  Module.register_attribute(__MODULE__, :style_ids, accumulate: true)
+  Module.register_attribute(__MODULE__, :style_lengths, accumulate: true)
+  Module.register_attribute(__MODULE__, :types, accumulate: true)
 
   @doc """
-  Retrieves the table style for a given table style `tag`.
+  Converts a switch `argument` to a table style.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.style_for("light")
-      {:ok, :light}
-
-      iex> alias IO.ANSI.Table.Style
-      iex> Style.style_for("green-alt")
+      iex> Style.from_switch_arg("green-alt")
       {:ok, :green_alt}
+
+      iex> alias IO.ANSI.Table.Style
+      iex> Style.from_switch_arg("lite")
+      :error
   """
-  @spec style_for(String.t) :: {:ok, t} | :error
-  def style_for(tag)
+  @spec from_switch_arg(String.t) :: {:ok, t} | :error
+  def from_switch_arg(arg)
 
   @doc """
-  Retrieves the table style tag for a given table `style`.
+  Converts a table `style` to a switch argument.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.tag_for(:light)
-      "light"
+      iex> Style.to_switch_arg(:green_alt)
+      "green-alt"
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.tag_for(:green_alt)
-      "green-alt"
+      iex> Style.to_switch_arg(:lite)
+      nil
   """
-  @spec tag_for(t) :: String.t | nil
-  def tag_for(style)
+  @spec to_switch_arg(t) :: String.t | nil
+  def to_switch_arg(style)
 
   for {style, %{}} <- @styles do
-    @style_lengths String.length(inspect style)
-    tag = String.replace to_string(style), "_", "-"
-    def style_for(unquote tag), do: {:ok, unquote style}
-    def tag_for(unquote style), do: unquote(tag)
+    @style_ids style
+    @style_lengths style |> inspect() |> String.length()
+    arg = style |> to_string() |> String.replace("_", "-")
+    def from_switch_arg(unquote(arg)), do: {:ok, unquote(style)}
+    def to_switch_arg(unquote(style)), do: unquote(arg)
   end
-  def style_for(_tag), do: :error
-  def tag_for(_style), do: nil
+  def from_switch_arg(_arg), do: :error
+  def to_switch_arg(_style), do: nil
 
-  @max_length Enum.max @style_lengths
+  @max_length Enum.max(@style_lengths)
 
   @doc """
-  Retrieves the line types of a given table `style`.
+  Returns the list of all table styles.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.line_types(:light)
-      [:top, :header, :separator, [:row], :bottom]
-
-      iex> alias IO.ANSI.Table.Style
-      iex> Style.line_types(:green_alt)
-      [:top, :header, :separator, [:even_row, :odd_row]]
+      iex> Style.styles() |> length
+      35
   """
-  @spec line_types(t) :: [line_type | [row_type]] | nil
-  def line_types(style)
-
-  for {style, %{line_types: line_types}} <- @styles do
-    def line_types(unquote style), do: unquote(line_types)
-  end
-  def line_types(_style), do: nil
+  @spec styles() :: [t]
+  def styles(), do: Enum.sort(@style_ids)
 
   @doc """
-  Retrieves the dash of a given table `style` and line/row `type`.
+  Returns the dash of a given table `style` and line `type`.
 
   ## Examples
 
@@ -103,65 +91,93 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.dash(:dark, :row)
       nil
   """
-  @spec dash(t, line_type | row_type) :: String.t | nil
+  @spec dash(t, LineType.t) :: String.t | nil
   def dash(style, type)
 
   @doc """
-  Retrieves the borders of a given table `style` and line/row `type`.
+  Returns the borders of a given table `style` and line `type`.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
       iex> Style.borders(:cyan, :bottom)
-      {"╚═", "═╩═", "═╝"}
-
-      iex> alias IO.ANSI.Table.Style
-      iex> Style.borders(:cyan, :row)
-      {"║", "║", "║"}
+      ["╚═", "═╩═", "═╝"]
   """
-  @spec borders(t, line_type | row_type) :: borders | nil
+  @spec borders(t, LineType.t) :: [border] | []
   def borders(style, type)
 
-  for {style, %{borders: borders}} <- @styles do
-    for {type, {left, inner, right, dash}} <- borders do
-      def dash(unquote(style), unquote(type)), do: unquote(dash)
-      def borders(unquote(style), unquote(type)) do
-        {unquote(left), unquote(inner), unquote(right)}
-      end
-    end
-  end
-  def dash(_style, _type), do: nil
-  def borders(_style, _type), do: nil
-
   @doc """
-  Retrieves the 3 multipart border widths (left, inner and right)
-  of a given table `style` and line/row `type`. The widths are multipart to
-  account for the "fillers" preceding/following the borders.
+  Returns the border spreads of a given table `style` and line `type`.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.border_widths(:plain, :bottom) # borders: "└─", "─┴─", "─┘"
-      {[2, 0], [0, 3, 0], [0, 2]}
+      iex> Style.border_spreads(:plain, :bottom)
+      [[0, 2, 0], [0, 3, 0], [0, 2, 0]] # borders: "└─", "─┴─", "─┘"
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.border_widths(:plain, :header) # borders: "│" ,  "│" ,  "│"
-      {[1, 1], [1, 1, 1], [1, 1]}
+      iex> Style.border_spreads(:plain, :header)
+      [[0, 1, 1], [1, 1, 1], [1, 1, 0]] # borders: "│" ,  "│" ,  "│"
   """
-  @spec border_widths(t, line_type | row_type) :: border_widths | nil
-  def border_widths(style, type)
-
-  for {style, %{border_widths: border_widths}} <- @styles do
-    for {type, {left, inner, right}} <- border_widths do
-      def border_widths(unquote(style), unquote(type)) do
-        {unquote(left), unquote(inner), unquote(right)}
-      end
-    end
-  end
-  def border_widths(_style, _type), do: nil
+  @spec border_spreads(t, LineType.t) :: [Column.spread] | []
+  def border_spreads(style, type)
 
   @doc """
-  Retrieves the border attribute of a given table `style` and line/row `type`.
+  Returns the line types of a given table `style`.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Style
+      iex> Style.line_types(:light)
+      [:top, :header, :separator, [:row], :bottom]
+
+      iex> alias IO.ANSI.Table.Style
+      iex> Style.line_types(:green_alt)
+      [:top, :header, :separator, [:even_row, :odd_row]]
+  """
+  @spec line_types(t) :: [LineType.t] | []
+  def line_types(style)
+
+  for {style, %{borders: borders}} <- @styles do
+    for {type, [left, inner, right, dash]} <- borders do
+      @left_lengths String.length(left)
+      @inner_lengths String.length(inner)
+      @right_lengths String.length(right)
+      @types type
+      def dash(unquote(style), unquote(type)), do: unquote(dash)
+      def borders(unquote(style), unquote(type)) do
+        [unquote(left), unquote(inner), unquote(right)]
+      end
+    end
+
+    @max_left_length Enum.max(@left_lengths)
+    @max_inner_length Enum.max(@inner_lengths)
+    @max_right_length Enum.max(@right_lengths)
+
+    for {type, [left, inner, right, _dash]} <- borders do
+      left_spread = Column.spread(@max_left_length, left, :left)
+      inner_spread = Column.spread(@max_inner_length, inner, :center)
+      right_spread = Column.spread(@max_right_length, right, :right)
+      def border_spreads(unquote(style), unquote(type)) do
+        [unquote(left_spread), unquote(inner_spread), unquote(right_spread)]
+      end
+    end
+
+    @line_types {style, LineType.to_line_types(@types)}
+    def line_types(unquote(style)), do: @line_types[unquote(style)]
+
+    Module.delete_attribute(__MODULE__, :left_lengths)
+    Module.delete_attribute(__MODULE__, :inner_lengths)
+    Module.delete_attribute(__MODULE__, :right_lengths)
+    Module.delete_attribute(__MODULE__, :types)
+  end
+  def dash(_style, _type), do: nil
+  def borders(_style, _type), do: []
+  def border_spreads(_style, _type), do: []
+  def line_types(_style), do: []
+
+  @doc """
+  Returns the border attribute of a given table `style` and line `type`.
 
   ## Examples
 
@@ -169,18 +185,11 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.border_attr(:green, :top)
       [:light_yellow, :light_green_background]
   """
-  @spec border_attr(t, line_type | row_type) :: attr | nil
+  @spec border_attr(t, LineType.t) :: attr | nil
   def border_attr(style, type)
 
-  for {style, %{border_attrs: border_attrs}} <- @styles do
-    for {type, border_attr} <- border_attrs do
-      def border_attr(unquote(style), unquote(type)), do: unquote(border_attr)
-    end
-  end
-  def border_attr(_style, _type), do: nil
-
   @doc """
-  Retrieves the filler attribute of a given table `style` and line/row `type`.
+  Returns the filler attribute of a given table `style` and line `type`.
 
   ## Examples
 
@@ -188,18 +197,11 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.filler_attr(:mixed, :row)
       :light_green_background
   """
-  @spec filler_attr(t, line_type | row_type) :: attr | nil
+  @spec filler_attr(t, LineType.t) :: attr | nil
   def filler_attr(style, type)
 
-  for {style, %{filler_attrs: filler_attrs}} <- @styles do
-    for {type, filler_attr} <- filler_attrs do
-      def filler_attr(unquote(style), unquote(type)), do: unquote(filler_attr)
-    end
-  end
-  def filler_attr(_style, _type), do: nil
-
   @doc """
-  Retrieves the key attribute of a given table `style` and line/row `type`.
+  Returns the key attribute of a given table `style` and line `type`.
 
   ## Examples
 
@@ -211,18 +213,11 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.key_attr(:light, :header)
       [:light_yellow, :underline]
   """
-  @spec key_attr(t, line_type | row_type) :: attr | nil
+  @spec key_attr(t, LineType.t) :: attr | nil
   def key_attr(style, type)
 
-  for {style, %{key_attrs: key_attrs}} <- @styles do
-    for {type, key_attr} <- key_attrs do
-      def key_attr(unquote(style), unquote(type)), do: unquote(key_attr)
-    end
-  end
-  def key_attr(_style, _type), do: nil
-
   @doc """
-  Retrieves the non key attribute of a given table `style` and line/row `type`.
+  Returns the non key attribute of a given table `style` and line `type`.
 
   ## Examples
 
@@ -230,54 +225,68 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.non_key_attr(:cyan, :row)
       [:black, :light_cyan_background]
   """
-  @spec non_key_attr(t, line_type | row_type) :: attr | nil
+  @spec non_key_attr(t, LineType.t) :: attr | nil
   def non_key_attr(style, type)
 
-  for {style, %{non_key_attrs: non_key_attrs}} <- @styles do
-    for {type, non_key_attr} <- non_key_attrs do
-      def non_key_attr(unquote(style), unquote(type)) do
-        unquote(non_key_attr)
+  @attr_funs [:border_attr, :filler_attr, :key_attr, :non_key_attr]
+
+  for fun <- @attr_funs do
+    key = "#{fun}s" |> String.to_atom()
+    for {style, style_map} <- @styles do
+      attrs = Map.get(style_map, key)
+      case attrs do
+        attrs when is_list(attrs) and length(attrs) > 2 ->
+          for {type, attr} <- attrs do
+            def unquote(fun)(unquote(style), unquote(type)), do: unquote(attr)
+          end
+        attr ->
+          for type <- List.flatten(@line_types[style]) do
+            def unquote(fun)(unquote(style), unquote(type)), do: unquote(attr)
+          end
       end
     end
+    def unquote(fun)(_style, _type), do: nil
   end
-  def non_key_attr(_style, _type), do: nil
 
   @doc ~S"""
-  Retrieves a list of interpolated texts (one per table style)
-  and optionally passes each interpolated text to a function.
+  Returns a list of interpolated texts (one per table style)
+  and optionally passes each one to a function.
 
   ## Examples
 
       alias IO.ANSI.Table.Style
-      Style.texts "  - `&style`&filler - &note\n"
+      Style.texts("  - `&style`&filler - &note\n")
 
       alias IO.ANSI.Table.Style
-      Style.texts "  - `&style`&filler - &note", &IO.puts/1
+      Style.texts("  - `&style`&filler - &note", &IO.puts/1)
 
   ## Interpolation placeholders
 
-    - `&style`  - table style (e.g. ":light")
-    - `&tag`    - table style tag (e.g. "light")
-    - `&filler` - padding after &style or &tag
+    - `&style`  - table style (e.g. ":light_alt")
+    - `&arg`    - table style switch arg (e.g. "light-alt")
+    - `&filler` - padding after &style or &arg
     - `&note`   - table style note
     - `&rank`   - table style rank (3 digits)
   """
   @spec texts(String.t, (String.t -> any)) :: [any]
   def texts(template, fun \\ & &1) when is_function(fun, 1) do
     @styles
-    |> Enum.sort(& elem(&1, 1).rank <= elem(&2, 1).rank)
-    |> Stream.map(&interpolate &1, template)
+    |> Enum.sort(& elem(&1, 0) <= elem(&2, 0))
+    |> Stream.map(&interpolate(&1, template))
     |> Enum.map(&fun.(&1))
   end
+
+  ## Private functions
 
   @spec interpolate({t, map}, String.t) :: String.t
   defp interpolate({style, %{note: note, rank: rank}}, template) do
     import String, only: [duplicate: 2, replace: 3, slice: 2]
-    {style, tag} = {inspect(style), tag_for(style)}
-    filler = duplicate " ", @max_length - String.length(style)
+
+    {style, arg} = {inspect(style), to_switch_arg(style)}
+    filler = duplicate(" ", @max_length - String.length(style))
     template
     |> replace("&style", style)
-    |> replace("&tag", tag)
+    |> replace("&arg", arg)
     |> replace("&filler", filler)
     |> replace("&note", note)
     |> replace("&rank", slice("0#{rank}", -3..-1)) # last 3 digits

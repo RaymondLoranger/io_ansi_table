@@ -1,101 +1,107 @@
-
 defmodule IO.ANSI.Table.FormatterTest do
   @moduledoc false
 
   use ExUnit.Case, async: true
 
-  alias ExUnit.CaptureIO, as: CIO # allows to capture stuff sent to STDOUT
-  alias IO.ANSI.Table.Formatter, as: TF
+  alias ExUnit.CaptureIO # allows to capture IO
+  alias IO.ANSI.Table.{Formatter, Spec}
 
-  doctest TF
+  doctest Formatter
 
   setup_all do
-    fake_maps = Enum.map ~w/c z b a y x/, &%{key: &1, other: &1}
-    maps = [ # unordered maps with atom keys and string values...
-      %{c1: "r3 c1", c2: "r3 c2" , c3: "r3 c3", c4: "r3 c4"  },
-      %{c1: "r1 c1", c2: "r1 c2" , c3: "r1 c3", c4: "r1+++c4"},
-      %{c1: "r4 c1", c2: "r4++c2", c3: "r4 c3", c4: "r4 c4"  },
-      %{c1: "r2 c1", c2: "r2 c2" , c3: "r2 c3", c4: "r2 c4"  }
+    maps =
+      [ # unordered maps with atom keys and string values...
+        %{c1: "r3 c1", c2: "r3 c2" , c3: "r3 c3", c4: "r3 c4"  },
+        %{c1: "r1 c1", c2: "r1 c2" , c3: "r1 c3", c4: "r1+++c4"},
+        %{c1: "r4 c1", c2: "r4++c2", c3: "r4 c3", c4: "r4 c4"  },
+        %{c1: "r2 c1", c2: "r2 c2" , c3: "r2 c3", c4: "r2 c4"  }
+      ]
+    options = [
+      bell: false, count: 4, style: :test,
+      headers: [:c4, :c1, :c2],
+      margins: [top: 0, bottom: 0, left: 0],
+      sort_specs: [:c4],
+      sort_symbols: [asc: "↑"]
     ]
-    {:ok, fake_maps: fake_maps, maps: maps}
+    spec = Spec.new() |> Spec.apply(options)
+    {:ok, maps: maps, spec: spec}
   end
 
-  describe "IO.ANSI.Table.Formatter.key_for/2" do
-    test "fake maps sorted on :key", %{fake_maps: fake_maps} do
-      assert fake_maps
-      |> Enum.sort_by(&TF.key_for &1, [:key])
-      |> Enum.map(& &1.key)
-      == ~w/a b c x y z/
-    end
-  end
-
-  describe "IO.ANSI.Table.Formatter.print_table/5" do
-    test "formats table ok", %{maps: maps} do
-      result = CIO.capture_io fn ->
-        TF.print_table(
-          maps, 4, false, :test,
-          headers: [:c4, :c1, :c2],
-          key_headers: [:c4],
-          margins: [top: 0, bottom: 0, left: 0]
-        )
-      end
-      assert result == """
-      ┌─────────┬───────┬────────┐
-      │ C4      │ C1    │ C2     │
-      ├─────────┼───────┼────────┤
-      │ r1+++c4 │ r1 c1 │ r1 c2  │
-      │ r2 c4   │ r2 c1 │ r2 c2  │
-      │ r3 c4   │ r3 c1 │ r3 c2  │
-      │ r4 c4   │ r4 c1 │ r4++c2 │
-      └─────────┴───────┴────────┘
-      """
+  describe "Formatter.print_table/2" do
+    test "formats table ok", %{maps: maps, spec: spec} do
+      print_fun = fn -> Formatter.print_table(spec, maps) end
+      capture =
+        """
+        ┌─────────┬───────┬────────┐
+        │ C4↑     │ C1    │ C2     │
+        ├─────────┼───────┼────────┤
+        │ r1+++c4 │ r1 c1 │ r1 c2  │
+        │ r2 c4   │ r2 c1 │ r2 c2  │
+        │ r3 c4   │ r3 c1 │ r3 c2  │
+        │ r4 c4   │ r4 c1 │ r4++c2 │
+        └─────────┴───────┴────────┘
+        """
+      assert CaptureIO.capture_io(print_fun) == capture
     end
 
-    test "positions table ok", %{maps: maps} do
-      result = CIO.capture_io fn ->
-        TF.print_table(
-          maps, 4, false, :test,
-          headers: [:c4, :c1, :c2],
-          key_headers: [:c4],
-          margins: [top: 1, bottom: 1, left: 6]
-        )
-      end
-      assert result == """
+    test "positions table ok", %{maps: maps, spec: spec} do
+      options = [
+        margins: [top: 1, bottom: 0, left: 2],
+        sort_symbols: [asc: "⬆", pos: :leading]
+      ]
+      spec = Spec.apply(spec, options)
+      print_fun = fn -> Formatter.print_table(spec, maps) end
+      capture =
+        """
 
-            ┌─────────┬───────┬────────┐
-            │ C4      │ C1    │ C2     │
-            ├─────────┼───────┼────────┤
-            │ r1+++c4 │ r1 c1 │ r1 c2  │
-            │ r2 c4   │ r2 c1 │ r2 c2  │
-            │ r3 c4   │ r3 c1 │ r3 c2  │
-            │ r4 c4   │ r4 c1 │ r4++c2 │
-            └─────────┴───────┴────────┘
-
-      """
+          ┌─────────┬───────┬────────┐
+          │ ⬆C4     │ C1    │ C2     │
+          ├─────────┼───────┼────────┤
+          │ r1+++c4 │ r1 c1 │ r1 c2  │
+          │ r2 c4   │ r2 c1 │ r2 c2  │
+          │ r3 c4   │ r3 c1 │ r3 c2  │
+          │ r4 c4   │ r4 c1 │ r4++c2 │
+          └─────────┴───────┴────────┘
+        """
+      assert CaptureIO.capture_io(print_fun) == capture
     end
-  end
 
-  describe "IO.ANSI.Table.Formatter.colums/2" do
-    test "returns list of columns", %{maps: maps} do
-      columns = TF.columns maps, [:c4, :c1, :c2]
-      assert length(columns) == 3
-      assert List.first(columns) == ["r3 c4", "r1+++c4", "r4 c4", "r2 c4"]
-      assert List.last(columns) == ["r3 c2", "r1 c2", "r4++c2", "r2 c2"]
+    test "bad options are ignored", %{maps: maps, spec: spec} do
+      options = [margins: %{}, sort_symbols: nil]
+      spec = Spec.apply(spec, options)
+      print_fun = fn -> Formatter.print_table(spec, maps) end
+      capture =
+        """
+
+          ┌─────────┬───────┬────────┐
+          │ C4↑     │ C1    │ C2     │
+          ├─────────┼───────┼────────┤
+          │ r1+++c4 │ r1 c1 │ r1 c2  │
+          │ r2 c4   │ r2 c1 │ r2 c2  │
+          │ r3 c4   │ r3 c1 │ r3 c2  │
+          │ r4 c4   │ r4 c1 │ r4++c2 │
+          └─────────┴───────┴────────┘
+
+        """
+      assert CaptureIO.capture_io(print_fun) == capture
     end
-  end
 
-  describe "IO.ANSI.Table.Formatter.rows/2" do
-    test "returns list of rows", %{maps: maps} do
-      rows = TF.rows maps, [:c4, :c1, :c2]
-      assert length(rows) == length(maps)
-      assert List.first(rows) == ["r3 c4", "r3 c1", "r3 c2"]
-      assert List.last(rows) == ["r2 c4", "r2 c1", "r2 c2"]
-    end
-  end
-
-  describe "IO.ANSI.Table.Formatter.column_widths/1" do
-    test "returns max column widths", %{maps: maps} do
-      assert TF.columns(maps, [:c4, :c1, :c2]) |> TF.column_widths == [7, 5, 6]
+    test "bad sort specs are ignored", %{maps: maps, spec: spec} do
+      options = [sort_specs: {}, sort_symbols: [asc: "▲"]]
+      spec = Spec.apply(spec, options)
+      print_fun = fn -> Formatter.print_table(spec, maps) end
+      capture =
+        """
+        ┌─────────┬───────┬────────┐
+        │ C4      │ C1    │ C2     │
+        ├─────────┼───────┼────────┤
+        │ r3 c4   │ r3 c1 │ r3 c2  │
+        │ r1+++c4 │ r1 c1 │ r1 c2  │
+        │ r4 c4   │ r4 c1 │ r4++c2 │
+        │ r2 c4   │ r2 c1 │ r2 c2  │
+        └─────────┴───────┴────────┘
+        """
+      assert CaptureIO.capture_io(print_fun) == capture
     end
   end
 end
