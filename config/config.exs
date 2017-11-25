@@ -68,6 +68,7 @@ config :elixir, ansi_enabled: true # to allow mix messages in colors...
 #     config :io_ansi_table, style: :light
 
 config :io_ansi_table, ansi_enabled: true # table formatting in colors
+config :io_ansi_table, async: false # true -> cast; false ->call
 config :io_ansi_table, default_align_specs: [:undefined]
 config :io_ansi_table, default_bell: false
 config :io_ansi_table, default_count: 11

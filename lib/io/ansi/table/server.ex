@@ -8,6 +8,8 @@ defmodule IO.ANSI.Table.Server do
 
   alias IO.ANSI.Table.{Formatter, Spec}
 
+  @typep from :: GenServer.from
+
   @me __MODULE__
 
   @spec start_link(term) :: GenServer.on_start
@@ -26,5 +28,15 @@ defmodule IO.ANSI.Table.Server do
   def handle_cast({maps}, spec) do
     Formatter.print_table(spec, maps)
     {:noreply, spec}
+  end
+
+  @spec handle_call(term, from, Spec.t) :: {:reply, :ok, Spec.t}
+  def handle_call({maps, options}, _from, spec) do
+    :ok = Formatter.print_table(spec, maps, options)
+    {:reply, :ok, spec}
+  end
+  def handle_call({maps}, _from, spec) do
+    :ok = Formatter.print_table(spec, maps)
+    {:reply, :ok, spec}
   end
 end

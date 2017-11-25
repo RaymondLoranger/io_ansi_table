@@ -2,10 +2,15 @@ defmodule IO.ANSI.Table.Options do
   @moduledoc """
   Documents the `IO.ANSI.Table.Options` using configuration examples.
 
-  All options can be configured and/or passed as a keyword argument to
+  All 10 options can be configured and/or passed as a keyword argument to
   `IO.ANSI.Table.format/2`.
   Each option of the keyword will override its configured counterpart.
-  You should configure all options except maybe `bell`, `count` and `style`.
+  You should however configure all options except possibly
+  `bell`, `count` and `style`.
+
+  You can also configure `:async` which is a compile time only option.
+  Therefore changing this config option requires to recompile the app.
+  When `true` the table will print asynchronously. Defaults to `false`.
 
   Here are some configuration examples for each option:
 

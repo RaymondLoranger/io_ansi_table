@@ -8,13 +8,21 @@ defmodule IO.ANSI.Table do
   Can choose a table style among the 35 already predefined.
   """
 
+  use PersistConfig
+
   alias IO.ANSI.Table.{Server, Style}
+
+  @async Application.get_env(@app, :async)
 
   @doc """
   Same as `format/2` but will use configured options.
   """
   @spec format([Access.container]) :: :ok
-  def format(maps), do: GenServer.cast(Server, {maps})
+  if @async do
+    def format(maps), do: GenServer.cast(Server, {maps})
+  else
+    def format(maps), do: GenServer.call(Server, {maps})
+  end
 
   @doc """
   Prints data from `maps` to STDOUT in a table tailored by `options`.
@@ -67,8 +75,13 @@ defmodule IO.ANSI.Table do
         align_specs: [center: :dob],
         margins: [top: 2, bottom: 2]
       )
+
   ## ![print_table_people](images/print_table_people.png)
   """
   @spec format([Access.container], Keyword.t) :: :ok
-  def format(maps, options), do: GenServer.cast(Server, {maps, options})
+  if @async do
+    def format(maps, options), do: GenServer.cast(Server, {maps, options})
+  else
+    def format(maps, options), do: GenServer.call(Server, {maps, options})
+  end
 end
