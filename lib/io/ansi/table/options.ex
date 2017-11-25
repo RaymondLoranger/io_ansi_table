@@ -2,10 +2,10 @@ defmodule IO.ANSI.Table.Options do
   @moduledoc """
   Documents the `IO.ANSI.Table.Options` using configuration examples.
 
-  Options can be configured and/or passed as a keyword argument to
+  All options can be configured and/or passed as a keyword argument to
   `IO.ANSI.Table.format/2`.
   Each option of the keyword will override its configured counterpart.
-  Normally you should configure all options except possibly `style`.
+  You should configure all options except maybe `bell`, `count` and `style`.
 
   Here are some configuration examples for each option:
 

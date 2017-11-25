@@ -20,9 +20,8 @@ defmodule IO.ANSI.Table.Spec do
 
   @spec apply(t, Keyword.t) :: t
   def apply(spec, options) do
-    options
-    |> Enum.reduce(spec, &validate/2)
-    |> update()
+    spec = options |> Enum.reduce(spec, &validate/2)
+    if skip_update?(options), do: spec, else: update(spec)
   end
 
   @spec deploy(Spec.t, [Access.container]) :: Spec.t
@@ -33,6 +32,11 @@ defmodule IO.ANSI.Table.Spec do
   end
 
   ## Private functions
+
+  @spec skip_update?(Keyword.t) :: boolean
+  defp skip_update?(options) do
+    options |> Keyword.keys() |> Enum.all?(& &1 in [:bell, :count, :style])
+  end
 
   @spec init() :: t
   defp init() do
