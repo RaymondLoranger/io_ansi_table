@@ -1235,10 +1235,10 @@ config :io_ansi_table, table_styles: [
 ]
 
 # Comment out to compile debug, info and warn messages...
-config :logger, compile_time_purge_level: :error
+# config :logger, compile_time_purge_level: :error
 
 # Prevents runtime debug, info and warn messages...
-config :logger, level: :error
+# config :logger, level: :error
 
 # Listed by ascending log level...
 config :logger, :console, colors: [

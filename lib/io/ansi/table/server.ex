@@ -24,24 +24,24 @@ defmodule IO.ANSI.Table.Server do
 
   @spec handle_cast(term, Spec.t) :: {:noreply, Spec.t}
   def handle_cast({maps, options}, spec) do
-    Logger.info("Handling cast with options #{inspect(options)}")
+    Logger.debug("Handling cast with options #{inspect(options)}")
     Formatter.print_table(spec, maps, options)
     {:noreply, spec}
   end
   def handle_cast({maps}, spec) do
-    Logger.info("Handling cast without options")
+    Logger.debug("Handling cast without options")
     Formatter.print_table(spec, maps)
     {:noreply, spec}
   end
 
   @spec handle_call(term, from, Spec.t) :: {:reply, :ok, Spec.t}
   def handle_call({maps, options}, _from, spec) do
-    Logger.info("Handling call with options #{inspect(options)}")
+    Logger.debug("Handling call with options #{inspect(options)}")
     :ok = Formatter.print_table(spec, maps, options)
     {:reply, :ok, spec}
   end
   def handle_call({maps}, _from, spec) do
-    Logger.info("Handling call without options")
+    Logger.debug("Handling call without options")
     :ok = Formatter.print_table(spec, maps)
     {:reply, :ok, spec}
   end
