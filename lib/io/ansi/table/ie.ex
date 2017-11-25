@@ -18,6 +18,10 @@ defmodule IO.ANSI.Table.IE do
   #   Style.styles()
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
+  #   Application.put_env(:io_ansi_table, :async, true)
+  #   r(Table)
+  #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
+  #   print_people()
 
   alias IO.ANSI.Table
   alias IO.ANSI.Table.Style
@@ -64,6 +68,7 @@ defmodule IO.ANSI.Table.IE do
     quote do
       import IO.ANSI.Table.IE
       alias IO.ANSI.Table
+      alias IO.ANSI.Table.IE
       alias IO.ANSI.Table.{Column, Config, Formatter, Heading}
       alias IO.ANSI.Table.{Line, Line_type, Row, Spec, Style}
       require MapSorter
