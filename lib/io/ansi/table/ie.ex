@@ -66,9 +66,9 @@ defmodule IO.ANSI.Table.IE do
 
   defmacro __using__(_options) do
     quote do
-      import IO.ANSI.Table.IE
+      import unquote(__MODULE__)
       alias IO.ANSI.Table
-      alias IO.ANSI.Table.IE
+      alias unquote(__MODULE__)
       alias IO.ANSI.Table.{Column, Config, Formatter, Heading}
       alias IO.ANSI.Table.{Line, Line_type, Row, Spec, Style}
       require MapSorter

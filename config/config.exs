@@ -1089,7 +1089,7 @@ config :io_ansi_table, table_styles: [
     ],
     key_attrs: [
       top:       [:cyan, :cyan_background],
-      header:    [:magenta, :cyan_background, :underline],
+      header:    [:light_white, :cyan_background, :underline],
       separator: [:cyan, :cyan_background],
       even_row:  [:light_blue, :light_cyan_background],
       odd_row:   [:light_blue, :light_yellow_background]
@@ -1132,7 +1132,7 @@ config :io_ansi_table, table_styles: [
     ],
     key_attrs: [
       top:       [:cyan, :cyan_background],
-      header:    [:magenta, :cyan_background, :underline],
+      header:    [:light_white, :cyan_background, :underline],
       separator: [:cyan, :cyan_background],
       row_1:     [:light_blue, :light_cyan_background],
       row_2:     [:light_blue, :light_yellow_background],
@@ -1174,7 +1174,7 @@ config :io_ansi_table, table_styles: [
     ],
     key_attrs: [
       top:       [:green, :green_background],
-      header:    [:magenta, :green_background, :underline],
+      header:    [:light_white, :green_background, :underline],
       separator: [:green, :green_background],
       even_row:  [:light_blue, :light_green_background],
       odd_row:   [:light_blue, :light_yellow_background]
@@ -1217,7 +1217,7 @@ config :io_ansi_table, table_styles: [
     ],
     key_attrs: [
       top:       [:green, :green_background],
-      header:    [:magenta, :green_background, :underline],
+      header:    [:light_white, :green_background, :underline],
       separator: [:green, :green_background],
       row_1:     [:light_blue, :light_green_background],
       row_2:     [:light_blue, :light_yellow_background],
