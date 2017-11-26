@@ -88,7 +88,7 @@ defmodule IO.ANSI.Table.Line do
   @spec item_widths([elem], LineType.t, Spec.t) :: [Column.width]
   def item_widths(elems, type, spec) do
     Stream.zip([spec.column_widths, elems, spec.align_attrs])
-    |> Enum.map(&spread/1)
+    |> Enum.map(fn {width, elem, attr} -> Column.spread(width, elem, attr) end)
     |> deploy(Style.border_spreads(spec.style, type))
   end
 
@@ -114,18 +114,21 @@ defmodule IO.ANSI.Table.Line do
   """
   @spec format([Column.width], [Style.attr], boolean) :: String.t
   def format(item_widths, item_attrs, ansi_enabled? \\ @ansi_enabled) do
-    fragment_fun = fn
-      {width, :normal} -> "~-#{width}ts" # t for Unicode translation
-      {width, attr} -> IO.ANSI.format([attr, "~-#{width}ts"], ansi_enabled?)
-    end
-    fragments = # => IO.chardata (list of strings and/or improper lists)
-      item_widths
-      |> Enum.zip(item_attrs)
-      |> Enum.map(fragment_fun)
-    "#{fragments}~n" # => string embedded with ANSI escape sequences
+    item_widths
+    |> Enum.zip(item_attrs)
+    |> Enum.map(&fragment(&1, ansi_enabled?))
+    |> (&"#{&1}~n").() # => string embedded with ANSI escape sequences
   end
 
   ## Private functions
+
+  @spec fragment(tuple, boolean) :: IO.chardata
+  defp fragment({width, :normal}, _ansi_enabled?) do
+    "~-#{width}ts" # t for Unicode translation
+  end
+  defp fragment({width, attr}, ansi_enabled?) do
+    IO.ANSI.format([attr, "~-#{width}ts"], ansi_enabled?)
+  end
 
   # @doc """
   # Deploys `elements` by mixing `delimiters` (left, inner and right).
@@ -179,10 +182,5 @@ defmodule IO.ANSI.Table.Line do
       [filler, [filler, inner, filler], filler],
       [filler, [filler, right, filler]        ]
     ]
-  end
-
-  @spec spread({Column.width, elem, Column.align_attr}) :: Column.spread
-  defp spread({width, elem, align_attr}) do
-    Column.spread(width, elem, align_attr)
   end
 end
