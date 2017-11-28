@@ -10,7 +10,7 @@ defmodule IO.ANSI.Table.Options do
 
   ## Notes
 
-  You can also config `:async` which is a compile time option. Therefore
+  You can also configure `:async` which is a compile time option. Therefore
   changing this option requires to recompile the `:io_ansi_table` app.
   When `true` the table will print asynchronously. Defaults to `false`.
 
