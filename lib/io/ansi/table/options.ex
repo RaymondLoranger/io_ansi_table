@@ -8,11 +8,20 @@ defmodule IO.ANSI.Table.Options do
   You should however configure all options except possibly
   `bell`, `count` and `style`.
 
-  You can also configure `:async` which is a compile time only option.
-  Therefore changing this config option requires to recompile the app.
+  ## Notes
+
+  You can also config `:async` which is a compile time option. Therefore
+  changing this option requires to recompile the `:io_ansi_table` app.
   When `true` the table will print asynchronously. Defaults to `false`.
 
-  Here are some configuration examples for each option:
+  If option `sort_specs` (see below) specifies structs like `%Date{}`
+  or `%Time{}`, you must provide the following config and then
+  recompile the `:map_sorter` dependency used by `:io_ansi_table`:
+
+  - `config :map_sorter, sorting_on_structs?: true`
+  - `mix deps.compile map_sorter`
+
+  ## Examples
 
   - `align_specs` - to align column elements (list)
 

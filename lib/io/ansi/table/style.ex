@@ -72,7 +72,7 @@ defmodule IO.ANSI.Table.Style do
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.styles() |> length
+      iex> Style.styles() |> length()
       35
   """
   @spec styles() :: [t]

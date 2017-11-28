@@ -28,47 +28,38 @@ defmodule IO.ANSI.Table.IE do
 
   require MapSorter
 
-  @align_specs [center: :date_of_birth, right: :weight]
-  @headers [:name, :date_of_birth, :likes, :height, :weight, :bmi]
-  @header_fixes %{~r[Bmi] => "BMI"}
+  @align_specs [center: :dob, right: :weight]
+  @headers [:name, :dob, :likes, :bmi]
+  @header_fixes %{"Dob" => "DOB", "Bmi" => "BMI"}
   @margins [top: 1, bottom: 0]
-  @people [
-    %{
-      name: "Mike", likes: "ski, arts", date_of_birth: "1992-04-15",
-      height: ~s[6' 0"], weight: "176 lb", bmi: 23.9
-    },
-    %{
-      name: "Mary", likes: "travels"  , date_of_birth: "1992-04-15",
-      height: ~s[5' 6"], weight: "166 lb", bmi: 26.8
-    },
-    %{
-      name: "Ann" , likes: "reading"  , date_of_birth: "1992-04-15",
-      height: ~s[6' 1"], weight: "187 lb", bmi: 24.7
-    },
-    %{
-      name: "Ray" , likes: "cycling"  , date_of_birth: "1977-08-28",
-      height: ~s[6' 0"], weight: "141 lb", bmi: 19.1
-    },
-    %{
-      name: "Bill", likes: "karate"   , date_of_birth: "1977-08-28",
-      height: ~s[5' 8"], weight: "119 lb", bmi: 18.1
-    },
-    %{
-      name: "Joe" , likes: "boxing"   , date_of_birth: "1977-08-28",
-      height: "1.82 m" , weight: "69 kg" , bmi: 20.8
-    },
-    %{
-      name: "Jill", likes: "cooking"  , date_of_birth: "1976-09-28",
-      height: "1.76 m" , weight: "80 kg" , bmi: 25.8
-    }
+  # Using @people with struct dobs requires to...
+  # config :map_sorter, sorting_on_structs?: true
+  # mix deps.compile map_sorter
+  @people [ # struct dobs
+    %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15], bmi: 23.9},
+    %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15], bmi: 26.8},
+    %{name: "Ann" , likes: "reading"  , dob: ~D[1992-04-15], bmi: 24.7},
+    %{name: "Ray" , likes: "cycling"  , dob: ~D[1977-08-28], bmi: 19.1},
+    %{name: "Bill", likes: "karate"   , dob: ~D[1977-08-28], bmi: 18.1},
+    %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28], bmi: 20.8},
+    %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28], bmi: 25.8}
   ]
-  @sort_specs [:date_of_birth, desc: :likes]
+  @people [ # string dobs
+    %{name: "Mike", likes: "ski, arts", dob: "1992-04-15", bmi: 23.9},
+    %{name: "Mary", likes: "travels"  , dob: "1992-04-15", bmi: 26.8},
+    %{name: "Ann" , likes: "reading"  , dob: "1992-04-15", bmi: 24.7},
+    %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28", bmi: 19.1},
+    %{name: "Bill", likes: "karate"   , dob: "1977-08-28", bmi: 18.1},
+    %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28", bmi: 20.8},
+    %{name: "Jill", likes: "cooking"  , dob: "1976-09-28", bmi: 25.8}
+  ]
+  @sort_specs [:dob, desc: :likes]
 
   defmacro __using__(_options) do
     quote do
       import unquote(__MODULE__)
-      alias IO.ANSI.Table
       alias unquote(__MODULE__)
+      alias IO.ANSI.Table
       alias IO.ANSI.Table.{Column, Config, Formatter, Heading}
       alias IO.ANSI.Table.{Line, Line_type, Row, Spec, Style}
       require MapSorter
@@ -76,7 +67,7 @@ defmodule IO.ANSI.Table.IE do
     end
   end
 
-  def people(), do: @people
+  def people(), do: @people()
 
   def people_as_keywords(), do: Enum.map(@people, &Keyword.new/1)
 
@@ -125,7 +116,7 @@ defmodule IO.ANSI.Table.IE do
     fragments = IO.ANSI.format(chardata)
     "#{fragments}"
     |> Style.texts(&IO.puts/1)
-    |> length
+    |> length()
   end
 
   def people_sorted(), do: MapSorter.sort(@people, @sort_specs)

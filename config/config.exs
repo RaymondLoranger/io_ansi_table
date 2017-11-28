@@ -1248,4 +1248,6 @@ config :logger, :console, colors: [
   error: :light_red
 ]
 
+# config :map_sorter, sorting_on_structs?: true
+
 #     import_config "#{Mix.env}.exs"
