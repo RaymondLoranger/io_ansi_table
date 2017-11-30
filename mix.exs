@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project() do
     [
       app: :io_ansi_table,
-      version: "0.3.8",
+      version: "0.3.9",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       name: "IO ANSI Table",
@@ -12,8 +12,7 @@ defmodule IO.ANSI.Table.Mixfile do
       description: description(),
       package: package(),
       aliases: aliases(),
-      deps: deps(),
-      dialyzer: [plt_add_apps: [:mix]]
+      deps: deps()
     ]
   end
 
@@ -40,8 +39,8 @@ defmodule IO.ANSI.Table.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application() do
     [
-      mod: {IO.ANSI.Table.App, :ok},
-      extra_applications: [:logger]
+      extra_applications: [:logger],
+      mod: {IO.ANSI.Table.App, :ok}
     ]
   end
 
