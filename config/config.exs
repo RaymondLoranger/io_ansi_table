@@ -1231,6 +1231,216 @@ config :io_ansi_table, table_styles: [
       row_2:     [:black, :light_yellow_background],
       row_3:     [:black, :light_cyan_background]
     ]
+  },
+  game_green: %{
+    note: "green headers, 3 repeating row colors",
+    rank: 260,
+    borders: [
+      #           left inner  right dash
+      top:       ["╔", "═╤═", "╗",  "═"],
+      header:    ["║",  "│" , "║",  nil],
+      separator: ["╟", "─┼─", "╢",  "─"],
+      row_1:     ["║",  "│" , "║",  nil],
+      row_2:     ["║",  "│" , "║",  nil],
+      row_3:     ["║",  "│" , "║",  nil],
+      bottom:    ["╚", "═╧═", "╝",  "═"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: [
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      row_1:     :light_blue_background,
+      row_2:     :magenta_background,
+      row_3:     :normal,
+      bottom:    :normal
+    ],
+    key_attrs: [
+      top:       :light_yellow,
+      header:    :light_green,
+      separator: :light_yellow,
+      row_1:     [:light_green, :light_blue_background],
+      row_2:     [:light_green, :magenta_background],
+      row_3:     :light_green,
+      bottom:    :light_yellow
+    ],
+    non_key_attrs: [
+      top:       :light_yellow,
+      header:    :light_green,
+      separator: :light_yellow,
+      row_1:     [:light_yellow, :light_blue_background],
+      row_2:     [:light_yellow, :magenta_background],
+      row_3:     :light_yellow,
+      bottom:    :light_yellow
+    ]
+  },
+  game_cyan: %{
+    note: "cyan headers, 3 repeating row colors",
+    rank: 270,
+    borders: [
+      #           left inner  right dash
+      top:       ["╔", "═╤═", "╗",  "═"],
+      header:    ["║",  "│" , "║",  nil],
+      separator: ["╟", "─┼─", "╢",  "─"],
+      row_1:     ["║",  "│" , "║",  nil],
+      row_2:     ["║",  "│" , "║",  nil],
+      row_3:     ["║",  "│" , "║",  nil],
+      bottom:    ["╚", "═╧═", "╝",  "═"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: [
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      row_1:     :light_blue_background,
+      row_2:     :magenta_background,
+      row_3:     :normal,
+      bottom:    :normal
+    ],
+    key_attrs: [
+      top:       :light_yellow,
+      header:    :light_cyan,
+      separator: :light_yellow,
+      row_1:     [:light_cyan, :light_blue_background],
+      row_2:     [:light_cyan, :magenta_background],
+      row_3:     :light_cyan,
+      bottom:    :light_yellow
+    ],
+    non_key_attrs: [
+      top:       :light_yellow,
+      header:    :light_cyan,
+      separator: :light_yellow,
+      row_1:     [:light_yellow, :light_blue_background],
+      row_2:     [:light_yellow, :magenta_background],
+      row_3:     :light_yellow,
+      bottom:    :light_yellow
+    ]
+  },
+  game_magenta: %{
+    note: "magenta headers, 3 repeating row colors",
+    rank: 280,
+    borders: [
+      #           left inner  right dash
+      top:       ["╔", "═╤═", "╗",  "═"],
+      header:    ["║",  "│" , "║",  nil],
+      separator: ["╟", "─┼─", "╢",  "─"],
+      row_1:     ["║",  "│" , "║",  nil],
+      row_2:     ["║",  "│" , "║",  nil],
+      row_3:     ["║",  "│" , "║",  nil],
+      bottom:    ["╚", "═╧═", "╝",  "═"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: [
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      row_1:     :light_blue_background,
+      row_2:     :magenta_background,
+      row_3:     :normal,
+      bottom:    :normal
+    ],
+    key_attrs: [
+      top:       :light_yellow,
+      header:    :light_magenta,
+      separator: :light_yellow,
+      row_1:     [:light_magenta, :light_blue_background],
+      row_2:     [:light_magenta, :magenta_background],
+      row_3:     :light_magenta,
+      bottom:    :light_yellow
+    ],
+    non_key_attrs: [
+      top:       :light_yellow,
+      header:    :light_magenta,
+      separator: :light_yellow,
+      row_1:     [:light_yellow, :light_blue_background],
+      row_2:     [:light_yellow, :magenta_background],
+      row_3:     :light_yellow,
+      bottom:    :light_yellow
+    ]
+  },
+  game_yellow: %{
+    note: "yellow headers, 3 repeating row colors",
+    rank: 290,
+    borders: [
+      #           left inner  right dash
+      top:       ["╔", "═╤═", "╗",  "═"],
+      header:    ["║",  "│" , "║",  nil],
+      separator: ["╟", "─┼─", "╢",  "─"],
+      row_1:     ["║",  "│" , "║",  nil],
+      row_2:     ["║",  "│" , "║",  nil],
+      row_3:     ["║",  "│" , "║",  nil],
+      bottom:    ["╚", "═╧═", "╝",  "═"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: [
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      row_1:     :light_blue_background,
+      row_2:     :magenta_background,
+      row_3:     :normal,
+      bottom:    :normal
+    ],
+    key_attrs: [
+      top:       :light_yellow,
+      header:    :light_yellow,
+      separator: :light_yellow,
+      row_1:     [:light_yellow, :light_blue_background],
+      row_2:     [:light_yellow, :magenta_background],
+      row_3:     :light_yellow,
+      bottom:    :light_yellow
+    ],
+    non_key_attrs: [
+      top:       :light_yellow,
+      header:    :light_yellow,
+      separator: :light_yellow,
+      row_1:     [:light_yellow, :light_blue_background],
+      row_2:     [:light_yellow, :magenta_background],
+      row_3:     :light_yellow,
+      bottom:    :light_yellow
+    ]
+  },
+  game_red: %{
+    note: "red headers, 3 repeating row colors",
+    rank: 300,
+    borders: [
+      #           left inner  right dash
+      top:       ["╔", "═╤═", "╗",  "═"],
+      header:    ["║",  "│" , "║",  nil],
+      separator: ["╟", "─┼─", "╢",  "─"],
+      row_1:     ["║",  "│" , "║",  nil],
+      row_2:     ["║",  "│" , "║",  nil],
+      row_3:     ["║",  "│" , "║",  nil],
+      bottom:    ["╚", "═╧═", "╝",  "═"]
+    ],
+    border_attrs: :light_yellow,
+    filler_attrs: [
+      top:       :normal,
+      header:    :normal,
+      separator: :normal,
+      row_1:     :light_blue_background,
+      row_2:     :magenta_background,
+      row_3:     :normal,
+      bottom:    :normal
+    ],
+    key_attrs: [
+      top:       :light_yellow,
+      header:    :light_red,
+      separator: :light_yellow,
+      row_1:     [:light_red, :light_blue_background],
+      row_2:     [:light_red, :magenta_background],
+      row_3:     :light_red,
+      bottom:    :light_yellow
+    ],
+    non_key_attrs: [
+      top:       :light_yellow,
+      header:    :light_red,
+      separator: :light_yellow,
+      row_1:     [:light_yellow, :light_blue_background],
+      row_2:     [:light_yellow, :magenta_background],
+      row_3:     :light_yellow,
+      bottom:    :light_yellow
+    ]
   }
 ]
 

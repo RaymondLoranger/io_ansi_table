@@ -73,7 +73,7 @@ defmodule IO.ANSI.Table.Style do
 
       iex> alias IO.ANSI.Table.Style
       iex> Style.styles() |> length()
-      35
+      40
   """
   @spec styles() :: [t]
   def styles(), do: Enum.sort(@style_ids)

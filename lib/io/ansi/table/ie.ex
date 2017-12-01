@@ -22,6 +22,8 @@ defmodule IO.ANSI.Table.IE do
   #   r(Table)
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
+  #   print_islands([:medium, :medium_alt, :medium_mult])
+  #   print_islands()
 
   alias IO.ANSI.Table
   alias IO.ANSI.Table.Style
@@ -31,6 +33,28 @@ defmodule IO.ANSI.Table.IE do
   @align_specs [center: :dob, right: :weight]
   @headers [:name, :dob, :likes, :bmi]
   @header_fixes %{"Dob" => "DOB", "Bmi" => "BMI"}
+  @islands [
+    %{:row =>  1, 1 => "]", 2 => "]", 3 => " ", 4 => " ", 5  => " ",
+                  6 => " ", 7 => " ", 8 => " ", 9 => "_", :A => "_"},
+    %{:row =>  2, 1 => " ", 2 => "]", 3 => " ", 4 => " ", 5  => " ",
+                  6 => " ", 7 => " ", 8 => " ", 9 => " ", :A => " "},
+    %{:row =>  3, 1 => "]", 2 => " ", 3 => " ", 4 => "_", 5  => " ",
+                  6 => " ", 7 => "L", 8 => " ", 9 => " ", :A => " "},
+    %{:row =>  4, 1 => " ", 2 => " ", 3 => "_", 4 => " ", 5  => " ",
+                  6 => " ", 7 => "L", 8 => " ", 9 => " ", :A => " "},
+    %{:row =>  5, 1 => " ", 2 => " ", 3 => " ", 4 => " ", 5  => " ",
+                  6 => " ", 7 => "L", 8 => "L", 9 => " ", :A => " "},
+    %{:row =>  6, 1 => " ", 2 => " ", 3 => "S", 4 => "S", 5  => " ",
+                  6 => " ", 7 => " ", 8 => " ", 9 => " ", :A => " "},
+    %{:row =>  7, 1 => " ", 2 => "S", 3 => " ", 4 => " ", 5  => " ",
+                  6 => " ", 7 => " ", 8 => " ", 9 => " ", :A => "_"},
+    %{:row =>  8, 1 => " ", 2 => " ", 3 => " ", 4 => " ", 5  => " ",
+                  6 => " ", 7 => " ", 8 => " ", 9 => " ", :A => " "},
+    %{:row =>  9, 1 => " ", 2 => " ", 3 => " ", 4 => " ", 5  => "■",
+                  6 => " ", 7 => " ", 8 => " ", 9 => "●", :A => " "},
+    %{:row => 10, 1 => " ", 2 => " ", 3 => " ", 4 => " ", 5  => "■",
+                  6 => "■", 7 => " ", 8 => " ", 9 => " ", :A => " "}
+  ]
   @margins [top: 1, bottom: 0]
   # Using @people with struct dobs requires to...
   # config :map_sorter, sorting_on_structs?: true
@@ -80,6 +104,20 @@ defmodule IO.ANSI.Table.IE do
       @people, bell: true, count: length(@people), style: style,
       headers: @headers, header_fixes: @header_fixes,
       sort_specs: @sort_specs, align_specs: @align_specs,
+      margins: @margins
+    )
+  end
+
+  def print_islands(styles \\ Style.styles())
+  def print_islands(styles) when is_list(styles) do
+    Enum.each(styles, &print_islands/1)
+  end
+  def print_islands(style) do
+    Table.format(
+      @islands, bell: false, count: 10, style: style,
+      headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, :A],
+      header_fixes: %{"Row" => "", "A" => "10"},
+      sort_specs: [:row], align_specs: [right: :row],
       margins: @margins
     )
   end
