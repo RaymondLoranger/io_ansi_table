@@ -16,14 +16,14 @@ defmodule IO.ANSI.Table.IE do
   #   styles()
   #   styles(:light_green)
   #   Style.styles()
+  #   print_islands([:medium, :medium_alt, :medium_mult])
+  #   print_islands()
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
   #   Application.put_env(:io_ansi_table, :async, true)
   #   r(Table)
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
-  #   print_islands([:medium, :medium_alt, :medium_mult])
-  #   print_islands()
 
   alias IO.ANSI.Table
   alias IO.ANSI.Table.Style

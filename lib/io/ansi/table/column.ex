@@ -25,19 +25,19 @@ defmodule IO.ANSI.Table.Column do
   @spec left_margin(Spec.t) :: Spec.t
   def left_margin(spec) do
     margin = String.duplicate(" ", spec.margins[:left] || 0)
-    Map.put(spec, :left_margin, margin)
+    %{spec | left_margin: margin}
   end
 
   @spec align_attrs(Spec.t) :: Spec.t
   def align_attrs(spec) do
     attrs = Enum.map(spec.headers, &find_attr(&1, spec.align_specs, :left))
-    Map.put(spec, :align_attrs, attrs)
+    %{spec | align_attrs: attrs}
   end
 
   @spec sort_attrs(Spec.t) :: Spec.t
   def sort_attrs(spec) do
     attrs = Enum.map(spec.headers, &find_attr(&1, spec.sort_specs, :asc))
-    Map.put(spec, :sort_attrs, attrs)
+    %{spec | sort_attrs: attrs}
   end
 
   @doc """
@@ -70,6 +70,7 @@ defmodule IO.ANSI.Table.Column do
       |> transpose()
       |> widths(spec.max_width)
     Map.put(spec, :column_widths, widths)
+    %{spec | column_widths: widths}
   end
 
   @doc """

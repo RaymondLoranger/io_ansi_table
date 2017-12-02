@@ -11,7 +11,7 @@ defmodule IO.ANSI.Table.Heading do
   @spec headings(Spec.t) :: Spec.t
   def headings(spec) do
     headings = Enum.map(spec.headers, &to_heading(&1, spec))
-    Map.put(spec, :headings, headings)
+    %{spec | headings: headings}
   end
 
   ## Private functions

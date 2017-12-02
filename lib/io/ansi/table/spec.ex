@@ -41,13 +41,19 @@ defmodule IO.ANSI.Table.Spec do
   @spec init() :: t
   defp init() do
     %{
+      align_attrs: [],
       align_specs: Config.align_specs(),
       bell: Config.bell(),
+      column_widths: [],
       count: Config.count(),
       headers: Config.headers(),
       header_fixes: Config.header_fixes(),
+      headings: [],
+      left_margin: "",
       margins: Config.margins(),
       max_width: Config.max_width(),
+      rows: [],
+      sort_attrs: [],
       sort_specs: Config.sort_specs(),
       sort_symbols: Config.sort_symbols(),
       style: Config.style()
@@ -68,20 +74,17 @@ defmodule IO.ANSI.Table.Spec do
 
   @spec header_fixes(t) :: t
   defp header_fixes(spec) do
-    header_fixes = Map.merge(@default_header_fixes, spec.header_fixes)
-    Map.put(spec, :header_fixes, header_fixes)
+    update_in(spec.header_fixes, &Map.merge(@default_header_fixes, &1))
   end
 
   @spec sort_symbols(t) :: t
   defp sort_symbols(spec) do
-    sort_symbols = Keyword.merge(@default_sort_symbols, spec.sort_symbols)
-    Map.put(spec, :sort_symbols, sort_symbols)
+    update_in(spec.sort_symbols, &Keyword.merge(@default_sort_symbols, &1))
   end
 
   @spec margins(t) :: t
   defp margins(spec) do
-    margins = Keyword.merge(@default_margins, spec.margins)
-    Map.put(spec, :margins, margins)
+    update_in(spec.margins, &Keyword.merge(@default_margins, &1))
   end
 
   @spec validate(tuple, Spec.t) :: Spec.t
