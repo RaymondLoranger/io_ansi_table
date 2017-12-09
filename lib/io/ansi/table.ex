@@ -15,17 +15,12 @@ defmodule IO.ANSI.Table do
   @async Application.get_env(@app, :async)
 
   @doc """
-  Same as `format/2` but will use configured options.
-  """
-  @spec format([Access.container]) :: :ok
-  if @async do
-    def format(maps), do: GenServer.cast(Server, {maps})
-  else
-    def format(maps), do: GenServer.call(Server, {maps})
-  end
-
-  @doc """
   Prints data from `maps` to STDOUT in a table tailored by `options`.
+
+  All options can be configured and/or passed as a keyword argument.
+  Each option of the keyword will override its configured counterpart.
+  You should however configure all options except possibly
+  `bell`, `count` and `style`.
 
   The columns are identified by the `:headers` option (`map` keys).
   We calculate the width of each column to fit the longest element
@@ -80,8 +75,12 @@ defmodule IO.ANSI.Table do
   """
   @spec format([Access.container], Keyword.t) :: :ok
   if @async do
-    def format(maps, options), do: GenServer.cast(Server, {maps, options})
+    def format(maps, options \\ []) do
+      GenServer.cast(Server, {maps, options})
+    end
   else
-    def format(maps, options), do: GenServer.call(Server, {maps, options})
+    def format(maps, options \\ []) do
+      GenServer.call(Server, {maps, options})
+    end
   end
 end

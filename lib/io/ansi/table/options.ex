@@ -2,20 +2,14 @@ defmodule IO.ANSI.Table.Options do
   @moduledoc """
   Documents the `IO.ANSI.Table.Options` using configuration examples.
 
-  All 10 options can be configured and/or passed as a keyword argument to
-  `IO.ANSI.Table.format/2`.
-  Each option of the keyword will override its configured counterpart.
-  You should however configure all options except possibly
-  `bell`, `count` and `style`.
-
   ## Notes
 
-  You can also configure `:async` which is a compile time option. Therefore
+  You can configure `:async` which is a compile time option. Therefore
   changing this option requires to recompile the `:io_ansi_table` app.
   When `true` the table will print asynchronously. Defaults to `false`.
 
   If option `sort_specs` (see below) specifies structs like `%Date{}`
-  or `%Time{}`, you must provide the following config and then
+  or `%Time{}`, you must provide the following configuration and then
   recompile the `:map_sorter` dependency used by `:io_ansi_table`:
 
   - `config :map_sorter, sorting_on_structs?: true`

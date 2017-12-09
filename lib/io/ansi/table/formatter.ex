@@ -1,9 +1,4 @@
 defmodule IO.ANSI.Table.Formatter do
-  # @moduledoc """
-  # Prints a table to STDOUT applying a table style to a list of maps.
-
-  # Also works for keywords or structs implementing the Access behaviour.
-  # """
   @moduledoc false
 
   use PersistConfig
@@ -12,20 +7,14 @@ defmodule IO.ANSI.Table.Formatter do
 
   @rule_types Application.get_env(@app, :rule_types)
 
-  @doc """
-  See `IO.ANSI.Table.format/2`.
-  """
   @spec print_table(Spec.t, [Access.container], Keyword.t) :: :ok
-  def print_table(spec, maps, options) do
-    spec |> Spec.apply(options) |> print_table(maps)
-  end
-
-  @doc """
-  See `IO.ANSI.Table.format/1`.
-  """
-  @spec print_table(Spec.t, [Access.container]) :: :ok
-  def print_table(spec, maps) do
-    spec |> Spec.deploy(maps) |> write_table()
+  def print_table(spec, maps, options \\ []) do
+    case options do
+      [_|_] -> Spec.apply(spec, options)
+      [] -> spec
+    end
+    |> Spec.deploy(maps)
+    |> write_table()
   end
 
   ## Private functions
