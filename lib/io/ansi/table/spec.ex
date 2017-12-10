@@ -20,7 +20,7 @@ defmodule IO.ANSI.Table.Spec do
 
   @spec apply(t, Keyword.t) :: t
   def apply(spec, options) do
-    spec = options |> Enum.reduce(spec, &validate/2)
+    spec = Enum.reduce(options, spec, &validate/2)
     if skip_update?(options), do: spec, else: update(spec)
   end
 

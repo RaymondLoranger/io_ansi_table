@@ -69,7 +69,6 @@ defmodule IO.ANSI.Table.Column do
       [spec.headings | spec.rows]
       |> transpose()
       |> widths(spec.max_width)
-    Map.put(spec, :column_widths, widths)
     %{spec | column_widths: widths}
   end
 

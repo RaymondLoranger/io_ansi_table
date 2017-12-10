@@ -9,13 +9,13 @@ defmodule IO.ANSI.Table.FormatterTest do
   doctest Formatter
 
   setup_all do
-    maps =
-      [ # unordered maps with atom keys and string values...
-        %{c1: "r3 c1", c2: "r3 c2" , c3: "r3 c3", c4: "r3 c4"  },
-        %{c1: "r1 c1", c2: "r1 c2" , c3: "r1 c3", c4: "r1+++c4"},
-        %{c1: "r4 c1", c2: "r4++c2", c3: "r4 c3", c4: "r4 c4"  },
-        %{c1: "r2 c1", c2: "r2 c2" , c3: "r2 c3", c4: "r2 c4"  }
-      ]
+    maps = [
+      # unordered maps with atom keys and string values...
+      %{c1: "r3 c1", c2: "r3 c2" , c3: "r3 c3", c4: "r3 c4"  },
+      %{c1: "r1 c1", c2: "r1 c2" , c3: "r1 c3", c4: "r1+++c4"},
+      %{c1: "r4 c1", c2: "r4++c2", c3: "r4 c3", c4: "r4 c4"  },
+      %{c1: "r2 c1", c2: "r2 c2" , c3: "r2 c3", c4: "r2 c4"  }
+    ]
     options = [
       bell: false, count: 4, style: :test,
       headers: [:c4, :c1, :c2],

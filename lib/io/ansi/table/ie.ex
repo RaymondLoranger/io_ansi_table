@@ -10,6 +10,11 @@ defmodule IO.ANSI.Table.IE do
   #   people_as_keywords()
   #   people_sorted_as_keywords()
   #   print_people(:dotted_mult)
+  #   put_env(:pretty_alt)
+  #   people() |> Table.format()
+  #   GenServer.stop(Server, :shutdown)
+  #   people() |> Table.format()
+  #   print_people(:dotted_mult)
   #   print_people(:dotted_mult, 9)
   #   print_people_as_keywords(:green_mult)
   #   print_people_as_keywords(:green_mult, 9)
@@ -78,6 +83,7 @@ defmodule IO.ANSI.Table.IE do
     %{name: "Jill", likes: "cooking"  , dob: "1976-09-28", bmi: 25.8}
   ]
   @sort_specs [:dob, desc: :likes]
+  @sort_symbols  [asc: "▲", desc: "▼", pos: :trailing]
 
   defmacro __using__(_options) do
     quote do
@@ -85,7 +91,7 @@ defmodule IO.ANSI.Table.IE do
       alias unquote(__MODULE__)
       alias IO.ANSI.Table
       alias IO.ANSI.Table.{Column, Config, Formatter, Heading}
-      alias IO.ANSI.Table.{Line, Line_type, Row, Spec, Style}
+      alias IO.ANSI.Table.{Line, Line_type, Row, Server, Spec, Style}
       require MapSorter
       :ok
     end
@@ -106,6 +112,18 @@ defmodule IO.ANSI.Table.IE do
       sort_specs: @sort_specs, align_specs: @align_specs,
       margins: @margins
     )
+  end
+
+  def put_env(style) do
+    Application.put_env(:io_ansi_table, :bell, true)
+    Application.put_env(:io_ansi_table, :count, length(@people))
+    Application.put_env(:io_ansi_table, :style, style)
+    Application.put_env(:io_ansi_table, :headers, @headers)
+    Application.put_env(:io_ansi_table, :header_fixes, @header_fixes)
+    Application.put_env(:io_ansi_table, :sort_specs, @sort_specs)
+    Application.put_env(:io_ansi_table, :align_specs, @align_specs)
+    Application.put_env(:io_ansi_table, :margins, @margins)
+    Application.put_env(:io_ansi_table, :sort_symbols, @sort_symbols)
   end
 
   def print_islands(styles \\ Style.styles())

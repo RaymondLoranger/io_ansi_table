@@ -15,7 +15,6 @@ defmodule IO.ANSI.Table.Row do
       |> MapSorter.sort(spec.sort_specs)
       |> Enum.take(spec.count)
       |> to_rows(spec.headers)
-    Map.put(spec, :rows, rows)
     %{spec | rows: rows}
   end
 
