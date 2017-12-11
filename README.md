@@ -33,13 +33,13 @@ config :io_ansi_table, header_fixes: %{
   ~r[ rfc(\d+)$]i => " RFC-\\1"
 }
 
-config :io_ansi_table, align_specs: %{
+config :io_ansi_table, align_specs: [
   center: "station_id", right: "wind_mph"
-}
+]
 
-config :io_ansi_table, sort_specs: %{
+config :io_ansi_table, sort_specs: [
   asc: "station_id"
-}
+]
 ```
 
 ## Examples
