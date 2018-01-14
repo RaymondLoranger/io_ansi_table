@@ -6,7 +6,8 @@ defmodule IO.ANSI.Table.Server do
 
   use GenServer
 
-  alias IO.ANSI.Table.{Formatter, Server, Spec}
+  alias __MODULE__
+  alias IO.ANSI.Table.{Formatter, Spec}
 
   require Logger
 

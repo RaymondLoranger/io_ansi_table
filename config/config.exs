@@ -1244,10 +1244,10 @@ config :io_ansi_table, table_styles: [
     filler_attrs: :normal,
     key_attrs: [
       header: :normal,
-      row:    :light_white
+      row:    :normal
     ],
     non_key_attrs: [
-      header: :light_white,
+      header: :normal,
       row:    :normal
     ]
   }
