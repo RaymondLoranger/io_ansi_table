@@ -38,28 +38,59 @@ defmodule IO.ANSI.Table.IE do
   @align_specs [center: :dob, right: :weight]
   @headers [:name, :dob, :likes, :bmi]
   @header_fixes %{"Dob" => "DOB", "Bmi" => "BMI"}
+
+  @i "#{IO.ANSI.format([:light_yellow, :light_yellow_background, "isl"], true)}"
+  @f "#{IO.ANSI.format([:green, :green_background, "for"], true)}"
+  @w "#{IO.ANSI.format([:blue, :blue_background, "wat"], true)}"
+  @h "#{IO.ANSI.format([:green, :green_background, "hit"], true)}"
+  @m "#{IO.ANSI.format([:light_black, :light_black_background, "mis"], true)}"
+
   @islands [
-    %{:row =>  1, 1 => "]", 2 => "]", 3 => " ", 4 => " ", 5  => " ",
-                  6 => " ", 7 => " ", 8 => " ", 9 => "_", :A => "_"},
-    %{:row =>  2, 1 => " ", 2 => "]", 3 => " ", 4 => " ", 5  => " ",
-                  6 => " ", 7 => " ", 8 => " ", 9 => " ", :A => " "},
-    %{:row =>  3, 1 => "]", 2 => " ", 3 => " ", 4 => "_", 5  => " ",
-                  6 => " ", 7 => "L", 8 => " ", 9 => " ", :A => " "},
-    %{:row =>  4, 1 => " ", 2 => " ", 3 => "_", 4 => " ", 5  => " ",
-                  6 => " ", 7 => "L", 8 => " ", 9 => " ", :A => " "},
-    %{:row =>  5, 1 => " ", 2 => " ", 3 => " ", 4 => " ", 5  => " ",
-                  6 => " ", 7 => "L", 8 => "L", 9 => " ", :A => " "},
-    %{:row =>  6, 1 => " ", 2 => " ", 3 => "S", 4 => "S", 5  => " ",
-                  6 => " ", 7 => " ", 8 => " ", 9 => " ", :A => " "},
-    %{:row =>  7, 1 => " ", 2 => "S", 3 => " ", 4 => " ", 5  => " ",
-                  6 => " ", 7 => " ", 8 => " ", 9 => " ", :A => "_"},
-    %{:row =>  8, 1 => " ", 2 => " ", 3 => " ", 4 => " ", 5  => " ",
-                  6 => " ", 7 => " ", 8 => " ", 9 => " ", :A => " "},
-    %{:row =>  9, 1 => " ", 2 => " ", 3 => " ", 4 => " ", 5  => "■",
-                  6 => " ", 7 => " ", 8 => " ", 9 => "●", :A => " "},
-    %{:row => 10, 1 => " ", 2 => " ", 3 => " ", 4 => " ", 5  => "■",
-                  6 => "■", 7 => " ", 8 => " ", 9 => " ", :A => " "}
+    %{:row =>  1, 1 => @i, 2 => @f, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  2, 1 => @w, 2 => @f, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  3, 1 => @i, 2 => @f, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @i, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  4, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @i, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  5, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @f, 8 => @i, 9 => @w, :A => @w},
+    %{:row =>  6, 1 => @w, 2 => @w, 3 => @i, 4 => @i, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  7, 1 => @w, 2 => @i, 3 => @i, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  8, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  9, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @i,
+                  6 => @i, 7 => @w, 8 => @w, 9 => @f, :A => @w},
+    %{:row => 10, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @i,
+                  6 => @i, 7 => @w, 8 => @w, 9 => @w, :A => @w}
   ]
+
+  @attacks [
+    %{:row =>  1, 1 => @w, 2 => @m, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  2, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  3, 1 => @w, 2 => @w, 3 => @w, 4 => @h, 5  => @h,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  4, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @h, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  5, 1 => @w, 2 => @w, 3 => @m, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @h, 9 => @w, :A => @w},
+    %{:row =>  6, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  7, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @m},
+    %{:row =>  8, 1 => @w, 2 => @w, 3 => @w, 4 => @m, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row =>  9, 1 => @w, 2 => @w, 3 => @h, 4 => @m, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
+    %{:row => 10, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
+                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w}
+  ]
+
   @margins [top: 1, bottom: 0]
   # Using @people with struct dobs requires to...
   # config :map_sorter, sorting_on_structs?: true
@@ -135,7 +166,26 @@ defmodule IO.ANSI.Table.IE do
       @islands, bell: false, count: 10, style: style,
       headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, :A],
       header_fixes: %{"Row" => "", "A" => "10"},
-      sort_specs: [:row], align_specs: [right: :row],
+      align_specs: [
+        right: :row,
+        center: 1, center: 2,  center: 3,  center: 4,  center: 5,
+        center: 6, center: 7,  center: 8,  center: 9,  center: :A
+      ],
+      sort_specs: [:row],
+      sort_symbols: [asc: ""],
+      margins: @margins
+    )
+    Table.format(
+      @attacks, bell: false, count: 10, style: style,
+      headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, :A],
+      header_fixes: %{"Row" => "", "A" => "10"},
+      align_specs: [
+        right: :row,
+        center: 1, center: 2,  center: 3,  center: 4,  center: 5,
+        center: 6, center: 7,  center: 8,  center: 9,  center: :A
+      ],
+      sort_specs: [:row],
+      sort_symbols: [asc: ""],
       margins: @margins
     )
   end

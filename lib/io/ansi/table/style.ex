@@ -73,7 +73,7 @@ defmodule IO.ANSI.Table.Style do
 
       iex> alias IO.ANSI.Table.Style
       iex> Style.styles() |> length()
-      40
+      36
   """
   @spec styles() :: [t]
   def styles(), do: Enum.sort(@style_ids)
@@ -183,7 +183,7 @@ defmodule IO.ANSI.Table.Style do
 
       iex> alias IO.ANSI.Table.Style
       iex> Style.border_attr(:green, :top)
-      [:light_yellow, :light_green_background]
+      [:light_white, :green_background]
   """
   @spec border_attr(t, LineType.t) :: attr | nil
   def border_attr(style, type)
@@ -195,7 +195,7 @@ defmodule IO.ANSI.Table.Style do
 
       iex> alias IO.ANSI.Table.Style
       iex> Style.filler_attr(:mixed, :row)
-      :light_green_background
+      :green_background
   """
   @spec filler_attr(t, LineType.t) :: attr | nil
   def filler_attr(style, type)
@@ -223,7 +223,7 @@ defmodule IO.ANSI.Table.Style do
 
       iex> alias IO.ANSI.Table.Style
       iex> Style.non_key_attr(:cyan, :row)
-      [:black, :light_cyan_background]
+      [:black, :cyan_background]
   """
   @spec non_key_attr(t, LineType.t) :: attr | nil
   def non_key_attr(style, type)
@@ -234,15 +234,14 @@ defmodule IO.ANSI.Table.Style do
     key = "#{fun}s" |> String.to_atom()
     for {style, style_map} <- @styles do
       attrs = Map.get(style_map, key)
-      case attrs do
-        attrs when is_list(attrs) and length(attrs) > 2 ->
-          for {type, attr} <- attrs do
-            def unquote(fun)(unquote(style), unquote(type)), do: unquote(attr)
-          end
-        attr ->
-          for type <- List.flatten(@line_types[style]) do
-            def unquote(fun)(unquote(style), unquote(type)), do: unquote(attr)
-          end
+      if Keyword.keyword?(attrs) do
+        for {type, attr} <- attrs do
+          def unquote(fun)(unquote(style), unquote(type)), do: unquote(attr)
+        end
+      else
+        for type <- List.flatten(@line_types[style]) do
+          def unquote(fun)(unquote(style), unquote(type)), do: unquote(attrs)
+        end
       end
     end
     def unquote(fun)(_style, _type), do: nil

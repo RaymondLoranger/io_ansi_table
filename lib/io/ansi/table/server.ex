@@ -6,16 +6,14 @@ defmodule IO.ANSI.Table.Server do
 
   use GenServer
 
-  alias IO.ANSI.Table.{Formatter, Spec}
+  alias IO.ANSI.Table.{Formatter, Server, Spec}
 
   require Logger
 
   @typep from :: GenServer.from
 
-  @me __MODULE__
-
   @spec start_link(term) :: GenServer.on_start
-  def start_link(:ok), do: GenServer.start_link(@me, :ok, name: @me)
+  def start_link(:ok), do: GenServer.start_link(Server, :ok, name: Server)
 
   ## Callbacks
 

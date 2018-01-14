@@ -1,7 +1,7 @@
 # IO ANSI Table
 
 Prints data to STDOUT in a table with borders and colors.
-Can choose a table style among the 40 already predefined.
+Can choose a table style amongst many already predefined.
 
 ## Installation
 
@@ -19,28 +19,6 @@ end
 
 In `config/config.exs`, you should then configure the table formatting
 [options](https://hexdocs.pm/io_ansi_table/IO.ANSI.Table.Options.html).
-
-Here is an example, if your table relates to NOAA Observations:
-
-```elixir
-config :io_ansi_table, headers: [
-  "station_id", "observation_time_rfc822", "wind_mph"
-]
-
-config :io_ansi_table, header_fixes: %{
-  ~r[ id$]i       => " ID",
-  ~r[ mph$]i      => " MPH",
-  ~r[ rfc(\d+)$]i => " RFC-\\1"
-}
-
-config :io_ansi_table, align_specs: [
-  center: "station_id", right: "wind_mph"
-]
-
-config :io_ansi_table, sort_specs: [
-  asc: "station_id"
-]
-```
 
 ## Examples
 
@@ -61,10 +39,11 @@ people = [
 ]
 Table.format(people, style: :dark)
 ```
-## ![print_table_people](images/print_table_people.png)
+## ![print_table_people](images/Monokai.png)
+## ![print_table_people](images/xterm.png)
+## ![print_table_people](images/PowerShell.png)
 
-N.B. On Windows, run command `chcp 65001` (in **Powershell**) for the UTF-8
-code page (background color should be **DarkBlue** and font **Consolas**).
+N.B. On Windows, run command `chcp 65001` for the UTF-8 code page.
 
 These 2 packages use `:io_ansi_table` as a dependency to tabulate data fetched
 from the web:

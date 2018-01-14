@@ -138,18 +138,18 @@ config :io_ansi_table, table_styles: [
     border_attrs: :light_white,
     filler_attrs: :normal,
     key_attrs: [
-      top:       :normal,
+      top:       :light_white,
       header:    [:light_yellow, :underline],
-      separator: :normal,
+      separator: :light_white,
       row:       :light_cyan,
-      bottom:    :normal
+      bottom:    :light_white
     ],
     non_key_attrs: [
-      top:       :normal,
+      top:       :light_white,
       header:    :light_yellow,
-      separator: :normal,
-      row:       :normal,
-      bottom:    :normal
+      separator: :light_white,
+      row:       :light_white,
+      bottom:    :light_white
     ]
   },
   light_alt: %{
@@ -169,25 +169,25 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :light_blue_background,
+      even_row:  :blue_background,
       odd_row:   :normal,
       bottom:    :normal
     ],
     key_attrs: [
-      top:       :normal,
+      top:       :light_white,
       header:    [:light_yellow, :underline],
-      separator: :normal,
-      even_row:  [:light_cyan, :light_blue_background],
-      odd_row:   :light_cyan,
-      bottom:    :normal
+      separator: :light_white,
+      even_row:  [:light_white, :blue_background],
+      odd_row:   :light_white,
+      bottom:    :light_white
     ],
     non_key_attrs: [
-      top:       :normal,
+      top:       :light_white,
       header:    :light_yellow,
-      separator: :normal,
-      even_row:  [:normal, :light_blue_background],
-      odd_row:   :normal,
-      bottom:    :normal
+      separator: :light_white,
+      even_row:  [:light_yellow, :blue_background],
+      odd_row:   :light_yellow,
+      bottom:    :light_white
     ]
   },
   light_mult: %{
@@ -208,28 +208,28 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :blue_background,
+      row_2:     :red_background,
       row_3:     :normal,
       bottom:    :normal
     ],
     key_attrs: [
-      top:       :normal,
+      top:       :light_white,
       header:    [:light_yellow, :underline],
-      separator: :normal,
-      row_1:     [:light_cyan, :light_blue_background],
-      row_2:     [:light_cyan, :magenta_background],
-      row_3:     :light_cyan,
-      bottom:    :normal
+      separator: :light_white,
+      row_1:     [:light_white, :blue_background],
+      row_2:     [:light_white, :red_background],
+      row_3:     :light_white,
+      bottom:    :light_white
     ],
     non_key_attrs: [
-      top:       :normal,
+      top:       :light_white,
       header:    :light_yellow,
-      separator: :normal,
-      row_1:     [:normal, :light_blue_background],
-      row_2:     [:normal, :magenta_background],
-      row_3:     :normal,
-      bottom:    :normal
+      separator: :light_white,
+      row_1:     [:light_yellow, :blue_background],
+      row_2:     [:light_yellow, :red_background],
+      row_3:     :light_yellow,
+      bottom:    :light_white
     ]
   },
   medium: %{
@@ -277,7 +277,7 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :light_blue_background,
+      even_row:  :blue_background,
       odd_row:   :normal,
       bottom:    :normal
     ],
@@ -285,15 +285,15 @@ config :io_ansi_table, table_styles: [
       top:       :light_yellow,
       header:    [:light_green, :underline],
       separator: :light_yellow,
-      even_row:  [:light_cyan, :light_blue_background],
-      odd_row:   :light_cyan,
+      even_row:  [:light_white, :blue_background],
+      odd_row:   :light_white,
       bottom:    :light_yellow
     ],
     non_key_attrs: [
       top:       :light_yellow,
       header:    :light_green,
       separator: :light_yellow,
-      even_row:  [:light_yellow, :light_blue_background],
+      even_row:  [:light_yellow, :blue_background],
       odd_row:   :light_yellow,
       bottom:    :light_yellow
     ]
@@ -316,8 +316,8 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :blue_background,
+      row_2:     :red_background,
       row_3:     :normal,
       bottom:    :normal
     ],
@@ -325,17 +325,17 @@ config :io_ansi_table, table_styles: [
       top:       :light_yellow,
       header:    [:light_green, :underline],
       separator: :light_yellow,
-      row_1:     [:light_cyan, :light_blue_background],
-      row_2:     [:light_cyan, :magenta_background],
-      row_3:     :light_cyan,
+      row_1:     [:light_white, :blue_background],
+      row_2:     [:light_white, :red_background],
+      row_3:     :light_white,
       bottom:    :light_yellow
     ],
     non_key_attrs: [
       top:       :light_yellow,
       header:    :light_green,
       separator: :light_yellow,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
+      row_1:     [:light_yellow, :blue_background],
+      row_2:     [:light_yellow, :red_background],
       row_3:     :light_yellow,
       bottom:    :light_yellow
     ]
@@ -362,7 +362,7 @@ config :io_ansi_table, table_styles: [
     ],
     non_key_attrs: [
       top:       :light_green,
-      header:    :light_red,
+      header:    :light_green,
       separator: :light_green,
       row:       :light_green,
       bottom:    :light_green
@@ -385,7 +385,7 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :light_blue_background,
+      even_row:  :blue_background,
       odd_row:   :normal,
       bottom:    :normal
     ],
@@ -393,15 +393,15 @@ config :io_ansi_table, table_styles: [
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
-      even_row:  [:light_white, :light_blue_background],
+      even_row:  [:light_white, :blue_background],
       odd_row:   :light_white,
       bottom:    :light_green
     ],
     non_key_attrs: [
       top:       :light_green,
-      header:    :light_red,
+      header:    :light_green,
       separator: :light_green,
-      even_row:  [:light_green, :light_blue_background],
+      even_row:  [:light_green, :blue_background],
       odd_row:   :light_green,
       bottom:    :light_green
     ]
@@ -424,8 +424,8 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :blue_background,
+      row_2:     :red_background,
       row_3:     :normal,
       bottom:    :normal
     ],
@@ -433,17 +433,17 @@ config :io_ansi_table, table_styles: [
       top:       :light_green,
       header:    [:light_white, :light_red_background],
       separator: :light_green,
-      row_1:     [:light_white, :light_blue_background],
-      row_2:     [:light_white, :magenta_background],
+      row_1:     [:light_white, :blue_background],
+      row_2:     [:light_white, :red_background],
       row_3:     :light_white,
       bottom:    :light_green
     ],
     non_key_attrs: [
       top:       :light_green,
-      header:    :light_red,
+      header:    :light_green,
       separator: :light_green,
-      row_1:     [:light_green, :light_blue_background],
-      row_2:     [:light_green, :magenta_background],
+      row_1:     [:light_green, :blue_background],
+      row_2:     [:light_green, :red_background],
       row_3:     :light_green,
       bottom:    :light_green
     ]
@@ -465,7 +465,7 @@ config :io_ansi_table, table_styles: [
       top:       :light_magenta,
       header:    [:light_green, :underline],
       separator: :light_magenta,
-      row:       :light_cyan,
+      row:       :light_white,
       bottom:    :light_magenta
     ],
     non_key_attrs: [
@@ -493,7 +493,7 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :light_blue_background,
+      even_row:  :blue_background,
       odd_row:   :normal,
       bottom:    :normal
     ],
@@ -501,15 +501,15 @@ config :io_ansi_table, table_styles: [
       top:       :light_magenta,
       header:    [:light_green, :underline],
       separator: :light_magenta,
-      even_row:  [:light_cyan, :light_blue_background],
-      odd_row:   :light_cyan,
+      even_row:  [:light_white, :blue_background],
+      odd_row:   :light_white,
       bottom:    :light_magenta
     ],
     non_key_attrs: [
       top:       :light_magenta,
       header:    :light_green,
       separator: :light_magenta,
-      even_row:  [:light_yellow, :light_blue_background],
+      even_row:  [:light_yellow, :blue_background],
       odd_row:   :light_yellow,
       bottom:    :light_magenta
     ]
@@ -532,8 +532,8 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
+      row_1:     :blue_background,
+      row_2:     :red_background,
       row_3:     :normal,
       bottom:    :normal
     ],
@@ -541,23 +541,23 @@ config :io_ansi_table, table_styles: [
       top:       :light_magenta,
       header:    [:light_green, :underline],
       separator: :light_magenta,
-      row_1:     [:light_cyan, :light_blue_background],
-      row_2:     [:light_cyan, :magenta_background],
-      row_3:     :light_cyan,
+      row_1:     [:light_white, :blue_background],
+      row_2:     [:light_white, :red_background],
+      row_3:     :light_white,
       bottom:    :light_magenta
     ],
     non_key_attrs: [
       top:       :light_magenta,
       header:    :light_green,
       separator: :light_magenta,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
+      row_1:     [:light_yellow, :blue_background],
+      row_2:     [:light_yellow, :red_background],
       row_3:     :light_yellow,
       bottom:    :light_magenta
     ]
   },
   cyan: %{
-    note: "light cyan background",
+    note: "cyan background",
     rank: 50,
     borders: [
       #           left  inner  right dash
@@ -567,21 +567,21 @@ config :io_ansi_table, table_styles: [
       row:       ["║" ,  "║" ,  "║", nil],
       bottom:    ["╚═", "═╩═", "═╝", "═"]
     ],
-    border_attrs: [:light_blue, :light_cyan_background],
-    filler_attrs: :light_cyan_background,
+    border_attrs: [:light_white, :cyan_background],
+    filler_attrs: :cyan_background,
     key_attrs: [
-      top:       [:light_blue, :light_cyan_background],
-      header:    [:light_yellow, :light_red_background],
-      separator: [:light_blue, :light_cyan_background],
-      row:       [:light_blue, :light_cyan_background],
-      bottom:    [:light_blue, :light_cyan_background]
+      top:       [:light_white, :cyan_background],
+      header:    [:light_white, :blue_background],
+      separator: [:light_white, :cyan_background],
+      row:       [:light_white, :cyan_background],
+      bottom:    [:light_white, :cyan_background]
     ],
     non_key_attrs: [
-      top:       [:light_blue, :light_cyan_background],
-      header:    [:light_red, :light_cyan_background],
-      separator: [:light_blue, :light_cyan_background],
-      row:       [:black, :light_cyan_background],
-      bottom:    [:light_blue, :light_cyan_background]
+      top:       [:light_white, :cyan_background],
+      header:    [:light_white, :cyan_background],
+      separator: [:light_white, :cyan_background],
+      row:       [:black, :cyan_background],
+      bottom:    [:light_white, :cyan_background]
     ]
   },
   yellow: %{
@@ -595,25 +595,25 @@ config :io_ansi_table, table_styles: [
       row:       ["║" ,  "║" ,  "║", nil],
       bottom:    ["╚═", "═╩═", "═╝", "═"]
     ],
-    border_attrs: [:green, :light_yellow_background],
+    border_attrs: [:blue, :light_yellow_background],
     filler_attrs: :light_yellow_background,
     key_attrs: [
-      top:       [:green, :light_yellow_background],
-      header:    [:light_white, :light_red_background],
-      separator: [:green, :light_yellow_background],
-      row:       [:light_blue, :light_yellow_background],
-      bottom:    [:green, :light_yellow_background]
+      top:       [:blue, :light_yellow_background],
+      header:    [:light_white, :blue_background],
+      separator: [:blue, :light_yellow_background],
+      row:       [:blue, :light_yellow_background],
+      bottom:    [:blue, :light_yellow_background]
     ],
     non_key_attrs: [
-      top:       [:green, :light_yellow_background],
-      header:    [:light_red, :light_yellow_background],
-      separator: [:green, :light_yellow_background],
+      top:       [:blue, :light_yellow_background],
+      header:    [:blue, :light_yellow_background],
+      separator: [:blue, :light_yellow_background],
       row:       [:black, :light_yellow_background],
-      bottom:    [:green, :light_yellow_background]
+      bottom:    [:blue, :light_yellow_background]
     ]
   },
   green: %{
-    note: "light green background",
+    note: "green background",
     rank: 70,
     borders: [
       #           left  inner  right dash
@@ -623,21 +623,21 @@ config :io_ansi_table, table_styles: [
       row:       ["║" ,  "║" ,  "║", nil],
       bottom:    ["╚═", "═╩═", "═╝", "═"]
     ],
-    border_attrs: [:light_yellow, :light_green_background],
-    filler_attrs: :light_green_background,
+    border_attrs: [:light_white, :green_background],
+    filler_attrs: :green_background,
     key_attrs: [
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_yellow, :light_red_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:light_blue, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
+      top:       [:light_white, :green_background],
+      header:    [:light_white, :light_red_background],
+      separator: [:light_white, :green_background],
+      row:       [:light_white, :green_background],
+      bottom:    [:light_white, :green_background]
     ],
     non_key_attrs: [
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_red, :light_green_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:black, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
+      top:       [:light_white, :green_background],
+      header:    [:light_white, :green_background],
+      separator: [:light_white, :green_background],
+      row:       [:black, :green_background],
+      bottom:    [:light_white, :green_background]
     ]
   },
   cyan_border: %{
@@ -655,16 +655,16 @@ config :io_ansi_table, table_styles: [
     filler_attrs: :normal,
     key_attrs: [
       top:       [:light_cyan, :light_cyan_background],
-      header:    :light_red,
+      header:    :light_white,
       separator: [:light_cyan, :light_cyan_background],
-      row:       :light_cyan,
+      row:       :light_white,
       bottom:    [:light_cyan, :light_cyan_background]
     ],
     non_key_attrs: [
       top:       [:light_cyan, :light_cyan_background],
-      header:    :light_magenta,
+      header:    :light_cyan,
       separator: [:light_cyan, :light_cyan_background],
-      row:       :normal,
+      row:       :light_cyan,
       bottom:    [:light_cyan, :light_cyan_background]
     ]
   },
@@ -683,16 +683,16 @@ config :io_ansi_table, table_styles: [
     filler_attrs: :normal,
     key_attrs: [
       top:       [:light_yellow, :light_yellow_background],
-      header:    :light_red,
+      header:    :light_white,
       separator: [:light_yellow, :light_yellow_background],
-      row:       :light_yellow,
+      row:       :light_white,
       bottom:    [:light_yellow, :light_yellow_background]
     ],
     non_key_attrs: [
       top:       [:light_yellow, :light_yellow_background],
-      header:    :light_magenta,
+      header:    :light_yellow,
       separator: [:light_yellow, :light_yellow_background],
-      row:       :normal,
+      row:       :light_yellow,
       bottom:    [:light_yellow, :light_yellow_background]
     ]
   },
@@ -711,16 +711,16 @@ config :io_ansi_table, table_styles: [
     filler_attrs: :normal,
     key_attrs: [
       top:       [:light_green, :light_green_background],
-      header:    :light_red,
+      header:    :light_white,
       separator: [:light_green, :light_green_background],
-      row:       :light_green,
+      row:       :light_white,
       bottom:    [:light_green, :light_green_background]
     ],
     non_key_attrs: [
       top:       [:light_green, :light_green_background],
-      header:    :light_magenta,
+      header:    :light_green,
       separator: [:light_green, :light_green_background],
-      row:       :normal,
+      row:       :light_green,
       bottom:    [:light_green, :light_green_background]
     ]
   },
@@ -736,19 +736,19 @@ config :io_ansi_table, table_styles: [
       bottom:    ["╚═", "═╩═", "═╝", "═"]
     ],
     border_attrs: [:black, :light_yellow_background],
-    filler_attrs: :light_green_background,
+    filler_attrs: :green_background,
     key_attrs: [
       top:       [:black, :light_yellow_background],
       header:    [:light_red, :reverse, :light_yellow_background],
       separator: [:black, :light_yellow_background],
-      row:       [:light_blue, :light_yellow_background],
+      row:       [:blue, :light_yellow_background],
       bottom:    [:black, :light_yellow_background]
     ],
     non_key_attrs: [
       top:       [:black, :light_yellow_background],
-      header:    [:light_magenta, :light_white_background],
+      header:    [:magenta, :light_white_background],
       separator: [:black, :light_yellow_background],
-      row:       [:light_black, :light_yellow_background],
+      row:       [:black, :light_yellow_background],
       bottom:    [:black, :light_yellow_background]
     ]
   },
@@ -767,7 +767,7 @@ config :io_ansi_table, table_styles: [
     filler_attrs: :normal,
     key_attrs: [
       top:       :normal,
-      header:    [:light_white, :green_background],
+      header:    [:light_green, :underline],
       separator: :normal,
       row:       :light_green,
       bottom:    :normal
@@ -791,15 +791,15 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  :light_blue_background,
+      even_row:  :blue_background,
       odd_row:   :normal,
       bottom:    :normal
     ],
     key_attrs: [
       top:       :normal,
-      header:    [:light_white, :green_background],
+      header:    [:light_green, :underline],
       separator: :normal,
-      even_row:  [:light_green, :light_blue_background],
+      even_row:  [:light_green, :blue_background],
       odd_row:   :light_green,
       bottom:    :normal
     ],
@@ -807,7 +807,7 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      even_row:  [:normal, :light_blue_background],
+      even_row:  [:normal, :blue_background],
       odd_row:   :normal,
       bottom:    :normal
     ]
@@ -830,27 +830,27 @@ config :io_ansi_table, table_styles: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
-      row_3:     :normal,
+      row_1:     :blue_background,
+      row_2:     :red_background,
+      row_3:     :light_green,
       bottom:    :normal
     ],
     key_attrs: [
       top:       :normal,
-      header:    [:light_white, :green_background],
+      header:    [:light_green, :underline],
       separator: :normal,
-      row_1:     [:light_green, :light_blue_background],
-      row_2:     [:light_green, :magenta_background],
-      row_3:     :light_green,
+      row_1:     [:light_green, :blue_background],
+      row_2:     [:light_green, :red_background],
+      row_3:     [:light_green, :normal],
       bottom:    :normal
     ],
     non_key_attrs: [
       top:       :normal,
       header:    :normal,
       separator: :normal,
-      row_1:     [:normal, :light_blue_background],
-      row_2:     [:normal, :magenta_background],
-      row_3:     :normal,
+      row_1:     [:light_white, :blue_background],
+      row_2:     [:light_white, :red_background],
+      row_3:     [:light_white, :normal],
       bottom:    :normal
     ]
   },
@@ -961,21 +961,21 @@ config :io_ansi_table, table_styles: [
       row:       ["║"  ,   "║"  ,   "║", nil],
       bottom:    ["╚══", "══╩══", "══╝", "═"]
     ],
-    border_attrs: [:light_yellow, :light_green_background],
-    filler_attrs: :light_green_background,
+    border_attrs: [:light_white, :green_background],
+    filler_attrs: :green_background,
     key_attrs: [
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_yellow, :light_red_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:light_blue, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
+      top:       [:light_white, :green_background],
+      header:    [:light_white, :light_red_background],
+      separator: [:light_white, :green_background],
+      row:       [:light_white, :green_background],
+      bottom:    [:light_white, :green_background]
     ],
     non_key_attrs: [
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_red, :light_green_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:black, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
+      top:       [:light_white, :green_background],
+      header:    [:light_white, :green_background],
+      separator: [:light_white, :green_background],
+      row:       [:black, :green_background],
+      bottom:    [:light_white, :green_background]
     ]
   },
   green_unpadded: %{
@@ -989,21 +989,21 @@ config :io_ansi_table, table_styles: [
       row:       ["║", "║",  "║",  nil],
       bottom:    ["╚", "╩",  "╝",  "═"]
     ],
-    border_attrs: [:light_yellow, :light_green_background],
-    filler_attrs: :light_green_background,
+    border_attrs: [:light_white, :green_background],
+    filler_attrs: :green_background,
     key_attrs: [
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_yellow, :light_red_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:light_blue, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
+      top:       [:light_white, :green_background],
+      header:    [:light_white, :light_red_background],
+      separator: [:light_white, :green_background],
+      row:       [:light_white, :green_background],
+      bottom:    [:light_white, :green_background]
     ],
     non_key_attrs: [
-      top:       [:light_yellow, :light_green_background],
-      header:    [:light_red, :light_green_background],
-      separator: [:light_yellow, :light_green_background],
-      row:       [:black, :light_green_background],
-      bottom:    [:light_yellow, :light_green_background]
+      top:       [:light_white, :green_background],
+      header:    [:light_white, :green_background],
+      separator: [:light_white, :green_background],
+      row:       [:black, :green_background],
+      bottom:    [:light_white, :green_background]
     ]
   },
   green_border_padded: %{
@@ -1021,16 +1021,16 @@ config :io_ansi_table, table_styles: [
     filler_attrs: :normal,
     key_attrs: [
       top:       [:light_green, :light_green_background],
-      header:    :light_red,
+      header:    :light_white,
       separator: [:light_green, :light_green_background],
-      row:       :light_green,
+      row:       :light_white,
       bottom:    [:light_green, :light_green_background]
     ],
     non_key_attrs: [
       top:       [:light_green, :light_green_background],
-      header:    :light_magenta,
+      header:    :light_green,
       separator: [:light_green, :light_green_background],
-      row:       :normal,
+      row:       :light_green,
       bottom:    [:light_green, :light_green_background]
     ]
   },
@@ -1049,16 +1049,16 @@ config :io_ansi_table, table_styles: [
     filler_attrs: :normal,
     key_attrs: [
       top:       [:light_green, :light_green_background],
-      header:    :light_red,
+      header:    :light_white,
       separator: [:light_green, :light_green_background],
-      row:       :light_green,
+      row:       :light_white,
       bottom:    [:light_green, :light_green_background]
     ],
     non_key_attrs: [
       top:       [:light_green, :light_green_background],
-      header:    :light_magenta,
+      header:    :light_green,
       separator: [:light_green, :light_green_background],
-      row:       :normal,
+      row:       :light_green,
       bottom:    [:light_green, :light_green_background]
     ]
   },
@@ -1078,28 +1078,28 @@ config :io_ansi_table, table_styles: [
       header:    [:cyan, :cyan_background],
       separator: [:cyan, :cyan_background],
       even_row:  [:light_cyan, :light_cyan_background],
-      odd_row:   [:light_yellow, :light_yellow_background]
+      odd_row:   [:light_green, :light_green_background]
     ],
     filler_attrs: [
       top:       :cyan_background,
       header:    :cyan_background,
       separator: :cyan_background,
       even_row:  :light_cyan_background,
-      odd_row:   :light_yellow_background
+      odd_row:   :light_green_background
     ],
     key_attrs: [
       top:       [:cyan, :cyan_background],
       header:    [:light_white, :cyan_background, :underline],
       separator: [:cyan, :cyan_background],
-      even_row:  [:light_blue, :light_cyan_background],
-      odd_row:   [:light_blue, :light_yellow_background]
+      even_row:  [:red, :light_cyan_background],
+      odd_row:   [:red, :light_green_background]
     ],
     non_key_attrs: [
       top:       [:cyan, :cyan_background],
-      header:    [:light_yellow, :cyan_background],
+      header:    [:light_white, :cyan_background],
       separator: [:cyan, :cyan_background],
       even_row:  [:black, :light_cyan_background],
-      odd_row:   [:black, :light_yellow_background]
+      odd_row:   [:black, :light_green_background]
     ]
   },
   cyan_mult: %{
@@ -1119,32 +1119,32 @@ config :io_ansi_table, table_styles: [
       header:    [:cyan, :cyan_background],
       separator: [:cyan, :cyan_background],
       row_1:     [:light_cyan, :light_cyan_background],
-      row_2:     [:light_yellow, :light_yellow_background],
-      row_3:     [:light_green, :light_green_background]
+      row_2:     [:light_green, :light_green_background],
+      row_3:     [:light_yellow, :light_yellow_background]
     ],
     filler_attrs: [
       top:       :cyan_background,
       header:    :cyan_background,
       separator: :cyan_background,
       row_1:     :light_cyan_background,
-      row_2:     :light_yellow_background,
-      row_3:     :light_green_background
+      row_2:     :light_green_background,
+      row_3:     :light_yellow_background
     ],
     key_attrs: [
       top:       [:cyan, :cyan_background],
       header:    [:light_white, :cyan_background, :underline],
       separator: [:cyan, :cyan_background],
-      row_1:     [:light_blue, :light_cyan_background],
-      row_2:     [:light_blue, :light_yellow_background],
-      row_3:     [:light_blue, :light_green_background]
+      row_1:     [:red, :light_cyan_background],
+      row_2:     [:red, :light_green_background],
+      row_3:     [:red, :light_yellow_background]
     ],
     non_key_attrs: [
       top:       [:cyan, :cyan_background],
-      header:    [:light_yellow, :cyan_background],
+      header:    [:light_white, :cyan_background],
       separator: [:cyan, :cyan_background],
       row_1:     [:black, :light_cyan_background],
-      row_2:     [:black, :light_yellow_background],
-      row_3:     [:black, :light_green_background]
+      row_2:     [:black, :light_green_background],
+      row_3:     [:black, :light_yellow_background]
     ]
   },
   green_alt: %{
@@ -1176,12 +1176,12 @@ config :io_ansi_table, table_styles: [
       top:       [:green, :green_background],
       header:    [:light_white, :green_background, :underline],
       separator: [:green, :green_background],
-      even_row:  [:light_blue, :light_green_background],
-      odd_row:   [:light_blue, :light_yellow_background]
+      even_row:  [:red, :light_green_background],
+      odd_row:   [:red, :light_yellow_background]
     ],
     non_key_attrs: [
       top:       [:green, :green_background],
-      header:    [:light_yellow, :green_background],
+      header:    [:light_white, :green_background],
       separator: [:green, :green_background],
       even_row:  [:black, :light_green_background],
       odd_row:   [:black, :light_yellow_background]
@@ -1219,227 +1219,36 @@ config :io_ansi_table, table_styles: [
       top:       [:green, :green_background],
       header:    [:light_white, :green_background, :underline],
       separator: [:green, :green_background],
-      row_1:     [:light_blue, :light_green_background],
-      row_2:     [:light_blue, :light_yellow_background],
-      row_3:     [:light_blue, :light_cyan_background]
+      row_1:     [:red, :light_green_background],
+      row_2:     [:red, :light_yellow_background],
+      row_3:     [:red, :light_cyan_background]
     ],
     non_key_attrs: [
       top:       [:green, :green_background],
-      header:    [:light_yellow, :green_background],
+      header:    [:light_white, :green_background],
       separator: [:green, :green_background],
       row_1:     [:black, :light_green_background],
       row_2:     [:black, :light_yellow_background],
       row_3:     [:black, :light_cyan_background]
     ]
   },
-  game_green: %{
-    note: "green headers, 3 repeating row colors",
-    rank: 260,
+  game: %{
+    note: "game board",
+    rank: 255,
     borders: [
-      #           left inner  right dash
-      top:       ["╔", "═╤═", "╗",  "═"],
-      header:    ["║",  "│" , "║",  nil],
-      separator: ["╟", "─┼─", "╢",  "─"],
-      row_1:     ["║",  "│" , "║",  nil],
-      row_2:     ["║",  "│" , "║",  nil],
-      row_3:     ["║",  "│" , "║",  nil],
-      bottom:    ["╚", "═╧═", "╝",  "═"]
+      #        left inner right dash
+      header: ["",  "",   "",   nil],
+      row:    ["",  "",   "",   nil],
     ],
-    border_attrs: :light_yellow,
-    filler_attrs: [
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
-      row_3:     :normal,
-      bottom:    :normal
-    ],
+    border_attrs: :normal,
+    filler_attrs: :normal,
     key_attrs: [
-      top:       :light_yellow,
-      header:    :light_green,
-      separator: :light_yellow,
-      row_1:     [:light_green, :light_blue_background],
-      row_2:     [:light_green, :magenta_background],
-      row_3:     :light_green,
-      bottom:    :light_yellow
+      header: :normal,
+      row:    :light_white
     ],
     non_key_attrs: [
-      top:       :light_yellow,
-      header:    :light_green,
-      separator: :light_yellow,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
-      row_3:     :light_yellow,
-      bottom:    :light_yellow
-    ]
-  },
-  game_cyan: %{
-    note: "cyan headers, 3 repeating row colors",
-    rank: 270,
-    borders: [
-      #           left inner  right dash
-      top:       ["╔", "═╤═", "╗",  "═"],
-      header:    ["║",  "│" , "║",  nil],
-      separator: ["╟", "─┼─", "╢",  "─"],
-      row_1:     ["║",  "│" , "║",  nil],
-      row_2:     ["║",  "│" , "║",  nil],
-      row_3:     ["║",  "│" , "║",  nil],
-      bottom:    ["╚", "═╧═", "╝",  "═"]
-    ],
-    border_attrs: :light_yellow,
-    filler_attrs: [
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
-      row_3:     :normal,
-      bottom:    :normal
-    ],
-    key_attrs: [
-      top:       :light_yellow,
-      header:    :light_cyan,
-      separator: :light_yellow,
-      row_1:     [:light_cyan, :light_blue_background],
-      row_2:     [:light_cyan, :magenta_background],
-      row_3:     :light_cyan,
-      bottom:    :light_yellow
-    ],
-    non_key_attrs: [
-      top:       :light_yellow,
-      header:    :light_cyan,
-      separator: :light_yellow,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
-      row_3:     :light_yellow,
-      bottom:    :light_yellow
-    ]
-  },
-  game_magenta: %{
-    note: "magenta headers, 3 repeating row colors",
-    rank: 280,
-    borders: [
-      #           left inner  right dash
-      top:       ["╔", "═╤═", "╗",  "═"],
-      header:    ["║",  "│" , "║",  nil],
-      separator: ["╟", "─┼─", "╢",  "─"],
-      row_1:     ["║",  "│" , "║",  nil],
-      row_2:     ["║",  "│" , "║",  nil],
-      row_3:     ["║",  "│" , "║",  nil],
-      bottom:    ["╚", "═╧═", "╝",  "═"]
-    ],
-    border_attrs: :light_yellow,
-    filler_attrs: [
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
-      row_3:     :normal,
-      bottom:    :normal
-    ],
-    key_attrs: [
-      top:       :light_yellow,
-      header:    :light_magenta,
-      separator: :light_yellow,
-      row_1:     [:light_magenta, :light_blue_background],
-      row_2:     [:light_magenta, :magenta_background],
-      row_3:     :light_magenta,
-      bottom:    :light_yellow
-    ],
-    non_key_attrs: [
-      top:       :light_yellow,
-      header:    :light_magenta,
-      separator: :light_yellow,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
-      row_3:     :light_yellow,
-      bottom:    :light_yellow
-    ]
-  },
-  game_yellow: %{
-    note: "yellow headers, 3 repeating row colors",
-    rank: 290,
-    borders: [
-      #           left inner  right dash
-      top:       ["╔", "═╤═", "╗",  "═"],
-      header:    ["║",  "│" , "║",  nil],
-      separator: ["╟", "─┼─", "╢",  "─"],
-      row_1:     ["║",  "│" , "║",  nil],
-      row_2:     ["║",  "│" , "║",  nil],
-      row_3:     ["║",  "│" , "║",  nil],
-      bottom:    ["╚", "═╧═", "╝",  "═"]
-    ],
-    border_attrs: :light_yellow,
-    filler_attrs: [
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
-      row_3:     :normal,
-      bottom:    :normal
-    ],
-    key_attrs: [
-      top:       :light_yellow,
-      header:    :light_yellow,
-      separator: :light_yellow,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
-      row_3:     :light_yellow,
-      bottom:    :light_yellow
-    ],
-    non_key_attrs: [
-      top:       :light_yellow,
-      header:    :light_yellow,
-      separator: :light_yellow,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
-      row_3:     :light_yellow,
-      bottom:    :light_yellow
-    ]
-  },
-  game_red: %{
-    note: "red headers, 3 repeating row colors",
-    rank: 300,
-    borders: [
-      #           left inner  right dash
-      top:       ["╔", "═╤═", "╗",  "═"],
-      header:    ["║",  "│" , "║",  nil],
-      separator: ["╟", "─┼─", "╢",  "─"],
-      row_1:     ["║",  "│" , "║",  nil],
-      row_2:     ["║",  "│" , "║",  nil],
-      row_3:     ["║",  "│" , "║",  nil],
-      bottom:    ["╚", "═╧═", "╝",  "═"]
-    ],
-    border_attrs: :light_yellow,
-    filler_attrs: [
-      top:       :normal,
-      header:    :normal,
-      separator: :normal,
-      row_1:     :light_blue_background,
-      row_2:     :magenta_background,
-      row_3:     :normal,
-      bottom:    :normal
-    ],
-    key_attrs: [
-      top:       :light_yellow,
-      header:    :light_red,
-      separator: :light_yellow,
-      row_1:     [:light_red, :light_blue_background],
-      row_2:     [:light_red, :magenta_background],
-      row_3:     :light_red,
-      bottom:    :light_yellow
-    ],
-    non_key_attrs: [
-      top:       :light_yellow,
-      header:    :light_red,
-      separator: :light_yellow,
-      row_1:     [:light_yellow, :light_blue_background],
-      row_2:     [:light_yellow, :magenta_background],
-      row_3:     :light_yellow,
-      bottom:    :light_yellow
+      header: :light_white,
+      row:    :normal
     ]
   }
 ]

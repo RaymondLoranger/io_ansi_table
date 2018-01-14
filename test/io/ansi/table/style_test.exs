@@ -70,14 +70,14 @@ defmodule IO.ANSI.Table.StyleTest do
   describe "Style.filler_attr/2" do
     test "returns the filler attribute of a table style and line type" do
       assert Style.filler_attr(:medium, :header) == :normal
-      assert Style.filler_attr(:mixed , :row   ) == :light_green_background
+      assert Style.filler_attr(:mixed , :row   ) == :green_background
       assert Style.filler_attr(:heavy , :bottom) == nil
     end
   end
 
   describe "Style.key_attr/2" do
     test "returns the key attribute of a table style and line type" do
-      expected = [:light_blue, :light_cyan_background]
+      expected = [:light_white, :cyan_background]
       assert Style.key_attr(:medium, :header) == [:light_green, :underline]
       assert Style.key_attr(:cyan  , :row   ) == expected
       assert Style.key_attr(:cyan  , :middle) == nil
@@ -86,7 +86,7 @@ defmodule IO.ANSI.Table.StyleTest do
 
   describe "Style.non_key_attr/2" do
     test "returns the non key attribute of a table style and line type" do
-      expected = [:light_blue, :light_cyan_background]
+      expected = [:light_white, :cyan_background]
       assert Style.non_key_attr(:medium, :header) == :light_green
       assert Style.non_key_attr(:cyan  , :bottom) == expected
       assert Style.non_key_attr(:cyan  , :middle) == nil
@@ -97,7 +97,7 @@ defmodule IO.ANSI.Table.StyleTest do
     test "returns a list of interpolated texts (one per table style)" do
       expected1 = "yellow-border         (light yellow border)"
       expected2 = "`:yellow_border`         - light yellow border"
-      assert length(Style.texts "")                           == 40 # styles
+      assert length(Style.texts "")                           == 36 # styles
       assert List.last(Style.texts "&arg&filler (&note)"    ) == expected1
       assert List.last(Style.texts "`&style`&filler - &note") == expected2
     end

@@ -19,6 +19,8 @@ defmodule IO.ANSI.Table.Column do
   @type t :: [String.t]
   @type width :: non_neg_integer
 
+  @ansi_escape_char "\e"
+  @ansi_escape_codes ~r/\e\[([0-9]{1,3}(;[0-9]{1,3})*)?[m|K]/
   @max_width_range Application.get_env(@app, :max_width_range)
   @upper_max_width @max_width_range.last
 
@@ -86,11 +88,16 @@ defmodule IO.ANSI.Table.Column do
       iex> data = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
       iex> Column.widths(data, 7)
       [6, 7]
+
+      iex> alias IO.ANSI.Table.Column
+      iex> data = [["\e[32m\e[42mCHEETAH\e[0m", "elk"], ["mongoose", "ant"]]
+      iex> Column.widths(data)
+      [7, 8]
   """
   @spec widths([t], width) :: [width]
   def widths(columns, max_width \\ @upper_max_width) do
     for column <- columns do
-      column |> Enum.map(&String.length/1) |> Enum.max |> min(max_width)
+      column |> Enum.map(&column_width/1) |> Enum.max |> min(max_width)
     end
   end
 
@@ -106,32 +113,46 @@ defmodule IO.ANSI.Table.Column do
       ...>   Column.spread(7, "name", :right )
       ...> }
       {[0, 4, 3], [1, 4, 2], [3, 4, 0]}
+
+      iex> alias IO.ANSI.Table.Column
+      iex> {
+      ...>   Column.spread(10, "\e[32m\e[42mCHEETAH\e[0m", :left  ),
+      ...>   Column.spread(10, "\e[32m\e[42mCHEETAH\e[0m", :center),
+      ...>   Column.spread(10, "\e[32m\e[42mCHEETAH\e[0m", :right )
+      ...> }
+      iex> # not {[0, 7, 3], [1, 7, 2], [3, 7, 0]} but...
+      {[0, 21, 3], [1, 21, 2], [3, 21, 0]}
   """
   @spec spread(width, Line.elem, align_attr) :: spread
-  def spread(width, elem, :left = _align_attr) do
-    elem_width = String.length(elem) |> min(width)
-    [0, elem_width, width - elem_width]
+  def spread(width, elem, _align_attr = :left) do
+    elem_width = column_width(elem) |> min(width)
+    [0, format_width(elem), width - elem_width]
   end
-  def spread(width, elem, :right = _align_attr) do
-    elem_width = String.length(elem) |> min(width)
-    [width - elem_width, elem_width, 0]
+  def spread(width, elem, _align_attr = :right) do
+    elem_width = column_width(elem) |> min(width)
+    [width - elem_width, format_width(elem), 0]
   end
-  def spread(width, elem, :center = _align_attr) do
-    elem_width = String.length(elem) |> min(width)
+  def spread(width, elem, _align_attr = :center) do
+    elem_width = column_width(elem) |> min(width)
     left_width = div(width - elem_width, 2)
     right_width = width - left_width - elem_width
-    [left_width, elem_width, right_width]
+    [left_width, format_width(elem), right_width]
   end
-  def spread(width, elem, _align_attr) do
-    spread(width, elem, :left)
-  end
+  def spread(width, elem, _align_attr), do: spread(width, elem, :left)
 
   ## Private functions
 
-  # @doc """
-  # Converts `rows` to "columns".
+  @spec column_width(String.t) :: non_neg_integer
+  defp column_width(@ansi_escape_char <> _rest = string) do
+    string |> String.replace(@ansi_escape_codes, "") |> String.length()
+  end
+  defp column_width(string), do: String.length(string)
 
-  # ## Examples
+  @spec format_width(String.t) :: non_neg_integer
+  defp format_width(@ansi_escape_char <> _rest = string) do
+    string |> String.replace(@ansi_escape_char, "e") |> String.length()
+  end
+  defp format_width(string), do: String.length(string)
 
   #     iex> alias IO.ANSI.Table.Column
   #     iex> rows = [

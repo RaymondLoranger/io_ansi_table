@@ -9,10 +9,8 @@ defmodule IO.ANSI.Table.Formatter do
 
   @spec print_table(Spec.t, [Access.container], Keyword.t) :: :ok
   def print_table(spec, maps, options \\ []) do
-    case options do
-      [_|_] -> Spec.apply(spec, options)
-      [] -> spec
-    end
+    spec
+    |> Spec.apply(options)
     |> Spec.deploy(maps)
     |> write_table()
   end

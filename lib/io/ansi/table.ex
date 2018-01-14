@@ -71,15 +71,17 @@ defmodule IO.ANSI.Table do
         margins: [top: 2, bottom: 2]
       )
 
-  ## ![print_table_people](images/print_table_people.png)
+  ## ![print_table_people](images/Monokai.png)
+  ## ![print_table_people](images/xterm.png)
+  ## ![print_table_people](images/PowerShell.png)
   """
   @spec format([Access.container], Keyword.t) :: :ok
   if @async do
-    def format(maps, options \\ []) do
+    def format(maps, options \\ []) when is_list(options) do
       GenServer.cast(Server, {maps, options})
     end
   else
-    def format(maps, options \\ []) do
+    def format(maps, options \\ []) when is_list(options) do
       GenServer.call(Server, {maps, options})
     end
   end
