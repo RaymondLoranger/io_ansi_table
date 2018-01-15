@@ -52,9 +52,9 @@ from the web:
 
 ## Customization
 
-You can create new table styles or modify any of the many predefined ones
-by changing the dependency's `config/config.exs` file. You would then need to
-run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
+You can create new table styles or modify any predefined one by changing the
+dependency's `config/config.exs` file. You would then need to run
+`mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
 ## Latest version
 
