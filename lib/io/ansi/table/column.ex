@@ -126,17 +126,17 @@ defmodule IO.ANSI.Table.Column do
   @spec spread(width, Line.elem, align_attr) :: spread
   def spread(width, elem, _align_attr = :left) do
     elem_width = column_width(elem) |> min(width)
-    [0, format_width(elem), width - elem_width]
+    [0, String.length(elem), width - elem_width]
   end
   def spread(width, elem, _align_attr = :right) do
     elem_width = column_width(elem) |> min(width)
-    [width - elem_width, format_width(elem), 0]
+    [width - elem_width, String.length(elem), 0]
   end
   def spread(width, elem, _align_attr = :center) do
     elem_width = column_width(elem) |> min(width)
     left_width = div(width - elem_width, 2)
     right_width = width - left_width - elem_width
-    [left_width, format_width(elem), right_width]
+    [left_width, String.length(elem), right_width]
   end
   def spread(width, elem, _align_attr), do: spread(width, elem, :left)
 
@@ -147,12 +147,6 @@ defmodule IO.ANSI.Table.Column do
     string |> String.replace(@ansi_escape_codes, "") |> String.length()
   end
   defp column_width(string), do: String.length(string)
-
-  @spec format_width(String.t) :: non_neg_integer
-  defp format_width(@ansi_escape_char <> _rest = string) do
-    string |> String.replace(@ansi_escape_char, "e") |> String.length()
-  end
-  defp format_width(string), do: String.length(string)
 
   #     iex> alias IO.ANSI.Table.Column
   #     iex> rows = [
