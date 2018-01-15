@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project() do
     [
       app: :io_ansi_table,
-      version: "0.3.17",
+      version: "0.3.18",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       name: "IO ANSI Table",
@@ -23,7 +23,7 @@ defmodule IO.ANSI.Table.Mixfile do
   defp description() do
     """
     Prints data to STDOUT in a table with borders and colors.
-    Can choose a table style amongst many already predefined.
+    Can choose a table style to change the look of the table.
     """
   end
 

@@ -5,7 +5,7 @@ defmodule IO.ANSI.Table do
   @moduledoc """
   Prints data to STDOUT in a table with borders and colors.
 
-  Can choose a table style among the 40 already predefined.
+  Can choose a table style to change the look of the table.
   """
 
   use PersistConfig
@@ -57,23 +57,29 @@ defmodule IO.ANSI.Table do
   ## Examples
 
       alias IO.ANSI.Table
+      alias IO.ANSI.Table.Server
+
+      header_fixes = %{~r[dob]i => "Date of Birth"}
+
+      Application.put_env(:io_ansi_table, :headers, [:name, :dob, :likes])
+      Application.put_env(:io_ansi_table, :header_fixes, header_fixes)
+      Application.put_env(:io_ansi_table, :sort_specs, [asc: :dob])
+      Application.put_env(:io_ansi_table, :align_specs, [center: :dob])
+      Application.put_env(:io_ansi_table, :margins, [top: 2, bottom: 2])
+
       people = [
         %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
         %{name: "Mary", likes: "reading"  , dob: "1985-07-11"},
         %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"}
       ]
-      Table.format(
-        people, bell: true, count: 3, style: :dark,
-        headers: [:name, :dob, :likes],
-        header_fixes: %{~r[^dob$]i => "Date of Birth"},
-        sort_specs: [:dob],
-        align_specs: [center: :dob],
-        margins: [top: 2, bottom: 2]
-      )
 
-  ## ![print_table_people](images/Monokai.png)
-  ## ![print_table_people](images/xterm.png)
-  ## ![print_table_people](images/PowerShell.png)
+      GenServer.stop(Server, :shutdown)
+
+      Table.format(people, style: :light)
+      Table.format(people, style: :medium)
+      Table.format(people, style: :dark)
+
+  ## ![print_table_people](images/print_table_people.png)
   """
   @spec format([Access.container], Keyword.t) :: :ok
   if @async do
