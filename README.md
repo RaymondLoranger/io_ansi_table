@@ -37,9 +37,9 @@ people = [
   %{name: "Mary", likes: "reading"  , dob: "1985-07-11"},
   %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"}
 ]
+Table.format(people, style: :light)
+Table.format(people, style: :medium)
 Table.format(people, style: :dark)
-Table.format(people, style: :dark_alt)
-Table.format(people, style: :dark_mult)
 ```
 ## ![print_table_people](images/print_table_people.png)
 
