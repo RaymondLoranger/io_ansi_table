@@ -4,9 +4,9 @@ defmodule IO.ANSI.Table.Row do
   # """
   @moduledoc false
 
-  @type t :: [String.t]
+  @type t :: [String.t()]
 
-  @spec rows(Spec.t, [Access.container]) :: Spec.t
+  @spec rows(Spec.t(), [Access.container()]) :: Spec.t()
   def rows(spec, maps) do
     require MapSorter
 
@@ -15,6 +15,7 @@ defmodule IO.ANSI.Table.Row do
       |> MapSorter.sort(spec.sort_specs)
       |> Enum.take(spec.count)
       |> to_rows(spec.headers)
+
     %{spec | rows: rows}
   end
 

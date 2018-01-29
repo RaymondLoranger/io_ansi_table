@@ -11,24 +11,24 @@ defmodule IO.ANSI.Table.Server do
 
   require Logger
 
-  @typep from :: GenServer.from
+  @typep from :: GenServer.from()
 
-  @spec start_link(term) :: GenServer.on_start
+  @spec start_link(term) :: GenServer.on_start()
   def start_link(:ok), do: GenServer.start_link(Server, :ok, name: Server)
 
   ## Callbacks
 
-  @spec init(term) :: {:ok, Spec.t}
+  @spec init(term) :: {:ok, Spec.t()}
   def init(:ok), do: {:ok, Spec.new()}
 
-  @spec handle_cast(term, Spec.t) :: {:noreply, Spec.t}
+  @spec handle_cast(term, Spec.t()) :: {:noreply, Spec.t()}
   def handle_cast({maps, options}, spec) do
     Logger.debug("Handling cast with options #{inspect(options)}")
-    Formatter.print_table(spec, maps, options)
+    :ok = Formatter.print_table(spec, maps, options)
     {:noreply, spec}
   end
 
-  @spec handle_call(term, from, Spec.t) :: {:reply, :ok, Spec.t}
+  @spec handle_call(term, from, Spec.t()) :: {:reply, :ok, Spec.t()}
   def handle_call({maps, options}, _from, spec) do
     Logger.debug("Handling call with options #{inspect(options)}")
     :ok = Formatter.print_table(spec, maps, options)

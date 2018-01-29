@@ -18,17 +18,19 @@ defmodule IO.ANSI.Table.Spec do
   @spec new() :: t
   def new(), do: init() |> update()
 
-  @spec apply(t, Keyword.t) :: t
+  @spec apply(t, Keyword.t()) :: t
   def apply(spec, []), do: spec
+
   def apply(spec, options) do
     spec = Enum.reduce(options, spec, &validate/2)
+
     options
     |> Keyword.keys()
-    |> Enum.all?(& &1 in [:bell, :count, :style])
+    |> Enum.all?(&(&1 in [:bell, :count, :style]))
     |> if(do: spec, else: update(spec))
   end
 
-  @spec deploy(Spec.t, [Access.container]) :: Spec.t
+  @spec deploy(Spec.t(), [Access.container()]) :: Spec.t()
   def deploy(spec, maps) do
     spec
     |> Row.rows(maps)
@@ -86,9 +88,10 @@ defmodule IO.ANSI.Table.Spec do
     update_in(spec.margins, &Keyword.merge(@default_margins, &1))
   end
 
-  @spec validate(tuple, Spec.t) :: Spec.t
+  @spec validate(tuple, Spec.t()) :: Spec.t()
   defp validate({key, value}, spec) when key in @options do
     %{spec | key => apply(Config, key, [value])}
   end
+
   defp validate({_key, _value}, spec), do: spec
 end

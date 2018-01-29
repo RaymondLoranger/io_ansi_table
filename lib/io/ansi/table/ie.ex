@@ -6,7 +6,7 @@ defmodule IO.ANSI.Table.IE do
   # Examples:
   #   use IO.ANSI.Table.IE
   #   people()
-  #   people_sorted()
+  #   people_sorted() # to test sorting on structs, see below..
   #   people_as_keywords()
   #   people_sorted_as_keywords()
   #   print_people(:dotted_mult)
@@ -23,6 +23,7 @@ defmodule IO.ANSI.Table.IE do
   #   Style.styles()
   #   print_islands([:medium, :medium_alt, :medium_mult])
   #   print_islands()
+  #   print_islands(:game)
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
   #   Application.put_env(:io_ansi_table, :async, true)
@@ -30,6 +31,7 @@ defmodule IO.ANSI.Table.IE do
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
 
+  alias IO.ANSI
   alias IO.ANSI.Table
   alias IO.ANSI.Table.Style
 
@@ -39,11 +41,11 @@ defmodule IO.ANSI.Table.IE do
   @headers [:name, :dob, :likes, :bmi]
   @header_fixes %{"Dob" => "DOB", "Bmi" => "BMI"}
 
-  @i "#{IO.ANSI.format([:light_yellow, :light_yellow_background, "isl"], true)}"
-  @f "#{IO.ANSI.format([:green, :green_background, "for"], true)}"
-  @w "#{IO.ANSI.format([:blue, :blue_background, "wat"], true)}"
-  @h "#{IO.ANSI.format([:green, :green_background, "hit"], true)}"
-  @m "#{IO.ANSI.format([:light_black, :light_black_background, "mis"], true)}"
+  @i "#{ANSI.format([:light_yellow, :light_yellow_background, "isl"], true)}"
+  @f "#{ANSI.format([:green, :green_background, "for"], true)}"
+  @w "#{ANSI.format([:blue, :blue_background, "wat"], true)}"
+  @h "#{ANSI.format([:green, :green_background, "hit"], true)}"
+  @m "#{ANSI.format([:light_black, :light_black_background, "mis"], true)}"
 
   @islands [
     %{:row =>  1, 1 => @i, 2 => @f, 3 => @w, 4 => @w, 5  => @w,
@@ -92,10 +94,13 @@ defmodule IO.ANSI.Table.IE do
   ]
 
   @margins [top: 1, bottom: 0]
-  # Using @people with struct dobs requires to...
-  # config :map_sorter, sorting_on_structs?: true
-  # mix deps.compile map_sorter
-  @people [ # struct dobs
+
+  # Using @people with struct dob's requires to...
+  # - config :map_sorter, sorting_on_structs?: true
+  # - mix deps.compile map_sorter
+
+  # struct dob's...
+  @people [
     %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15], bmi: 23.9},
     %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15], bmi: 26.8},
     %{name: "Ann" , likes: "reading"  , dob: ~D[1992-04-15], bmi: 24.7},
@@ -104,7 +109,9 @@ defmodule IO.ANSI.Table.IE do
     %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28], bmi: 20.8},
     %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28], bmi: 25.8}
   ]
-  @people [ # string dobs
+
+  # string dob's...
+  @people [
     %{name: "Mike", likes: "ski, arts", dob: "1992-04-15", bmi: 23.9},
     %{name: "Mary", likes: "travels"  , dob: "1992-04-15", bmi: 26.8},
     %{name: "Ann" , likes: "reading"  , dob: "1992-04-15", bmi: 24.7},
@@ -113,8 +120,9 @@ defmodule IO.ANSI.Table.IE do
     %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28", bmi: 20.8},
     %{name: "Jill", likes: "cooking"  , dob: "1976-09-28", bmi: 25.8}
   ]
+
   @sort_specs [:dob, desc: :likes]
-  @sort_symbols  [asc: "▲", desc: "▼", pos: :trailing]
+  @sort_symbols [asc: "▲", desc: "▼", pos: :trailing]
 
   defmacro __using__(_options) do
     quote do
@@ -133,14 +141,21 @@ defmodule IO.ANSI.Table.IE do
   def people_as_keywords(), do: Enum.map(@people, &Keyword.new/1)
 
   def print_people(styles \\ Style.styles())
+
   def print_people(styles) when is_list(styles) do
     Enum.each(styles, &print_people/1)
   end
+
   def print_people(style) do
     Table.format(
-      @people, bell: true, count: length(@people), style: style,
-      headers: @headers, header_fixes: @header_fixes,
-      sort_specs: @sort_specs, align_specs: @align_specs,
+      @people,
+      bell: true,
+      count: length(@people),
+      style: style,
+      headers: @headers,
+      header_fixes: @header_fixes,
+      sort_specs: @sort_specs,
+      align_specs: @align_specs,
       margins: @margins
     )
   end
@@ -158,31 +173,56 @@ defmodule IO.ANSI.Table.IE do
   end
 
   def print_islands(styles \\ Style.styles())
+
   def print_islands(styles) when is_list(styles) do
     Enum.each(styles, &print_islands/1)
   end
+
   def print_islands(style) do
     Table.format(
-      @islands, bell: false, count: 10, style: style,
+      @islands,
+      bell: false,
+      count: 10,
+      style: style,
       headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, :A],
       header_fixes: %{"Row" => "", "A" => "10"},
       align_specs: [
         right: :row,
-        center: 1, center: 2,  center: 3,  center: 4,  center: 5,
-        center: 6, center: 7,  center: 8,  center: 9,  center: :A
+        center: 1,
+        center: 2,
+        center: 3,
+        center: 4,
+        center: 5,
+        center: 6,
+        center: 7,
+        center: 8,
+        center: 9,
+        center: :A
       ],
       sort_specs: [:row],
       sort_symbols: [asc: ""],
       margins: @margins
     )
+
     Table.format(
-      @attacks, bell: false, count: 10, style: style,
+      @attacks,
+      bell: false,
+      count: 10,
+      style: style,
       headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, :A],
       header_fixes: %{"Row" => "", "A" => "10"},
       align_specs: [
         right: :row,
-        center: 1, center: 2,  center: 3,  center: 4,  center: 5,
-        center: 6, center: 7,  center: 8,  center: 9,  center: :A
+        center: 1,
+        center: 2,
+        center: 3,
+        center: 4,
+        center: 5,
+        center: 6,
+        center: 7,
+        center: 8,
+        center: 9,
+        center: :A
       ],
       sort_specs: [:row],
       sort_symbols: [asc: ""],
@@ -192,34 +232,52 @@ defmodule IO.ANSI.Table.IE do
 
   def print_people_as_keywords(style) do
     Table.format(
-      people_as_keywords(), bell: true, count: length(@people), style: style,
-      headers: @headers, header_fixes: @header_fixes,
-      sort_specs: @sort_specs, align_specs: @align_specs,
+      people_as_keywords(),
+      bell: true,
+      count: length(@people),
+      style: style,
+      headers: @headers,
+      header_fixes: @header_fixes,
+      sort_specs: @sort_specs,
+      align_specs: @align_specs,
       margins: @margins
     )
   end
 
   def print_people(style, max_width) do
     Table.format(
-      @people, bell: true, count: length(@people), style: style,
-      headers: @headers, header_fixes: @header_fixes,
-      sort_specs: @sort_specs, align_specs: @align_specs,
-      margins: @margins, max_width: max_width
+      @people,
+      bell: true,
+      count: length(@people),
+      style: style,
+      headers: @headers,
+      header_fixes: @header_fixes,
+      sort_specs: @sort_specs,
+      align_specs: @align_specs,
+      margins: @margins,
+      max_width: max_width
     )
   end
 
   def print_people_as_keywords(style, max_width) do
     Table.format(
-      people_as_keywords(), bell: true, count: length(@people), style: style,
-      headers: @headers, header_fixes: @header_fixes,
-      sort_specs: @sort_specs, align_specs: @align_specs,
-      margins: @margins, max_width: max_width
+      people_as_keywords(),
+      bell: true,
+      count: length(@people),
+      style: style,
+      headers: @headers,
+      header_fixes: @header_fixes,
+      sort_specs: @sort_specs,
+      align_specs: @align_specs,
+      margins: @margins,
+      max_width: max_width
     )
   end
 
   def styles(color \\ :light_magenta) do
     chardata = [color, " &style&filler", :reset, " - &rank - &note"]
     fragments = IO.ANSI.format(chardata)
+
     "#{fragments}"
     |> Style.texts(&IO.puts/1)
     |> length()

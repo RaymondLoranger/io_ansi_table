@@ -21,14 +21,14 @@ defmodule IO.ANSI.Table.Config do
   @lower_max_width @max_width_range.first
   @upper_max_width @max_width_range.last
 
-  @spec align_specs() :: [Column.align_spec]
+  @spec align_specs() :: [Column.align_spec()]
   def align_specs() do
     @app
     |> Application.get_env(:align_specs, @default_align_specs)
     |> align_specs()
   end
 
-  @spec align_specs(any) :: [Column.align_spec]
+  @spec align_specs(any) :: [Column.align_spec()]
   def align_specs(any) when is_list(any), do: any
   def align_specs(_), do: @default_align_specs
 
@@ -76,27 +76,28 @@ defmodule IO.ANSI.Table.Config do
   def header_fixes(any) when is_map(any), do: any
   def header_fixes(_), do: @default_header_fixes
 
-  @spec margins() :: Keyword.t
+  @spec margins() :: Keyword.t()
   def margins() do
     @app
     |> Application.get_env(:margins, @default_margins)
     |> margins()
   end
 
-  @spec margins(any) :: Keyword.t
+  @spec margins(any) :: Keyword.t()
   def margins(any) when is_list(any) do
     if Keyword.keyword?(any), do: any, else: @default_margins
   end
+
   def margins(_), do: @default_margins
 
-  @spec max_width() :: Column.width
+  @spec max_width() :: Column.width()
   def max_width() do
     @app
     |> Application.get_env(:max_width, @upper_max_width)
     |> max_width()
   end
 
-  @spec max_width(any) :: Column.width
+  @spec max_width(any) :: Column.width()
   def max_width(any) when is_integer(any) do
     cond do
       any < @lower_max_width -> @lower_max_width
@@ -104,42 +105,45 @@ defmodule IO.ANSI.Table.Config do
       true -> any
     end
   end
+
   def max_width(_), do: @upper_max_width
 
-  @spec sort_specs() :: [Column.sort_spec]
+  @spec sort_specs() :: [Column.sort_spec()]
   def sort_specs() do
     @app
     |> Application.get_env(:sort_specs, @default_sort_specs)
     |> sort_specs()
   end
 
-  @spec sort_specs(any) :: [Column.sort_spec]
+  @spec sort_specs(any) :: [Column.sort_spec()]
   def sort_specs(any) when is_list(any), do: any
   def sort_specs(_), do: @default_sort_specs
 
-  @spec sort_symbols() :: Keyword.t
+  @spec sort_symbols() :: Keyword.t()
   def sort_symbols() do
     @app
     |> Application.get_env(:sort_symbols, @default_sort_symbols)
     |> sort_symbols()
   end
 
-  @spec sort_symbols(any) :: Keyword.t
+  @spec sort_symbols(any) :: Keyword.t()
   def sort_symbols(any) when is_list(any) do
     if Keyword.keyword?(any), do: any, else: @default_sort_symbols
   end
+
   def sort_symbols(_), do: @default_sort_symbols
 
-  @spec style() :: Style.t
+  @spec style() :: Style.t()
   def style() do
     @app
     |> Application.get_env(:style, @default_style)
     |> style()
   end
 
-  @spec style(any) :: Style.t
+  @spec style(any) :: Style.t()
   def style(any) when is_atom(any) do
     if Enum.member?(Style.styles(), any), do: any, else: @default_style
   end
+
   def style(_), do: @default_style
 end

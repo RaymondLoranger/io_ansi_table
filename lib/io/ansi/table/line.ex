@@ -8,8 +8,8 @@ defmodule IO.ANSI.Table.Line do
 
   alias IO.ANSI.Table.{Column, LineType, Spec, Style}
 
-  @type elem :: String.t
-  @typep item :: String.t
+  @type elem :: String.t()
+  @typep item :: String.t()
   @typep delimiter :: any
 
   @ansi_enabled Application.get_env(@app, :ansi_enabled)
@@ -32,7 +32,7 @@ defmodule IO.ANSI.Table.Line do
         "", ">"         , ""  # filler, right border, filler
       ]
   """
-  @spec items([elem], [Style.border]) :: [item]
+  @spec items([elem], [Style.border()]) :: [item]
   def items(elems, [left, inner, right] = _borders) do
     deploy(elems, delimiters(left, inner, right))
   end
@@ -56,15 +56,16 @@ defmodule IO.ANSI.Table.Line do
         :normal, :light_yellow             , :normal  # right border
       ]
   """
-  @spec item_attrs(LineType.t, Spec.t) :: [Style.attr]
+  @spec item_attrs(LineType.t(), Spec.t()) :: [Style.attr()]
   def item_attrs(type, spec) do
     # Wrap attributes in braces to prevent flattening...
     border_attr = {Style.border_attr(spec.style, type)}
     filler_attr = {Style.filler_attr(spec.style, type)}
     key_attr = {Style.key_attr(spec.style, type)}
     non_key_attr = {Style.non_key_attr(spec.style, type)}
+
     spec.sort_attrs
-    |> Enum.map(& &1 in [:asc, :desc] && key_attr || non_key_attr)
+    |> Enum.map(&if &1 in [:asc, :desc], do: key_attr, else: non_key_attr)
     |> deploy(delimiters(border_attr, filler_attr))
     |> Enum.map(fn {attr} -> attr end) # unwrap attributes
   end
@@ -85,7 +86,7 @@ defmodule IO.ANSI.Table.Line do
       iex> Line.item_widths(elems, type, spec)
       [0, 1, 1, 1, 6, 0, 1, 1, 1, 1, 10, 2, 1, 1, 1, 0, 5, 6, 1, 1, 0]
   """
-  @spec item_widths([elem], LineType.t, Spec.t) :: [Column.width]
+  @spec item_widths([elem], LineType.t(), Spec.t()) :: [Column.width()]
   def item_widths(elems, type, spec) do
     Stream.zip([spec.column_widths, elems, spec.align_attrs])
     |> Enum.map(fn {width, elem, attr} -> Column.spread(width, elem, attr) end)
@@ -112,7 +113,7 @@ defmodule IO.ANSI.Table.Line do
       iex> Line.format(item_widths, item_attrs, true)
       "\e[93m~-2ts\e[0m~-0ts\e[96m~-6ts\e[0m~n"
   """
-  @spec format([Column.width], [Style.attr], boolean) :: String.t
+  @spec format([Column.width()], [Style.attr()], boolean) :: String.t()
   def format(item_widths, item_attrs, ansi_enabled? \\ @ansi_enabled) do
     item_widths
     |> Enum.zip(item_attrs)
@@ -122,10 +123,11 @@ defmodule IO.ANSI.Table.Line do
 
   ## Private functions
 
-  @spec fragment(tuple, boolean) :: IO.chardata
+  @spec fragment(tuple, boolean) :: IO.chardata()
   defp fragment({width, :normal}, _ansi_enabled?) do
     "~-#{width}ts" # t for Unicode translation
   end
+
   defp fragment({width, attr}, ansi_enabled?) do
     IO.ANSI.format([attr, "~-#{width}ts"], ansi_enabled?)
   end
@@ -178,7 +180,7 @@ defmodule IO.ANSI.Table.Line do
   @spec delimiters(any, any, any, any) :: [any]
   defp delimiters(left, inner, right, filler \\ "") do
     [
-      [        [filler, left , filler], filler],
+      [        [filler, left, filler ], filler],
       [filler, [filler, inner, filler], filler],
       [filler, [filler, right, filler]        ]
     ]

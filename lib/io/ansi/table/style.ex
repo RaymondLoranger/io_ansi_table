@@ -9,7 +9,7 @@ defmodule IO.ANSI.Table.Style do
   alias IO.ANSI.Table.{Column, LineType}
 
   @type attr :: atom | [atom]
-  @type border :: String.t
+  @type border :: String.t()
   @type t :: atom
 
   @styles Application.get_env(@app, :table_styles)
@@ -35,7 +35,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.from_switch_arg("lite")
       :error
   """
-  @spec from_switch_arg(String.t) :: {:ok, t} | :error
+  @spec from_switch_arg(String.t()) :: {:ok, t} | :error
   def from_switch_arg(arg)
 
   @doc """
@@ -51,7 +51,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.to_switch_arg(:lite)
       nil
   """
-  @spec to_switch_arg(t) :: String.t | nil
+  @spec to_switch_arg(t) :: String.t() | nil
   def to_switch_arg(style)
 
   for {style, %{}} <- @styles do
@@ -61,6 +61,7 @@ defmodule IO.ANSI.Table.Style do
     def from_switch_arg(unquote(arg)), do: {:ok, unquote(style)}
     def to_switch_arg(unquote(style)), do: unquote(arg)
   end
+
   def from_switch_arg(_arg), do: :error
   def to_switch_arg(_style), do: nil
 
@@ -91,7 +92,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.dash(:dark, :row)
       nil
   """
-  @spec dash(t, LineType.t) :: String.t | nil
+  @spec dash(t, LineType.t()) :: String.t() | nil
   def dash(style, type)
 
   @doc """
@@ -103,7 +104,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.borders(:cyan, :bottom)
       ["╚═", "═╩═", "═╝"]
   """
-  @spec borders(t, LineType.t) :: [border] | []
+  @spec borders(t, LineType.t()) :: [border] | []
   def borders(style, type)
 
   @doc """
@@ -119,7 +120,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.border_spreads(:plain, :header)
       [[0, 1, 1], [1, 1, 1], [1, 1, 0]] # borders: "│" ,  "│" ,  "│"
   """
-  @spec border_spreads(t, LineType.t) :: [Column.spread] | []
+  @spec border_spreads(t, LineType.t()) :: [Column.spread()] | []
   def border_spreads(style, type)
 
   @doc """
@@ -135,7 +136,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.line_types(:green_alt)
       [:top, :header, :separator, [:even_row, :odd_row]]
   """
-  @spec line_types(t) :: [LineType.t] | []
+  @spec line_types(t) :: [LineType.t()] | []
   def line_types(style)
 
   for {style, %{borders: borders}} <- @styles do
@@ -145,6 +146,7 @@ defmodule IO.ANSI.Table.Style do
       @right_lengths String.length(right)
       @types type
       def dash(unquote(style), unquote(type)), do: unquote(dash)
+
       def borders(unquote(style), unquote(type)) do
         [unquote(left), unquote(inner), unquote(right)]
       end
@@ -158,6 +160,7 @@ defmodule IO.ANSI.Table.Style do
       left_spread = Column.spread(@max_left_length, left, :left)
       inner_spread = Column.spread(@max_inner_length, inner, :center)
       right_spread = Column.spread(@max_right_length, right, :right)
+
       def border_spreads(unquote(style), unquote(type)) do
         [unquote(left_spread), unquote(inner_spread), unquote(right_spread)]
       end
@@ -171,6 +174,7 @@ defmodule IO.ANSI.Table.Style do
     Module.delete_attribute(__MODULE__, :right_lengths)
     Module.delete_attribute(__MODULE__, :types)
   end
+
   def dash(_style, _type), do: nil
   def borders(_style, _type), do: []
   def border_spreads(_style, _type), do: []
@@ -185,7 +189,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.border_attr(:green, :top)
       [:light_white, :green_background]
   """
-  @spec border_attr(t, LineType.t) :: attr | nil
+  @spec border_attr(t, LineType.t()) :: attr | nil
   def border_attr(style, type)
 
   @doc """
@@ -197,7 +201,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.filler_attr(:mixed, :row)
       :green_background
   """
-  @spec filler_attr(t, LineType.t) :: attr | nil
+  @spec filler_attr(t, LineType.t()) :: attr | nil
   def filler_attr(style, type)
 
   @doc """
@@ -213,7 +217,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.key_attr(:light, :header)
       [:light_yellow, :underline]
   """
-  @spec key_attr(t, LineType.t) :: attr | nil
+  @spec key_attr(t, LineType.t()) :: attr | nil
   def key_attr(style, type)
 
   @doc """
@@ -225,15 +229,17 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.non_key_attr(:cyan, :row)
       [:black, :cyan_background]
   """
-  @spec non_key_attr(t, LineType.t) :: attr | nil
+  @spec non_key_attr(t, LineType.t()) :: attr | nil
   def non_key_attr(style, type)
 
   @attr_funs [:border_attr, :filler_attr, :key_attr, :non_key_attr]
 
   for fun <- @attr_funs do
     key = "#{fun}s" |> String.to_atom()
+
     for {style, style_map} <- @styles do
       attrs = Map.get(style_map, key)
+
       if Keyword.keyword?(attrs) do
         for {type, attr} <- attrs do
           def unquote(fun)(unquote(style), unquote(type)), do: unquote(attr)
@@ -244,6 +250,7 @@ defmodule IO.ANSI.Table.Style do
         end
       end
     end
+
     def unquote(fun)(_style, _type), do: nil
   end
 
@@ -267,29 +274,33 @@ defmodule IO.ANSI.Table.Style do
     - `&note`   - table style note
     - `&rank`   - table style rank (3 digits)
   """
-  @spec texts(String.t, (String.t -> any)) :: [any]
+  @spec texts(String.t(), (String.t() -> any)) :: [any]
   def texts(template, fun \\ & &1) when is_function(fun, 1) do
     @styles
-    |> Enum.sort(& elem(&1, 0) <= elem(&2, 0))
+    |> Enum.sort(&(elem(&1, 0) <= elem(&2, 0)))
     |> Stream.map(&interpolate(&1, template))
     |> Enum.map(&fun.(&1))
   end
 
   ## Private functions
 
-  @spec interpolate({t, map}, String.t) :: String.t
+  @spec interpolate({t, map}, String.t()) :: String.t()
   defp interpolate({style, %{note: note, rank: rank}}, template) do
     import String, only: [duplicate: 2, replace: 3, slice: 2]
 
     {style, arg} = {inspect(style), to_switch_arg(style)}
     filler = duplicate(" ", @max_length - String.length(style))
+
+    # Ensure rank always 3 digits...
+    # Erase for example trailing " - "...
+    # Erase trailing " () "...
     template
     |> replace("&style", style)
     |> replace("&arg", arg)
     |> replace("&filler", filler)
     |> replace("&note", note)
-    |> replace("&rank", slice("0#{rank}", -3..-1)) # last 3 digits
-    |> replace(~r/ +. *$/u, "") # e.g. erase trailing " - "
-    |> replace(~r/ +\(\) *$/, "") # erase trailing " () "
+    |> replace("&rank", slice("0#{rank}", -3..-1))
+    |> replace(~r/ +. *$/u, "")
+    |> replace(~r/ +\(\) *$/, "")
   end
 end

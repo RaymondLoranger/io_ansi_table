@@ -1,5 +1,7 @@
-%{"dialyxir": {:hex, :dialyxir, "0.5.1", "b331b091720fd93e878137add264bac4f644e1ddae07a70bf7062c7862c4b952", [:mix], [], "hexpm"},
+%{
+  "dialyxir": {:hex, :dialyxir, "0.5.1", "b331b091720fd93e878137add264bac4f644e1ddae07a70bf7062c7862c4b952", [:mix], [], "hexpm"},
   "earmark": {:hex, :earmark, "1.2.4", "99b637c62a4d65a20a9fb674b8cffb8baa771c04605a80c911c4418c69b75439", [:mix], [], "hexpm"},
-  "ex_doc": {:hex, :ex_doc, "0.18.1", "37c69d2ef62f24928c1f4fdc7c724ea04aecfdf500c4329185f8e3649c915baf", [:mix], [{:earmark, "~> 1.1", [hex: :earmark, repo: "hexpm", optional: false]}], "hexpm"},
-  "map_sorter": {:hex, :map_sorter, "0.2.7", "fde7844e67de1c7cf473e8c26598bdd92c64fa88ef0ec02397e45e17fe4e2394", [:mix], [], "hexpm"},
-  "persist_config": {:hex, :persist_config, "0.1.7", "9d960992c8d0675cbbdeaa5b5152dec121e19a430b8b28624a9476da343cf918", [:mix], [], "hexpm"}}
+  "ex_doc": {:hex, :ex_doc, "0.18.2", "993e0a95e9fbb790ac54ea58e700b45b299bd48bc44b4ae0404f28161f37a83e", [:mix], [{:earmark, "~> 1.1", [hex: :earmark, repo: "hexpm", optional: false]}], "hexpm"},
+  "map_sorter": {:hex, :map_sorter, "0.2.11", "77db7f1d100e524a9a07ba87f421048a8d4be7b3a4901bc737bfca114429ecae", [:mix], [{:persist_config, "~> 0.1", [hex: :persist_config, repo: "hexpm", optional: false]}], "hexpm"},
+  "persist_config": {:hex, :persist_config, "0.2.2", "92fdd493a0e0868bf19b614cfff2111d7381fd0b918c2f18a1ac802fffeccf44", [:mix], [], "hexpm"},
+}

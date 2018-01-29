@@ -81,7 +81,7 @@ defmodule IO.ANSI.Table do
 
   ## ![print_table_people](images/print_table_people.png)
   """
-  @spec format([Access.container], Keyword.t) :: :ok
+  @spec format([Access.container()], Keyword.t()) :: :ok
   if @async do
     def format(maps, options \\ []) when is_list(options) do
       GenServer.cast(Server, {maps, options})

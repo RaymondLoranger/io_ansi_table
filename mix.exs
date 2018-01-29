@@ -1,12 +1,12 @@
 defmodule IO.ANSI.Table.Mixfile do
   use Mix.Project
 
-  def project() do
+  def project do
     [
       app: :io_ansi_table,
-      version: "0.3.19",
+      version: "0.3.20",
       elixir: "~> 1.5",
-      start_permanent: Mix.env == :prod,
+      start_permanent: Mix.env() == :prod,
       name: "IO ANSI Table",
       source_url: source_url(),
       description: description(),
@@ -16,20 +16,20 @@ defmodule IO.ANSI.Table.Mixfile do
     ]
   end
 
-  defp source_url() do
+  defp source_url do
     "https://github.com/RaymondLoranger/io_ansi_table"
   end
 
-  defp description() do
+  defp description do
     """
     Prints data to STDOUT in a table with borders and colors.
     Can choose a table style to change the look of the table.
     """
   end
 
-  defp package() do
+  defp package do
     [
-      files: ["lib", "mix.exs", "README*", "config/config.exs"],
+      files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}
@@ -37,7 +37,7 @@ defmodule IO.ANSI.Table.Mixfile do
   end
 
   # Run "mix help compile.app" to learn about applications.
-  def application() do
+  def application do
     [
       extra_applications: [:logger],
       mod: {IO.ANSI.Table.App, :ok}
@@ -45,7 +45,7 @@ defmodule IO.ANSI.Table.Mixfile do
   end
 
   # Run "mix help deps" to learn about dependencies.
-  defp deps() do
+  defp deps do
     [
       {:mix_tasks, path: "../mix_tasks", only: :dev, runtime: false},
       {:persist_config, "~> 0.1"},
@@ -56,7 +56,7 @@ defmodule IO.ANSI.Table.Mixfile do
     ]
   end
 
-  defp aliases() do
+  defp aliases do
     [
       docs: ["docs", &copy_images/1]
     ]
@@ -64,9 +64,13 @@ defmodule IO.ANSI.Table.Mixfile do
 
   defp copy_images(_) do
     File.cp_r("images", "doc/images", fn src, dst ->
-      src || dst # => true
-      # IO.gets(~s|Overwriting "#{dst}" with "#{src}".\nProceed? [Yn]\s|)
-      # in ["y\n", "Y\n"]
+      # Always true...
+      src || dst
+
+      # IO.gets(~s|Overwriting "#{dst}" with "#{src}".\nProceed? [Yn]\s|) in [
+      #   "y\n",
+      #   "Y\n"
+      # ]
     end)
   end
 end
