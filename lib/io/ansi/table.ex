@@ -10,7 +10,7 @@ defmodule IO.ANSI.Table do
 
   use PersistConfig
 
-  alias IO.ANSI.Table.{Server, Style}
+  alias __MODULE__.{Server, Style}
 
   @async Application.get_env(@app, :async)
 
