@@ -226,7 +226,7 @@ defmodule IO.ANSI.Table.IE do
       ],
       sort_specs: [:row],
       sort_symbols: [asc: ""],
-      margins: @margins
+      margins: [left: 35, top: -11]
     )
   end
 

@@ -17,12 +17,38 @@ defmodule IO.ANSI.Table.Formatter do
 
   ## Private functions
 
+  @spec top_margin(Spec.t()) :: String.t()
+  defp top_margin(spec) do
+    # Move the cursor up N lines: \e[<N>A...
+    case spec.margins[:top] do
+      n when is_integer(n) and n < 0 ->
+        "\e[#{n}A"
+
+      n when is_integer(n) and n >= 0 ->
+        String.duplicate("\n", spec.margins[:top])
+
+      _ ->
+        ""
+    end
+  end
+
+  @spec bottom_margin(Spec.t()) :: String.t()
+  defp bottom_margin(spec) do
+    case spec.margins[:bottom] do
+      n when is_integer(n) and n >= 0 ->
+        String.duplicate("\n", spec.margins[:bottom])
+
+      _ ->
+        ""
+    end
+  end
+
   @spec write_table(Spec.t()) :: :ok
   defp write_table(%{} = spec) do
-    String.duplicate("\n", spec.margins[:top] || 0) |> IO.write()
+    spec |> top_margin() |> IO.write()
     Style.line_types(spec.style) |> Enum.each(&write_line_type(&1, spec))
-    String.duplicate("\n", spec.margins[:bottom] || 0) |> IO.write()
-    IO.write((spec.bell && "\a") || "")
+    spec |> bottom_margin() |> IO.write()
+    IO.write(if spec.bell, do: "\a", else: "")
   end
 
   @spec write_line_type(Style.line_type(), Spec.t()) :: :ok

@@ -55,20 +55,21 @@ defmodule IO.ANSI.Table.FormatterTest do
         margins: [top: 1, bottom: 0, left: 2],
         sort_symbols: [asc: "⬆", pos: :leading]
       ]
+      left = "\e[2C"
 
       spec = Spec.apply(spec, options)
       print_fun = fn -> Formatter.print_table(spec, maps) end
 
       capture = """
 
-        ┌─────────┬───────┬────────┐
-        │ ⬆C4     │ C1    │ C2     │
-        ├─────────┼───────┼────────┤
-        │ r1+++c4 │ r1 c1 │ r1 c2  │
-        │ r2 c4   │ r2 c1 │ r2 c2  │
-        │ r3 c4   │ r3 c1 │ r3 c2  │
-        │ r4 c4   │ r4 c1 │ r4++c2 │
-        └─────────┴───────┴────────┘
+      #{left}┌─────────┬───────┬────────┐
+      #{left}│ ⬆C4     │ C1    │ C2     │
+      #{left}├─────────┼───────┼────────┤
+      #{left}│ r1+++c4 │ r1 c1 │ r1 c2  │
+      #{left}│ r2 c4   │ r2 c1 │ r2 c2  │
+      #{left}│ r3 c4   │ r3 c1 │ r3 c2  │
+      #{left}│ r4 c4   │ r4 c1 │ r4++c2 │
+      #{left}└─────────┴───────┴────────┘
       """
 
       assert CaptureIO.capture_io(print_fun) == capture
@@ -76,19 +77,20 @@ defmodule IO.ANSI.Table.FormatterTest do
 
     test "bad options are ignored", %{maps: maps, spec: spec} do
       options = [margins: %{}, sort_symbols: nil]
+      left = "\e[2C"
       spec = Spec.apply(spec, options)
       print_fun = fn -> Formatter.print_table(spec, maps) end
 
       capture = """
 
-        ┌─────────┬───────┬────────┐
-        │ C4↑     │ C1    │ C2     │
-        ├─────────┼───────┼────────┤
-        │ r1+++c4 │ r1 c1 │ r1 c2  │
-        │ r2 c4   │ r2 c1 │ r2 c2  │
-        │ r3 c4   │ r3 c1 │ r3 c2  │
-        │ r4 c4   │ r4 c1 │ r4++c2 │
-        └─────────┴───────┴────────┘
+      #{left}┌─────────┬───────┬────────┐
+      #{left}│ C4↑     │ C1    │ C2     │
+      #{left}├─────────┼───────┼────────┤
+      #{left}│ r1+++c4 │ r1 c1 │ r1 c2  │
+      #{left}│ r2 c4   │ r2 c1 │ r2 c2  │
+      #{left}│ r3 c4   │ r3 c1 │ r3 c2  │
+      #{left}│ r4 c4   │ r4 c1 │ r4++c2 │
+      #{left}└─────────┴───────┴────────┘
 
       """
 

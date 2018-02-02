@@ -26,7 +26,13 @@ defmodule IO.ANSI.Table.Column do
 
   @spec left_margin(Spec.t()) :: Spec.t()
   def left_margin(spec) do
-    margin = String.duplicate(" ", spec.margins[:left] || 0)
+    # Move the cursor forward N columns: \e[<N>C...
+    margin =
+      case spec.margins[:left] do
+        n when is_integer(n) and n > 0 -> "\e[#{n}C"
+        _ -> ""
+      end
+
     %{spec | left_margin: margin}
   end
 
