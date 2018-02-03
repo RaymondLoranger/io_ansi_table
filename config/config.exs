@@ -32,12 +32,12 @@ config :elixir, ansi_enabled: true
 #
 #
 #     config :io_ansi_table, margins: [
-#       top:    1, # line(s) before table
+#       top:    1, # line(s) before table (can be negative)
 #       bottom: 1, # line(s) after table
-#       left:   3  # space(s) left of table
+#       left:   3  # column(s) left of table
 #     ]
 #     config :io_ansi_table, margins: [
-#       left: 3 # space(s) left of table
+#       left: 3 # column(s) left of table
 #     ]
 #
 #

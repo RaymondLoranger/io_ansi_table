@@ -105,22 +105,22 @@ defmodule IO.ANSI.Table.Options do
 
     ```elixir
     config :io_ansi_table, margins: [ # merged with default margins
-      left: 3 # space(s) left of table
+      left: 3 # column(s) left of table
     ]
     ```
 
     ```elixir
     config :io_ansi_table, margins: [ # default margins
-      top:    1, # line(s) before table
+      top:    1, # line(s) before table (can be negative)
       bottom: 1, # line(s) after table
-      left:   2  # space(s) left of table
+      left:   2  # column(s) left of table
     ]
     ```
 
     ```elixir
     config :io_ansi_table, margins: [ # example for side-by-side tables
       top:    -11, # move cursor up 11 lines!!
-      bottom:   1, #
+      bottom:   1,
       left:    35, # move cursor forward 35 columns!!
     ]
     ```
