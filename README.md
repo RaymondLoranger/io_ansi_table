@@ -43,7 +43,9 @@ Table.format(people, style: :dark)
 ```
 ## ![print_table_people](images/print_table_people.png)
 
-N.B. On Windows, run command `chcp 65001` for the UTF-8 code page.
+## Notes
+
+For side-by-side tables, you can specify negative top margins.
 
 These 2 packages use `:io_ansi_table` as a dependency to tabulate data fetched
 from the web:
@@ -64,3 +66,4 @@ The latest version supports:
   - alternating row attributes
   - alignment of column elements
   - sort direction indicators
+  - negative top margins

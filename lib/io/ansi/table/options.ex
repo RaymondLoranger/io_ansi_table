@@ -117,6 +117,14 @@ defmodule IO.ANSI.Table.Options do
     ]
     ```
 
+    ```elixir
+    config :io_ansi_table, margins: [ # example for side-by-side tables
+      top:    -11, # move cursor up 11 lines!!
+      bottom:   1, #
+      left:    35, # move cursor forward 35 columns!!
+    ]
+    ```
+
   - `max_width` - to cap column widths (non_neg_integer)
 
     ```elixir

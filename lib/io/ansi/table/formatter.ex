@@ -19,8 +19,8 @@ defmodule IO.ANSI.Table.Formatter do
 
   @spec top_margin(Spec.t()) :: String.t()
   defp top_margin(spec) do
-    # Move the cursor up N lines: \e[<N>A...
     case spec.margins[:top] do
+      # Move the cursor up N lines: \e[<N>A...
       n when is_integer(n) and n < 0 ->
         "\e[#{n}A"
 

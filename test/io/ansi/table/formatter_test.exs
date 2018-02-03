@@ -55,7 +55,7 @@ defmodule IO.ANSI.Table.FormatterTest do
         margins: [top: 1, bottom: 0, left: 2],
         sort_symbols: [asc: "⬆", pos: :leading]
       ]
-      left = "\e[2C"
+      left = "\e[2C" # move cursor forward N columns: \e[<N>C
 
       spec = Spec.apply(spec, options)
       print_fun = fn -> Formatter.print_table(spec, maps) end
@@ -77,7 +77,7 @@ defmodule IO.ANSI.Table.FormatterTest do
 
     test "bad options are ignored", %{maps: maps, spec: spec} do
       options = [margins: %{}, sort_symbols: nil]
-      left = "\e[2C"
+      left = "\e[2C" # move cursor forward N columns: \e[<N>C
       spec = Spec.apply(spec, options)
       print_fun = fn -> Formatter.print_table(spec, maps) end
 
