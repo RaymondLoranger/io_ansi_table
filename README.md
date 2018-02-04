@@ -55,7 +55,7 @@ from the web:
 ## Customization
 
 You can create new table styles or modify any predefined one by changing the
-dependency's `config/config.exs` file. You would then need to run
+dependency's `config/persist_styles.exs` file. You would then need to run
 `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
 ## Latest version
