@@ -18,7 +18,8 @@ defmodule IO.ANSI.Table.Options do
   ## Examples
 
   - `align_specs` - to align column elements (list of attribute/header pairs
-                    where the default attribute is :left)
+                    where the attribute is `:left`, `:center` or `:right` and
+                    the default attribute is `:left`)
 
     ```elixir
     config :io_ansi_table, align_specs: [
@@ -133,7 +134,8 @@ defmodule IO.ANSI.Table.Options do
     ```
 
   - `sort_specs` - to sort the maps/keywords/structs (list of attribute/header
-                   pairs where the default attribute is :asc)
+                   pairs where the attribute is `:asc` or `:desc` and
+                   the default attribute is `:asc`)
 
     ```elixir
     config :io_ansi_table, sort_specs: [
