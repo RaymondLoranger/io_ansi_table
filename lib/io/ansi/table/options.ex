@@ -17,11 +17,12 @@ defmodule IO.ANSI.Table.Options do
 
   ## Examples
 
-  - `align_specs` - to align column elements (list)
+  - `align_specs` - to align column elements (list of attribute/header pairs
+                    where the default attribute is :left)
 
     ```elixir
     config :io_ansi_table, align_specs: [
-      center: "station_id", right: "wind_mph"
+      center: "station_id", right: "pressure_mb", right: "pressure_in"
     ]
     ```
 
@@ -131,7 +132,8 @@ defmodule IO.ANSI.Table.Options do
     config :io_ansi_table, max_width: 99 # default max width
     ```
 
-  - `sort_specs` - to sort the maps/keywords/structs (list)
+  - `sort_specs` - to sort the maps/keywords/structs (list of attribute/header
+                   pairs where the default attribute is :asc)
 
     ```elixir
     config :io_ansi_table, sort_specs: [
@@ -141,7 +143,7 @@ defmodule IO.ANSI.Table.Options do
 
     ```elixir
     config :io_ansi_table, sort_specs: [
-      "station_id", desc: "wind_mph"
+      "station_id", desc: "wind_mph", desc: "temp_c"
     ]
     ```
 
