@@ -19,7 +19,7 @@ defmodule IO.ANSI.Table.Options do
 
   - `align_specs` - to align column elements (list of attribute/header pairs
                     where the attribute is `:left`, `:center` or `:right` and
-                    the default attribute is `:left`)
+                    where `:left` is the default attribute)
 
     ```elixir
     config :io_ansi_table, align_specs: [
@@ -59,7 +59,7 @@ defmodule IO.ANSI.Table.Options do
     config :io_ansi_table, count: -11
     ```
 
-  - `headers` - to identify each column (list)
+  - `headers` - to identify each column (list of map/keyword/struct keys)
 
     ```elixir
     config :io_ansi_table, headers: [
@@ -134,8 +134,8 @@ defmodule IO.ANSI.Table.Options do
     ```
 
   - `sort_specs` - to sort the maps/keywords/structs (list of attribute/header
-                   pairs where the attribute is `:asc` or `:desc` and
-                   the default attribute is `:asc`)
+                   pairs where the attribute is either `:asc` or `:desc` and
+                   where `:asc` is the default attribute)
 
     ```elixir
     config :io_ansi_table, sort_specs: [

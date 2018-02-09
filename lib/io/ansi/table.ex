@@ -56,25 +56,20 @@ defmodule IO.ANSI.Table do
 
   ## Examples
 
+      # Assuming the following config:
+
+      # config :io_ansi_table, headers: [:name, :dob, :likes]
+      # config :io_ansi_table, header_fixes: %{~r[dob]i => "Date of Birth"}
+      # config :io_ansi_table, sort_specs: [asc: :dob]
+      # config :io_ansi_table, align_specs: [center: :dob]
+      # config :io_ansi_table, margins: [top: 2, bottom: 2]
+
       alias IO.ANSI.Table
-      alias IO.ANSI.Table.Server
-
-      header_fixes = %{~r[dob]i => "Date of Birth"}
-
-      Application.put_env(:io_ansi_table, :headers, [:name, :dob, :likes])
-      Application.put_env(:io_ansi_table, :header_fixes, header_fixes)
-      Application.put_env(:io_ansi_table, :sort_specs, [asc: :dob])
-      Application.put_env(:io_ansi_table, :align_specs, [center: :dob])
-      Application.put_env(:io_ansi_table, :margins, [top: 2, bottom: 2])
-
       people = [
         %{name: "Mike", likes: "ski, arts", dob: "1992-04-15"},
         %{name: "Mary", likes: "reading"  , dob: "1985-07-11"},
         %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"}
       ]
-
-      GenServer.stop(Server, :shutdown)
-
       Table.format(people, style: :light)
       Table.format(people, style: :medium)
       Table.format(people, style: :dark)
