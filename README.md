@@ -57,11 +57,11 @@ Table.format(people, style: :cyan_mult)
 
 For side-by-side tables, you can specify negative top margins.
 
-In addition to the basic ANSI foreground/background colors like
-`yellow`, `light_red`, `green_background` or `light_blue_background`,
-this package now supports all Xterm256 colors. Most of these 256 colors
-were given names like `aqua`, `chartreuse` or `psychedelic_purple`.
-For details, see the `config/persist_colors.exs` file.
+In addition to the regular ANSI foreground/background colors like
+`:yellow`, `:light_red`, `:green_background` or `:light_blue_background`,
+this package also supports Xterm-256 colors (foreground and background).
+Most of these 256 colors were given names like `:aqua`, `:chartreuse` or
+`:psychedelic_purple`. For details, see file `config/persist_colors.exs`.
 
 The following 2 packages use `:io_ansi_table` as a dependency to tabulate
 data fetched from the web:
@@ -84,4 +84,4 @@ The latest version supports:
   - alignment of column elements
   - sort direction indicators
   - negative top margins
-  - ANSI and Xterm256 colors
+  - ANSI and Xterm-256 colors
