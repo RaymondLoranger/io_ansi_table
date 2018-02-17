@@ -17,7 +17,7 @@ end
 
 ## Usage
 
-In `config/config.exs`, you should then configure the table formatting
+In your `config/config.exs`, you then configure the table formatting
 [options](https://hexdocs.pm/io_ansi_table/IO.ANSI.Table.Options.html).
 
 ## Examples
