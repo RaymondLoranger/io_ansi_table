@@ -6,6 +6,7 @@ defmodule IO.ANSI.Table.Line do
 
   use PersistConfig
 
+  alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table.{Column, LineType, Spec, Style}
 
   @type elem :: String.t()
@@ -47,13 +48,13 @@ defmodule IO.ANSI.Table.Line do
       iex> type = :header
       iex> Line.item_attrs(type, spec)
       [
-        :normal, :light_yellow             , :normal, # left border
-        :normal, :light_green              , :normal, # non key column
-        :normal, :light_yellow             , :normal, # inner border
-        :normal, [:light_green, :underline], :normal, # key column
-        :normal, :light_yellow             , :normal, # inner border
-        :normal, :light_green              , :normal, # non key column
-        :normal, :light_yellow             , :normal  # right border
+        :normal, :gold                 , :normal, # left border
+        :normal, :canary               , :normal, # non key column
+        :normal, :gold                 , :normal, # inner border
+        :normal, [:canary, :underline] , :normal, # key column
+        :normal, :gold                 , :normal, # inner border
+        :normal, :canary               , :normal, # non key column
+        :normal, :gold                 , :normal  # right border
       ]
   """
   @spec item_attrs(LineType.t(), Spec.t()) :: [Style.attr()]
@@ -96,7 +97,7 @@ defmodule IO.ANSI.Table.Line do
   @doc ~S"""
   Returns an Erlang io format reflecting `item widths` and `item attributes`.
   It consists of a string with embedded
-  [ANSI codes](https://gist.github.com/chrisopedia/8754917)
+  [ANSI codes](https://en.wikipedia.org/wiki/ANSI_escape_code)
   (escape sequences), if emitting ANSI codes is enabled.
 
   Here are a few ANSI codes:
@@ -117,19 +118,19 @@ defmodule IO.ANSI.Table.Line do
   def format(item_widths, item_attrs, ansi_enabled? \\ @ansi_enabled) do
     item_widths
     |> Enum.zip(item_attrs)
-    |> Enum.map(&fragment(&1, ansi_enabled?))
+    |> Enum.map(&ansidata(&1, ansi_enabled?))
     |> (&"#{&1}~n").() # => string embedded with ANSI escape sequences
   end
 
   ## Private functions
 
-  @spec fragment(tuple, boolean) :: IO.chardata()
-  defp fragment({width, :normal}, _ansi_enabled?) do
+  @spec ansidata(tuple, boolean) :: ANSI.ansidata
+  defp ansidata({width, :normal}, _ansi_enabled?) do
     "~-#{width}ts" # t for Unicode translation
   end
 
-  defp fragment({width, attr}, ansi_enabled?) do
-    IO.ANSI.format([attr, "~-#{width}ts"], ansi_enabled?)
+  defp ansidata({width, attr}, ansi_enabled?) do
+    ANSI.format([attr, "~-#{width}ts"], ansi_enabled?)
   end
 
   # @doc """

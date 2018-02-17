@@ -63,8 +63,8 @@ defmodule IO.ANSI.Table.StyleTest do
 
   describe "Style.border_attr/2" do
     test "returns the border attribute of a table style and line type" do
-      expected = [:cyan, :cyan_background]
-      assert Style.border_attr(:medium, :bottom) == :light_yellow
+      expected = [:dark_cyan, :dark_cyan_background]
+      assert Style.border_attr(:medium, :bottom) == :gold
       assert Style.border_attr(:cyan_alt, :top) == expected
       assert Style.border_attr(:heavy, :top) == nil
     end
@@ -81,7 +81,7 @@ defmodule IO.ANSI.Table.StyleTest do
   describe "Style.key_attr/2" do
     test "returns the key attribute of a table style and line type" do
       expected = [:light_white, :cyan_background]
-      assert Style.key_attr(:medium, :header) == [:light_green, :underline]
+      assert Style.key_attr(:medium, :header) == [:canary, :underline]
       assert Style.key_attr(:cyan, :row) == expected
       assert Style.key_attr(:cyan, :middle) == nil
     end
@@ -90,7 +90,7 @@ defmodule IO.ANSI.Table.StyleTest do
   describe "Style.non_key_attr/2" do
     test "returns the non key attribute of a table style and line type" do
       expected = [:light_white, :cyan_background]
-      assert Style.non_key_attr(:medium, :header) == :light_green
+      assert Style.non_key_attr(:medium, :header) == :canary
       assert Style.non_key_attr(:cyan, :bottom) == expected
       assert Style.non_key_attr(:cyan, :middle) == nil
     end

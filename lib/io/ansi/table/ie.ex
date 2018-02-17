@@ -31,7 +31,7 @@ defmodule IO.ANSI.Table.IE do
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
 
-  alias IO.ANSI
+  alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table
   alias IO.ANSI.Table.Style
 
@@ -41,11 +41,11 @@ defmodule IO.ANSI.Table.IE do
   @headers [:name, :dob, :likes, :bmi]
   @header_fixes %{"Dob" => "DOB", "Bmi" => "BMI"}
 
-  @i "#{ANSI.format([:light_yellow, :light_yellow_background, "isl"], true)}"
-  @f "#{ANSI.format([:green, :green_background, "for"], true)}"
-  @w "#{ANSI.format([:blue, :blue_background, "wat"], true)}"
-  @h "#{ANSI.format([:green, :green_background, "hit"], true)}"
-  @m "#{ANSI.format([:light_black, :light_black_background, "mis"], true)}"
+  @i "#{ANSI.format([:sandy_brown, :sandy_brown_background, "isl"], true)}"
+  @f "#{ANSI.format([:islamic_green, :islamic_green_background, "for"], true)}"
+  @w "#{ANSI.format([:dodger_blue, :dodger_blue_background, "wat"], true)}"
+  @h "#{ANSI.format([:islamic_green, :islamic_green_background, "hit"], true)}"
+  @m "#{ANSI.format([:mortar, :mortar_background, "mis"], true)}"
 
   @islands [
     %{:row =>  1, 1 => @i, 2 => @f, 3 => @w, 4 => @w, 5  => @w,
@@ -128,6 +128,7 @@ defmodule IO.ANSI.Table.IE do
     quote do
       import unquote(__MODULE__)
       alias unquote(__MODULE__)
+      alias IO.ANSI.Plus, as: ANSI
       alias IO.ANSI.Table
       alias IO.ANSI.Table.{Column, Config, Formatter, Heading}
       alias IO.ANSI.Table.{Line, Line_type, Row, Server, Spec, Style}
@@ -276,9 +277,9 @@ defmodule IO.ANSI.Table.IE do
 
   def styles(color \\ :light_magenta) do
     chardata = [color, " &style&filler", :reset, " - &rank - &note"]
-    fragments = IO.ANSI.format(chardata)
+    ansidata = ANSI.format(chardata)
 
-    "#{fragments}"
+    "#{ansidata}"
     |> Style.texts(&IO.puts/1)
     |> length()
   end

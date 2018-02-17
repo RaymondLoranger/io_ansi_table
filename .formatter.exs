@@ -1,4 +1,5 @@
 exceptions = [
+  # "persist_colors.exs",
   "persist_defaults.exs",
   "persist_styles.exs",
   "ie.ex",

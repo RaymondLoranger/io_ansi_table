@@ -71,10 +71,16 @@ defmodule IO.ANSI.Table do
         %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"}
       ]
       Table.format(people, style: :light)
-      Table.format(people, style: :medium)
-      Table.format(people, style: :dark)
+      Table.format(people, style: :light_alt)
+      Table.format(people, style: :light_mult)
+      Table.format(people, style: :cyan_alt)
+      Table.format(people, style: :cyan_mult)
 
-  ## ![print_table_people](images/print_table_people.png)
+  ## ![light](images/light.png)
+  ## ![light_alt](images/light_alt.png)
+  ## ![light_mult](images/light_mult.png)
+  ## ![cyan_alt](images/cyan_alt.png)
+  ## ![cyan_mult](images/cyan_mult.png)
   """
   @spec format([Access.container()], Keyword.t()) :: :ok
   if @async do

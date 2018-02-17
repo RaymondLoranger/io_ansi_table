@@ -91,5 +91,6 @@ config :logger, :console,
 
 # config :map_sorter, sorting_on_structs?: true
 
+import_config "persist_colors.exs"
 import_config "persist_defaults.exs"
 import_config "persist_styles.exs"

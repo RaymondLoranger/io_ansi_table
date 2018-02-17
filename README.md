@@ -10,7 +10,7 @@ Add the `:io_ansi_table` dependency to your `mix.exs` file:
 ```elixir
 def deps() do
   [
-    {:io_ansi_table, "~> 0.3"}
+    {:io_ansi_table, "~> 0.4"}
   ]
 end
 ```
@@ -38,17 +38,30 @@ people = [
   %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28"}
 ]
 Table.format(people, style: :light)
-Table.format(people, style: :medium)
-Table.format(people, style: :dark)
+Table.format(people, style: :light_alt)
+Table.format(people, style: :light_mult)
+Table.format(people, style: :cyan_alt)
+Table.format(people, style: :cyan_mult)
 ```
-## ![print_table_people](images/print_table_people.png)
+## ![light](images/light.png)
+## ![light_alt](images/light_alt.png)
+## ![light_mult](images/light_mult.png)
+## ![cyan_alt](images/cyan_alt.png)
+## ![cyan_mult](images/cyan_mult.png)
 
 ## Notes
 
 For side-by-side tables, you can specify negative top margins.
 
-These 2 packages use `:io_ansi_table` as a dependency to tabulate data fetched
-from the web:
+In addition to the basic ANSI foreground/background colors like
+`yellow`, `light_red`, `green_background` or `light_blue_background`,
+this package now supports all Xterm256 colors. Most of these 256 colors
+were given names like `aqua`, `chartreuse` or `psychedelic_purple`.
+For details, see the `config/persist_colors.exs` file.
+
+The following 2 packages use `:io_ansi_table` as a dependency to tabulate
+data fetched from the web:
+
   - [Github Issues](https://hex.pm/packages/github_issues)
   - [NOAA Observations](https://hex.pm/packages/noaa_observations)
 
@@ -67,3 +80,4 @@ The latest version supports:
   - alignment of column elements
   - sort direction indicators
   - negative top margins
+  - ANSI and Xterm256 colors

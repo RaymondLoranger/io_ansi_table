@@ -211,11 +211,11 @@ defmodule IO.ANSI.Table.Style do
 
       iex> alias IO.ANSI.Table.Style
       iex> Style.key_attr(:light, :row)
-      :light_cyan
+      :chartreuse
 
       iex> alias IO.ANSI.Table.Style
       iex> Style.key_attr(:light, :header)
-      [:light_yellow, :underline]
+      [:gold, :underline]
   """
   @spec key_attr(t, LineType.t()) :: attr | nil
   def key_attr(style, type)
