@@ -33,13 +33,13 @@ config :io_ansi_table, margins: [top: 2, bottom: 2]
 ```elixir
 alias IO.ANSI.Table
 people = [
-  %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15], bmi: 23.9},
-  %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15], bmi: 26.8},
-  %{name: "Ann" , likes: "reading"  , dob: ~D[1992-04-15], bmi: 24.7},
-  %{name: "Ray" , likes: "cycling"  , dob: ~D[1977-08-28], bmi: 19.1},
-  %{name: "Bill", likes: "karate"   , dob: ~D[1977-08-28], bmi: 18.1},
-  %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28], bmi: 20.8},
-  %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28], bmi: 25.8}
+  %{name: "Mike", likes: "ski, arts", dob: "1992-04-15", bmi: 23.9},
+  %{name: "Mary", likes: "travels"  , dob: "1992-04-15", bmi: 26.8},
+  %{name: "Ann" , likes: "reading"  , dob: "1992-04-15", bmi: 24.7},
+  %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28", bmi: 19.1},
+  %{name: "Bill", likes: "karate"   , dob: "1977-08-28", bmi: 18.1},
+  %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28", bmi: 20.8},
+  %{name: "Jill", likes: "cooking"  , dob: "1976-09-28", bmi: 25.8}
 ]
 Table.format(people, style: :light)
 Table.format(people, style: :light_alt)
