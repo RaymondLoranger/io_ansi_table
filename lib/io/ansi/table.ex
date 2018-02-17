@@ -20,7 +20,7 @@ defmodule IO.ANSI.Table do
   All options can be configured and/or passed as a keyword argument.
   Each option of the keyword will override its configured counterpart.
   You should however configure all options except possibly
-  `bell`, `count` and `style`.
+  `:bell`, `:count` and `:style`.
 
   The columns are identified by the `:headers` option (`map` keys).
   We calculate the width of each column to fit the longest element

@@ -17,7 +17,7 @@ end
 
 ## Usage
 
-In your `config/config.exs`, you then configure the table formatting
+In your `config/config.exs`, you should then configure the table formatting
 [options](https://hexdocs.pm/io_ansi_table/IO.ANSI.Table.Options.html).
 
 ## Examples
@@ -57,9 +57,8 @@ Table.format(people, style: :cyan_mult)
 
 For side-by-side tables, you can specify negative top margins.
 
-In addition to the regular ANSI foreground/background colors like
-`:yellow`, `:light_red`, `:green_background` or `:light_blue_background`,
-this package also supports Xterm-256 colors (foreground and background).
+In addition to the 16 regular ANSI colors and their background counterparts,
+this package also supports the 256 Xterm colors (foreground and background).
 Most of these 256 colors were given names like `:aqua`, `:chartreuse` or
 `:psychedelic_purple`. For details, see file `config/persist_colors.exs`.
 
