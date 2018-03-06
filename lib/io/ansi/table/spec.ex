@@ -30,7 +30,7 @@ defmodule IO.ANSI.Table.Spec do
     |> if(do: spec, else: update(spec))
   end
 
-  @spec deploy(Spec.t(), [Access.container()]) :: Spec.t()
+  @spec deploy(t, [Access.container()]) :: t
   def deploy(spec, maps) do
     spec
     |> Row.rows(maps)
@@ -88,7 +88,7 @@ defmodule IO.ANSI.Table.Spec do
     update_in(spec.margins, &Keyword.merge(@default_margins, &1))
   end
 
-  @spec validate(tuple, Spec.t()) :: Spec.t()
+  @spec validate(tuple, t) :: t
   defp validate({key, value}, spec) when key in @options do
     %{spec | key => apply(Config, key, [value])}
   end

@@ -4,6 +4,8 @@ defmodule IO.ANSI.Table.Row do
   # """
   @moduledoc false
 
+  alias IO.ANSI.Table.Spec
+
   @type t :: [String.t()]
 
   @spec rows(Spec.t(), [Access.container()]) :: Spec.t()

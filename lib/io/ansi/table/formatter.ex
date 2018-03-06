@@ -3,7 +3,7 @@ defmodule IO.ANSI.Table.Formatter do
 
   use PersistConfig
 
-  alias IO.ANSI.Table.{Line, Spec, Style}
+  alias IO.ANSI.Table.{Line, LineType, Spec, Style}
 
   @rule_types Application.get_env(@app, :rule_types)
 
@@ -51,7 +51,7 @@ defmodule IO.ANSI.Table.Formatter do
     IO.write(if spec.bell, do: "\a", else: "")
   end
 
-  @spec write_line_type(Style.line_type(), Spec.t()) :: :ok
+  @spec write_line_type(LineType.t(), Spec.t()) :: :ok
   defp write_line_type(type, %{} = spec) when type in @rule_types do
     spec.column_widths
     |> Enum.map(&(Style.dash(spec.style, type) |> String.duplicate(&1)))
@@ -68,7 +68,7 @@ defmodule IO.ANSI.Table.Formatter do
     |> Enum.each(fn {row, type} -> write_line(row, type, spec) end)
   end
 
-  @spec write_line([Line.elem()], Style.line_type(), Spec.t()) :: :ok
+  @spec write_line([Line.elem()], LineType.t(), Spec.t()) :: :ok
   defp write_line(elems, type, %{} = spec) do
     IO.write(spec.left_margin)
     items = Line.items(elems, Style.borders(spec.style, type))
