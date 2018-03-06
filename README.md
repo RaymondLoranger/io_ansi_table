@@ -59,8 +59,10 @@ For side-by-side tables, you can specify negative top margins.
 
 In addition to the 16 regular ANSI colors and their background counterparts,
 this package also supports the 256 Xterm colors (foreground and background).
-Most of these 256 colors were given names like [00ffff]`:aqua`[/00ffff],
-[87ff00]`:chartreuse`[/87ff00] or [d700ff]`:psychedelic_purple`[/d700ff].
+Most of these 256 colors were given names like
+<span style="back-ground-color:#00ffff;">`:aqua`</span>,
+<span style="back-ground-color:#87ff00;">`:chartreuse`</span>,
+<span style="back-ground-color:#d700ff;">`:psychedelic_purple`</span>.
 For details, see file `config/persist_colors.exs`.
 
 The following 2 packages use `:io_ansi_table` as a dependency to tabulate
