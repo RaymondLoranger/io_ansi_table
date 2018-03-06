@@ -59,6 +59,7 @@ For side-by-side tables, you can specify negative top margins.
 
 In addition to the 16 regular ANSI colors and their background counterparts,
 this package also supports the 256 Xterm colors (foreground and background).
+
 Most of these 256 colors were given names like:
 - ![#00ffff](https://placehold.it/15/00ffff/000000?text=+)`:aqua`
 - ![#87ff00](https://placehold.it/15/87ff00/000000?text=+)`:chartreuse`
