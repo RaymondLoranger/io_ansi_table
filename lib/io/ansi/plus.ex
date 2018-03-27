@@ -1,6 +1,7 @@
 defmodule IO.ANSI.Plus do
   # @moduledoc """
   # Functionality to render ANSI escape sequences.
+
   # [ANSI escape sequences](https://en.wikipedia.org/wiki/ANSI_escape_code)
   # are characters embedded in text used to control formatting, color, and
   # other output options on video text terminals.
@@ -23,6 +24,7 @@ defmodule IO.ANSI.Plus do
 
   @doc """
   Checks if ANSI coloring is supported and enabled on this machine.
+
   This function simply reads the configuration value for
   `:ansi_enabled` in the `:elixir` application. The value is by
   default `false` unless Elixir can detect during startup that
@@ -39,6 +41,7 @@ defmodule IO.ANSI.Plus do
 
   @doc ~S"""
   Sets the foreground color from individual RGB values.
+
   Valid values for each color are in the range 0 to 5.
   """
   @spec color(0..5, 0..5, 0..5) :: String.t()
@@ -52,6 +55,7 @@ defmodule IO.ANSI.Plus do
 
   @doc ~S"""
   Sets the background color from individual RGB values.
+
   Valid values for each color are in the range 0 to 5.
   """
   @spec color_background(0..5, 0..5, 0..5) :: String.t()
@@ -77,9 +81,7 @@ defmodule IO.ANSI.Plus do
   @doc "Blink: slow. Less than 150 per minute."
   defsequence(:blink_slow, 5)
 
-  @doc """
-  Blink: rapid. MS-DOS ANSI.SYS; 150 per minute or more; not widely supported.
-  """
+  @doc "Blink: rapid. MS-DOS ANSI.SYS; 150 per minute or more; not widely supported."
   defsequence(:blink_rapid, 6)
 
   @doc "Image: negative. Swap foreground and background."
@@ -91,10 +93,7 @@ defmodule IO.ANSI.Plus do
   @doc "Conceal. Not widely supported."
   defsequence(:conceal, 8)
 
-  @doc """
-  Crossed-out. Characters legible, but marked for deletion.
-  Not widely supported.
-  """
+  @doc "Crossed-out. Characters legible, but marked for deletion. Not widely supported."
   defsequence(:crossed_out, 9)
 
   @doc "Sets primary (default) font."
@@ -187,6 +186,37 @@ defmodule IO.ANSI.Plus do
   @doc "Sends cursor home."
   defsequence(:home, "", "H")
 
+  @doc """
+  Sends cursor to the absolute position specified by `line` and `column`.
+
+  Line `0` and column `0` would mean the top left corner.
+  """
+  @spec cursor(non_neg_integer, non_neg_integer) :: String.t()
+  def cursor(line, column)
+      when is_integer(line) and line >= 0 and is_integer(column) and column >= 0 do
+    "\e[#{line};#{column}H"
+  end
+
+  @doc "Sends cursor `lines` up."
+  @spec cursor_up(pos_integer) :: String.t()
+  def cursor_up(lines \\ 1) when is_integer(lines) and lines >= 1,
+    do: "\e[#{lines}A"
+
+  @doc "Sends cursor `lines` down."
+  @spec cursor_down(pos_integer) :: String.t()
+  def cursor_down(lines \\ 1) when is_integer(lines) and lines >= 1,
+    do: "\e[#{lines}B"
+
+  @doc "Sends cursor `columns` to the left."
+  @spec cursor_left(pos_integer) :: String.t()
+  def cursor_left(columns \\ 1) when is_integer(columns) and columns >= 1,
+    do: "\e[#{columns}D"
+
+  @doc "Sends cursor `columns` to the right."
+  @spec cursor_right(pos_integer) :: String.t()
+  def cursor_right(columns \\ 1) when is_integer(columns) and columns >= 1,
+    do: "\e[#{columns}C"
+
   @doc "Clears screen."
   defsequence(:clear, "2", "J")
 
@@ -199,32 +229,43 @@ defmodule IO.ANSI.Plus do
   end
 
   @doc ~S"""
-  Formats a chardata-like argument by converting named ANSI sequences into
-  actual ANSI codes.
+  Formats a chardata-like argument by converting named ANSI sequences into actual
+  ANSI codes.
+
   The named sequences are represented by atoms.
+
   It will also append an `IO.ANSI.reset/0` to the chardata when a conversion is
   performed. If you don't want this behaviour, use `format_fragment/2`.
+
   An optional boolean parameter can be passed to enable or disable
   emitting actual ANSI codes. When `false`, no ANSI codes will emitted.
   By default checks if ANSI is enabled using the `enabled?/0` function.
+
   ## Examples
-      iex> IO.ANSI.Plus.format(["Hello, ", :red, :bright, "world!"], true)
+
+      iex> IO.ANSI.format(["Hello, ", :red, :bright, "world!"], true)
       [[[[[[], "Hello, "] | "\e[31m"] | "\e[1m"], "world!"] | "\e[0m"]
+
   """
   def format(chardata, emit? \\ enabled?()) when is_boolean(emit?) do
     do_format(chardata, [], [], emit?, :maybe)
   end
 
   @doc ~S"""
-  Formats a chardata-like argument by converting named ANSI sequences into
-  actual ANSI codes.
+  Formats a chardata-like argument by converting named ANSI sequences into actual
+  ANSI codes.
+
   The named sequences are represented by atoms.
+
   An optional boolean parameter can be passed to enable or disable
   emitting actual ANSI codes. When `false`, no ANSI codes will emitted.
   By default checks if ANSI is enabled using the `enabled?/0` function.
+
   ## Examples
-      iex> IO.ANSI.Plus.format_fragment([:bright, 'Word'], true)
+
+      iex> IO.ANSI.format_fragment([:bright, 'Word'], true)
       [[[[[[] | "\e[1m"], 87], 111], 114], 100]
+
   """
   def format_fragment(chardata, emit? \\ enabled?()) when is_boolean(emit?) do
     do_format(chardata, [], [], emit?, false)

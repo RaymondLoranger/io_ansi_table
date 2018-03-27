@@ -3,6 +3,7 @@ defmodule IO.ANSI.Table.Formatter do
 
   use PersistConfig
 
+  alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table.{Line, LineType, Spec, Style}
 
   @rule_types Application.get_env(@app, :rule_types)
@@ -21,11 +22,11 @@ defmodule IO.ANSI.Table.Formatter do
   defp top_margin(spec) do
     case spec.margins[:top] do
       # Move the cursor up N lines: \e[<N>A...
-      n when is_integer(n) and n < 0 ->
-        "\e[#{n}A"
+      n when is_integer(n) and n <= -1 ->
+        ANSI.cursor_up(-n)
 
       n when is_integer(n) and n >= 0 ->
-        String.duplicate("\n", spec.margins[:top])
+        String.duplicate("\n", n)
 
       _ ->
         ""

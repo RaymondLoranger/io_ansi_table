@@ -94,3 +94,4 @@ config :logger, :console,
 import_config "persist_colors.exs"
 import_config "persist_defaults.exs"
 import_config "persist_styles.exs"
+import_config "persist_home_page.exs"

@@ -6,6 +6,7 @@ defmodule IO.ANSI.Table.Column do
 
   use PersistConfig
 
+  alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table.{Line, Row, Spec}
 
   @type align_attr :: :left | :center | :right
@@ -29,8 +30,8 @@ defmodule IO.ANSI.Table.Column do
     margin =
       case spec.margins[:left] do
         # Move the cursor forward N columns: \e[<N>C
-        n when is_integer(n) and n > 0 ->
-          "\e[#{n}C"
+        n when is_integer(n) and n >= 1 ->
+          ANSI.cursor_right(n)
 
         _ ->
           ""
@@ -183,6 +184,11 @@ defmodule IO.ANSI.Table.Column do
   end
 
   defp io_width(_elem, elem_width), do: elem_width
+
+  # @doc """
+  # Transposes rows to columns..
+
+  # ## Examples
 
   #     iex> alias IO.ANSI.Table.Column
   #     iex> rows = [
