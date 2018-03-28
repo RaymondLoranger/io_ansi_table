@@ -25,7 +25,7 @@ defmodule IO.ANSI.Table.Formatter do
       n when is_integer(n) and n <= -1 ->
         ANSI.cursor_up(-n)
 
-      n when is_integer(n) and n >= 0 ->
+      n when is_integer(n) and n >= 1 ->
         String.duplicate("\n", n)
 
       _ ->

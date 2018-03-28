@@ -100,7 +100,6 @@ defmodule IO.ANSI.Table.StyleTest do
     test "returns a list of interpolated texts (one per table style)" do
       expected1 = "yellow-border         (light yellow border)"
       expected2 = "`:yellow_border`         - light yellow border"
-      # styles
       assert length(Style.texts("")) == 36
       assert List.last(Style.texts("&arg&filler (&note)")) == expected1
       assert List.last(Style.texts("`&style`&filler - &note")) == expected2
