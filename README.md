@@ -3,6 +3,8 @@
 Prints data to STDOUT in a table with borders and colors.
 Can choose a table style to change the look of the table.
 
+##### Inspired by the book [Programming Elixir](https://pragprog.com/book/elixir16/programming-elixir-1-6) by Dave Thomas.
+
 ## Installation
 
 Add the `:io_ansi_table` dependency to your `mix.exs` file:

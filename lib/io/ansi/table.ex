@@ -4,15 +4,14 @@
 defmodule IO.ANSI.Table do
   use PersistConfig
 
-  @home_page Application.get_env(@app, :home_page)
+  @book_ref Application.get_env(@app, :book_ref)
 
   @moduledoc """
   Prints data to STDOUT in a table with borders and colors.
 
   Can choose a table style to change the look of the table.
 
-  Inspired by the book [Programming Elixir](#{@home_page})
-  by Dave Thomas.
+  ##### #{@book_ref}
   """
 
   alias __MODULE__.{Server, Style}
