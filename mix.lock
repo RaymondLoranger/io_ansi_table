@@ -2,7 +2,7 @@
   "dialyxir": {:hex, :dialyxir, "0.5.1", "b331b091720fd93e878137add264bac4f644e1ddae07a70bf7062c7862c4b952", [:mix], [], "hexpm"},
   "earmark": {:hex, :earmark, "1.2.4", "99b637c62a4d65a20a9fb674b8cffb8baa771c04605a80c911c4418c69b75439", [:mix], [], "hexpm"},
   "ex_doc": {:hex, :ex_doc, "0.18.3", "f4b0e4a2ec6f333dccf761838a4b253d75e11f714b85ae271c9ae361367897b7", [:mix], [{:earmark, "~> 1.1", [hex: :earmark, repo: "hexpm", optional: false]}], "hexpm"},
-  "map_sorter": {:hex, :map_sorter, "0.2.17", "a863ba84200583525d8eb014bb0afef472f45b7af8804fa6e299c43f0787169f", [:mix], [{:persist_config, "~> 0.1", [hex: :persist_config, repo: "hexpm", optional: false]}], "hexpm"},
+  "map_sorter": {:hex, :map_sorter, "0.2.18", "47b8ca7fc605645afdfa42d1c3f4f755571e50bd18386fbe285908defdf9a711", [:mix], [{:persist_config, "~> 0.1", [hex: :persist_config, repo: "hexpm", optional: false]}], "hexpm"},
   "mix_tasks": {:git, "https://github.com/RaymondLoranger/mix_tasks.git", "b998a58045d20162cefc5c433a9a93d7a241e56d", []},
   "persist_config": {:hex, :persist_config, "0.2.3", "2732324101e4bf880e674c82ba3ffd0f0a1065958f76e9d57393aec3bb391203", [:mix], [], "hexpm"},
 }
