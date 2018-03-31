@@ -9,7 +9,7 @@ defmodule IO.ANSI.Table.Server do
   alias __MODULE__
   alias IO.ANSI.Table.{Formatter, Spec}
 
-  require Logger
+  # require Logger
 
   @typep from :: GenServer.from()
 
@@ -23,14 +23,14 @@ defmodule IO.ANSI.Table.Server do
 
   @spec handle_cast(term, Spec.t()) :: {:noreply, Spec.t()}
   def handle_cast({maps, options}, spec) do
-    Logger.debug("Handling cast with options #{inspect(options)}")
+    # Logger.debug("Handling cast with options #{inspect(options)}")
     :ok = Formatter.print_table(spec, maps, options)
     {:noreply, spec}
   end
 
   @spec handle_call(term, from, Spec.t()) :: {:reply, :ok, Spec.t()}
   def handle_call({maps, options}, _from, spec) do
-    Logger.debug("Handling call with options #{inspect(options)}")
+    # Logger.debug("Handling call with options #{inspect(options)}")
     :ok = Formatter.print_table(spec, maps, options)
     {:reply, :ok, spec}
   end
