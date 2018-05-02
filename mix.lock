@@ -2,7 +2,7 @@
   "dialyxir": {:hex, :dialyxir, "0.5.1", "b331b091720fd93e878137add264bac4f644e1ddae07a70bf7062c7862c4b952", [:mix], [], "hexpm"},
   "earmark": {:hex, :earmark, "1.2.5", "4d21980d5d2862a2e13ec3c49ad9ad783ffc7ca5769cf6ff891a4553fbaae761", [:mix], [], "hexpm"},
   "ex_doc": {:hex, :ex_doc, "0.18.3", "f4b0e4a2ec6f333dccf761838a4b253d75e11f714b85ae271c9ae361367897b7", [:mix], [{:earmark, "~> 1.1", [hex: :earmark, repo: "hexpm", optional: false]}], "hexpm"},
-  "map_sorter": {:hex, :map_sorter, "0.2.21", "8a69aceb2c495b02bbe4d9e4f6c8ca0c83c1bb58489065ecec83694404bfb1ee", [:mix], [{:persist_config, "~> 0.2", [hex: :persist_config, repo: "hexpm", optional: false]}], "hexpm"},
-  "mix_tasks": {:git, "https://github.com/RaymondLoranger/mix_tasks.git", "cdb17c124405752bb40f09c4aa21613ada33357a", []},
-  "persist_config": {:hex, :persist_config, "0.2.5", "ad7c06dcf91263fc39d230ca99a0df0f3e7d33116ed9aaddcc42e2918a31cc3b", [:mix], [], "hexpm"},
+  "map_sorter": {:hex, :map_sorter, "0.2.22", "b6e7bc9ae2dbc46a42e3bddd5ce30f4d5be30b5a2ae74f3aae99a11cdc09434a", [:mix], [{:persist_config, "~> 0.2", [hex: :persist_config, repo: "hexpm", optional: false]}], "hexpm"},
+  "mix_tasks": {:git, "https://github.com/RaymondLoranger/mix_tasks.git", "1a223a160a4545228ce3ae2fed64a6acd0827173", []},
+  "persist_config": {:hex, :persist_config, "0.2.6", "2e177b1e82e0f26b90936af21ab5ddbffdbb1372adc33d49f20159e52d583b10", [:mix], [], "hexpm"},
 }
