@@ -29,8 +29,14 @@ defmodule IO.ANSI.Table.Server do
   end
 
   @spec handle_call(term, from, Spec.t()) :: {:reply, :ok, Spec.t()}
-  def handle_call({maps, options}, _from, spec) do
+  def handle_call({maps, options}, {from_pid, _ref}, spec) do
     # Logger.debug("Handling call with options #{inspect(options)}")
+
+    group_leader = Process.info(from_pid)[:group_leader]
+    if group_leader do
+      Process.group_leader(self(), group_leader)
+    end
+
     :ok = Formatter.print_table(spec, maps, options)
     {:reply, :ok, spec}
   end
