@@ -285,15 +285,12 @@ defmodule IO.ANSI.Table.IE do
   end
 
   @dialyzer {:nowarn_function, people_sorted: 0}
-  @spec people_sorted() :: :ok
   def people_sorted() do
     MapSorter.sort(@people, @sort_specs)
-    :ok
   end
 
   @dialyzer {:nowarn_function, people_sorted_as_keywords: 0}
   def people_sorted_as_keywords() do
     MapSorter.sort(people_as_keywords(), @sort_specs)
-    :ok
   end
 end

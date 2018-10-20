@@ -76,7 +76,7 @@ data fetched from the web:
   - [Github Issues](https://hex.pm/packages/github_issues)
   - [NOAA Observations](https://hex.pm/packages/noaa_observations)
 
-Now also supports printing data to a remote shell.
+Invocation from remote shell now supported (courtesy of [milkwine](https://github.com/milkwine)).
 
 ## Customization
 
@@ -94,4 +94,4 @@ The latest version supports:
   - sort direction indicators
   - negative top margins
   - ANSI and Xterm-256 colors
-  - printing data to remote shell
+  - invoking from remote shell
