@@ -94,4 +94,4 @@ The latest version supports:
   - sort direction indicators
   - negative top margins
   - ANSI and Xterm-256 colors
-  - invoking from remote shell
+  - invocation from remote shell
