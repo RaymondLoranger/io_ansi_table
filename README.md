@@ -11,7 +11,8 @@ Can choose a table style to change the look of the table.
 
 Add the `:io_ansi_table` dependency to your `mix.exs` file:
 
-```elixirdef deps do
+```elixir
+def deps do
   [
     {:io_ansi_table, "~> 0.4"}
   ]
