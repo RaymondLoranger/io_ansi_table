@@ -94,5 +94,5 @@ The latest version supports:
   - alignment of column elements
   - sort direction indicators
   - negative top margins
-  - ANSI and Xterm-256 colors
+  - ANSI and Xterm colors
   - invocation from remote shell
