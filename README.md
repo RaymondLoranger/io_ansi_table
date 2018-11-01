@@ -61,8 +61,8 @@ Table.format(people, style: :cyan_mult)
 
 For side-by-side tables, you can specify negative top margins.
 
-In addition to the 16 regular ANSI colors and their background counterparts,
-this package also supports the 256 Xterm colors (foreground and background).
+In addition to the 16 regular ANSI colors<sup>[*](#footnote1)</sup> and their
+background counterparts, this package also supports the 256 Xterm colors (foreground and background).
 
 Most of these 256 colors were given names like:
 - ![#00ffff](https://placehold.it/15/00ffff/000000?text=+)`:aqua`
@@ -77,7 +77,9 @@ data fetched from the web:
   - [Github Issues](https://hex.pm/packages/github_issues)
   - [NOAA Observations](https://hex.pm/packages/noaa_observations)
 
-Invocation from remote shell now supported (courtesy of [milkwine](https://github.com/milkwine)).
+Invocation from remote shell is now supported (courtesy of [milkwine](https://github.com/milkwine)).
+
+<sup><a name="footnote1">*</a></sup> Actually 8 colors and their "bright" variants.
 
 ## Customization
 
