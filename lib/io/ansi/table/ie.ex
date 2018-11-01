@@ -129,7 +129,7 @@ defmodule IO.ANSI.Table.IE do
       import unquote(__MODULE__)
       alias unquote(__MODULE__)
       alias IO.ANSI.Plus, as: ANSI
-      alias IO.ANSI.Table.{App, Column, Config, Formatter, Heading, IE}
+      alias IO.ANSI.Table.{App, Column, Config, Formatter, Heading}
       alias IO.ANSI.Table.{Line_Type, Line, Options, Row, Server, Spec, Style}
       alias IO.ANSI.Table
       require MapSorter
