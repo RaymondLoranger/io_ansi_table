@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.LineType do
-  # @moduledoc """
-  # Derives the line types of a table style.
-  # """
-  @moduledoc false
+  @moduledoc """
+  Derives the line types of a table style.
+  """
 
   use PersistConfig
 
