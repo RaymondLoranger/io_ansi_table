@@ -1,6 +1,4 @@
 defmodule IO.ANSI.Table.App do
-  @moduledoc false
-
   use Application
 
   alias __MODULE__

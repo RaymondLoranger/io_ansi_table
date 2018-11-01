@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.Style do
-  # @moduledoc """
-  # Defines functions returning the properties of configured table styles.
-  # """
-  @moduledoc false
+  @moduledoc """
+  Defines functions returning the properties of configured table styles.
+  """
 
   use PersistConfig
 

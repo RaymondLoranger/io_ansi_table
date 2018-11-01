@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.Heading do
-  # @moduledoc """
-  # Functions related to the column headings of a table.
-  # """
-  @moduledoc false
+  @moduledoc """
+  Functions related to the column headings of a table.
+  """
 
   alias IO.ANSI.Table.{Column, Spec}
 

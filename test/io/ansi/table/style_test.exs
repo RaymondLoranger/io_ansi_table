@@ -1,6 +1,4 @@
 defmodule IO.ANSI.Table.StyleTest do
-  @moduledoc false
-
   use ExUnit.Case, async: true
 
   alias IO.ANSI.Table.Style

@@ -1,6 +1,4 @@
 defmodule IO.ANSI.Table.FormatterTest do
-  @moduledoc false
-
   use ExUnit.Case, async: true
 
   # Allows to capture IO...

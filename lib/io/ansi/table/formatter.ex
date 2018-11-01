@@ -1,6 +1,4 @@
 defmodule IO.ANSI.Table.Formatter do
-  @moduledoc false
-
   use PersistConfig
 
   alias IO.ANSI.Plus, as: ANSI

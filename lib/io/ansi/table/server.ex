@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.Server do
-  # @moduledoc """
-  # Table GenServer...
-  # """
-  @moduledoc false
+  @moduledoc """
+  Table GenServer...
+  """
 
   use GenServer
 

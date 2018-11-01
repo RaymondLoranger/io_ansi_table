@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.Row do
-  # @moduledoc """
-  # Functions related to the rows of a table.
-  # """
-  @moduledoc false
+  @moduledoc """
+  Functions related to the rows of a table.
+  """
 
   alias IO.ANSI.Table.Spec
 

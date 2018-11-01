@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.Column do
-  # @moduledoc """
-  # Functions related to the columns of a table.
-  # """
-  @moduledoc false
+  @moduledoc """
+  Functions related to the columns of a table.
+  """
 
   use PersistConfig
 

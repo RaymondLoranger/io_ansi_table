@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.Config do
-  # @moduledoc """
-  # Gets table properties.
-  # """
-  @moduledoc false
+  @moduledoc """
+  Gets table properties.
+  """
 
   use PersistConfig
 

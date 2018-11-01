@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.Line do
-  # @moduledoc """
-  # Formats the line of a table.
-  # """
-  @moduledoc false
+  @moduledoc """
+  Formats the line of a table.
+  """
 
   use PersistConfig
 

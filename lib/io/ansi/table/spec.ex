@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.Spec do
-  # @moduledoc """
-  # Holds the specification of the table to be formatted.
-  # """
-  @moduledoc false
+  @moduledoc """
+  Holds the specification of the table to be formatted.
+  """
 
   use PersistConfig
 
