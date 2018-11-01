@@ -77,7 +77,7 @@ data fetched from the web:
   - [Github Issues](https://hex.pm/packages/github_issues)
   - [NOAA Observations](https://hex.pm/packages/noaa_observations)
 
-Invocation from remote shell is now supported (courtesy of [milkwine](https://github.com/milkwine)).
+Invocation from a remote shell is now supported (courtesy of [milkwine](https://github.com/milkwine)).
 
 <sup><a name="footnote1">*</a></sup> Actually 8 colors and their "bright" variants.
 
