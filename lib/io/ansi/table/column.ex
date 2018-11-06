@@ -65,7 +65,7 @@ defmodule IO.ANSI.Table.Column do
       ...> }
       {:asc, :desc, nil}
   """
-  @spec find_attr(any, [spec], attr) :: any | attr
+  @spec find_attr(any, [spec], attr) :: attr | nil
   def find_attr(header, specs, default_attr) do
     Enum.find_value(specs, fn
       {attr, key} when key == header -> attr
