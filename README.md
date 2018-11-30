@@ -9,7 +9,7 @@ Can choose a table style to change the look of the table.
 
 ## Installation
 
-Add the `:io_ansi_table` dependency to your `mix.exs` file:
+Add `io_ansi_table` to your list of dependencies in `mix.exs`:
 
 ```elixir
 def deps do
@@ -69,9 +69,9 @@ Most of these 256 colors were given names like:
 - ![#87ff00](https://placehold.it/15/87ff00/000000?text=+)`:chartreuse`
 - ![#d700ff](https://placehold.it/15/d700ff/000000?text=+)`:psychedelic_purple`
 
-For details, see file `config/persist_colors.exs`.
+For details, see file `config/persist_colors.exs` of dependency `io_ansi_plus`.
 
-The following 2 packages use `:io_ansi_table` as a dependency to tabulate
+The following 2 packages use `io_ansi_table` as a dependency to tabulate
 data fetched from the web:
 
   - [Github Issues](https://hex.pm/packages/github_issues)
@@ -83,8 +83,8 @@ Invocation from a remote shell is now supported (courtesy of [milkwine](https://
 
 ## Customization
 
-You can create new table styles or modify any predefined one by changing the
-dependency's `config/persist_styles.exs` file. You would then need to run
+You can create new table styles or modify any predefined one by changing this
+package's `config/persist_styles.exs` file. You would then need to run
 `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
 ## Latest version
