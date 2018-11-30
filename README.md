@@ -83,9 +83,8 @@ Invocation from a remote shell is now supported (courtesy of [milkwine](https://
 
 ## Customization
 
-You can create new table styles or modify any predefined one by changing this
-package's `config/persist_styles.exs` file. You would then need to run
-`mix deps.compile io_ansi_table [--force]` to make the changes effective.
+You can create new table styles or modify any predefined one by changing file `config/persist_styles.exs`.
+You would then need to run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
 ## Latest version
 

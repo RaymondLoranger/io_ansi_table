@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "0.4.25",
+      version: "0.4.26",
       elixir: "~> 1.6",
       start_permanent: Mix.env() == :prod,
       name: "IO ANSI Table",
