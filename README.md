@@ -61,7 +61,7 @@ Table.format(people, style: :cyan_mult)
 
 For side-by-side tables, you can specify negative top margins.
 
-In addition to the 16 regular ANSI colors<sup>[*](#footnote1)</sup> and their
+In addition to the 16 standard ANSI colors<sup>[1](#footnote1)</sup> and their
 background counterparts, this package also supports the 256 Xterm colors (foreground and background).
 
 Most of these 256 colors were given names like:
@@ -79,7 +79,7 @@ data fetched from the web:
 
 Invocation from a remote shell is now supported (courtesy of [milkwine](https://github.com/milkwine)).
 
-<sup><a name="footnote1">*</a></sup> Actually 8 colors and their "bright" variants.
+<sup><a name="footnote1">1</a></sup> Actually 8 colors and their "bright" variants.
 
 ## Customization
 
