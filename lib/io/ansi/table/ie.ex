@@ -1,9 +1,8 @@
 defmodule IO.ANSI.Table.IE do
   @moduledoc false
 
-  # Functions for iex session...
+  # Example of an IEx session...
   #
-  # Examples:
   #   use IO.ANSI.Table.IE
   #   people()
   #   people_sorted() # to test sorting on structs, see below..
@@ -27,7 +26,7 @@ defmodule IO.ANSI.Table.IE do
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
   #   Application.put_env(:io_ansi_table, :async, true)
-  #   r(Table)
+  #   r(Table) # recompile
   #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
   #   print_people()
 
