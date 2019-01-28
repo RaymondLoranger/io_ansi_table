@@ -63,7 +63,7 @@ defmodule IO.ANSI.Table.Formatter do
 
   defp write_line_type(type, %{} = spec) when is_list(type) do
     spec.rows
-    |> Stream.zip(Stream.cycle(type))
+    |> Enum.zip(Stream.cycle(type))
     |> Enum.each(fn {row, type} -> write_line(row, type, spec) end)
   end
 

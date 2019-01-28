@@ -88,7 +88,7 @@ defmodule IO.ANSI.Table.Line do
   """
   @spec item_widths([elem], LineType.t(), Spec.t()) :: [Column.width()]
   def item_widths(elems, type, spec) do
-    Stream.zip([spec.column_widths, elems, spec.align_attrs])
+    Enum.zip([spec.column_widths, elems, spec.align_attrs])
     |> Enum.map(fn {width, elem, attr} -> Column.spread(width, elem, attr) end)
     |> deploy(Style.border_spreads(spec.style, type))
   end

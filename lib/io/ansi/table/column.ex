@@ -198,5 +198,5 @@ defmodule IO.ANSI.Table.Column do
   #     [["1", "4"], ["2", "5"], ["3", "6"]]
   # """
   @spec transpose([Row.t()]) :: [t]
-  defp transpose(rows), do: rows |> Stream.zip() |> Enum.map(&Tuple.to_list/1)
+  defp transpose(rows), do: rows |> Enum.zip() |> Enum.map(&Tuple.to_list/1)
 end

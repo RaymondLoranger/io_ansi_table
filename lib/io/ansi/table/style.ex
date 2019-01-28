@@ -277,7 +277,7 @@ defmodule IO.ANSI.Table.Style do
   def texts(template, fun \\ & &1) when is_function(fun, 1) do
     @styles
     |> Enum.sort(&(elem(&1, 0) <= elem(&2, 0)))
-    |> Stream.map(&interpolate(&1, template))
+    |> Enum.map(&interpolate(&1, template))
     |> Enum.map(&fun.(&1))
   end
 
