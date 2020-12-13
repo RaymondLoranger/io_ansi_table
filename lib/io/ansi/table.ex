@@ -2,21 +2,19 @@
 # │ Inspired by the book "Programming Elixir" by Dave Thomas. │
 # └───────────────────────────────────────────────────────────┘
 defmodule IO.ANSI.Table do
-  use PersistConfig
-
-  @book_ref Application.get_env(@app, :book_ref)
-
   @moduledoc """
   Prints data to STDOUT in a table with borders and colors.
 
   Can choose a table style to change the look of the table.
 
-  ##### #{@book_ref}
+  ##### Inspired by the book [Programming Elixir](https://pragprog.com/book/elixir16/programming-elixir-1-6) by Dave Thomas.
   """
+
+  use PersistConfig
 
   alias __MODULE__.{Server, Style}
 
-  @async Application.get_env(@app, :async)
+  @async get_env(:async)
 
   @doc """
   Prints data from `maps` to STDOUT in a table tailored by `options`.

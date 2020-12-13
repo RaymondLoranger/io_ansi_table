@@ -11,7 +11,7 @@ defmodule IO.ANSI.Table.Style do
   @type border :: String.t()
   @type t :: atom
 
-  @styles Application.get_env(@app, :table_styles)
+  @styles get_env(:table_styles)
 
   Module.register_attribute(__MODULE__, :inner_lengths, accumulate: true)
   Module.register_attribute(__MODULE__, :left_lengths, accumulate: true)

@@ -21,7 +21,7 @@ defmodule IO.ANSI.Table.Column do
 
   @ansi_escape_char "\e"
   @ansi_escape_codes ~r/\e\[([0-9]{1,3}(;[0-9]{1,3})*)?[m|K]/
-  @max_width_range Application.get_env(@app, :max_width_range)
+  @max_width_range get_env(:max_width_range)
   @upper_max_width @max_width_range.last
 
   @spec left_margin(Spec.t()) :: Spec.t()

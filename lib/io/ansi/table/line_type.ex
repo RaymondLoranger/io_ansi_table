@@ -9,7 +9,7 @@ defmodule IO.ANSI.Table.LineType do
   @typep row :: :row | :even_row | :odd_row | :row_1 | :row_2 | :row_3
   @type t :: non_row | [row]
 
-  @row_types Application.get_env(@app, :row_types)
+  @row_types get_env(:row_types)
 
   @doc """
   Structures a flat list of line `types`.

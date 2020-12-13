@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 config :io_ansi_table, default_align_specs: [:undefined]
 config :io_ansi_table, default_bell: false

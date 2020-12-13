@@ -4,8 +4,8 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "0.4.30",
-      elixir: "~> 1.6",
+      version: "0.4.31",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "IO ANSI Table",
       source_url: source_url(),
@@ -40,21 +40,20 @@ defmodule IO.ANSI.Table.Mixfile do
   def application do
     [
       extra_applications: [:logger],
-      mod: {IO.ANSI.Table.App, :ok}
+      mod: {IO.ANSI.Table.TopSup, :ok}
     ]
   end
 
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:mix_tasks,
-       github: "RaymondLoranger/mix_tasks", only: :dev, runtime: false},
-      {:persist_config, "~> 0.1"},
+      {:dialyxir, "~> 1.0", only: :dev, runtime: false},
+      {:ex_doc, "~> 0.22", only: :dev, runtime: false},
       {:io_ansi_plus, "~> 0.1"},
       {:map_sorter, "~> 0.2"},
-      {:earmark, "~> 1.0", only: :dev},
-      {:ex_doc, "~> 0.14", only: :dev, runtime: false},
-      {:dialyxir, "~> 0.5", only: :dev, runtime: false}
+      {:mix_tasks,
+       github: "RaymondLoranger/mix_tasks", only: :dev, runtime: false},
+      {:persist_config, "~> 0.4", runtime: false}
     ]
   end
 

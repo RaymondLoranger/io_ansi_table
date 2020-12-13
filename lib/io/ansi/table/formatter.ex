@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Formatter do
   alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table.{Line, LineType, Spec, Style}
 
-  @rule_types Application.get_env(@app, :rule_types)
+  @rule_types get_env(:rule_types)
 
   @spec print_table(Spec.t(), [Access.container()], Keyword.t()) :: :ok
   def print_table(spec, maps, options \\ []) do

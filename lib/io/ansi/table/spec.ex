@@ -9,10 +9,10 @@ defmodule IO.ANSI.Table.Spec do
 
   @type t :: map
 
-  @default_header_fixes Application.get_env(@app, :default_header_fixes)
-  @default_margins Application.get_env(@app, :default_margins)
-  @default_sort_symbols Application.get_env(@app, :default_sort_symbols)
-  @options Application.get_env(@app, :options)
+  @default_header_fixes get_env(:default_header_fixes)
+  @default_margins get_env(:default_margins)
+  @default_sort_symbols get_env(:default_sort_symbols)
+  @options get_env(:options)
 
   @spec new() :: t
   def new(), do: init() |> update()

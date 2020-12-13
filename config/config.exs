@@ -1,9 +1,4 @@
-# This file is responsible for configuring your application
-# and its dependencies with the aid of the Mix.Config module.
-use Mix.Config
-
-# To allow mix messages in colors...
-config :elixir, ansi_enabled: true
+import Config
 
 # Examples of config to provide when using :io_ansi_table as a dep:
 #
@@ -74,10 +69,10 @@ config :io_ansi_table, ansi_enabled: true
 # If truthy -> GenServer.cast, otherwise -> GenServer.call...
 # config :io_ansi_table, async: true
 
-# Comment out to compile debug, info and warn messages...
-config :logger, compile_time_purge_level: :error
+# Keeps only error messages...
+config :logger, compile_time_purge_matching: [[level_lower_than: :error]]
 
-# Prevents runtime debug, info and warn messages...
+# Logs only error messages...
 config :logger, level: :error
 
 # Listed by ascending log level...
@@ -90,5 +85,3 @@ config :logger, :console,
   ]
 
 # config :map_sorter, sorting_on_structs?: true
-
-import_config "persist*.exs"

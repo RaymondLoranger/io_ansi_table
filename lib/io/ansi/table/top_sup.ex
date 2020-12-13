@@ -1,4 +1,4 @@
-defmodule IO.ANSI.Table.App do
+defmodule IO.ANSI.Table.TopSup do
   use Application
 
   alias __MODULE__
@@ -10,6 +10,6 @@ defmodule IO.ANSI.Table.App do
       # Child spec relying on use GenServer...
       {Server, :ok}
     ]
-    |> Supervisor.start_link(name: App, strategy: :one_for_one)
+    |> Supervisor.start_link(name: TopSup, strategy: :one_for_one)
   end
 end

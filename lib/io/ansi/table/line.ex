@@ -12,7 +12,7 @@ defmodule IO.ANSI.Table.Line do
   @typep item :: String.t()
   @typep delimiter :: any
 
-  @ansi_enabled Application.get_env(@app, :ansi_enabled, true)
+  @ansi_enabled get_env(:ansi_enabled, true)
 
   @doc """
   Deploys `elements` by mixing "fillers" and `borders` (left, inner and right).

@@ -23,7 +23,7 @@ defmodule IO.ANSI.Table.Row do
   ## Private functions
 
   # @doc """
-  # Converts 'maps` to "rows".
+  # Converts `maps` to "rows".
 
   # ## Examples
 
