@@ -27,7 +27,7 @@ defmodule IO.ANSI.Table.FormatterTest do
     ]
 
     spec = Spec.new() |> Spec.apply(options)
-    {:ok, maps: maps, spec: spec}
+    %{maps: maps, spec: spec}
   end
 
   describe "Formatter.print_table/2" do

@@ -45,23 +45,25 @@ defmodule IO.ANSI.Table.Formatter do
   @spec write_table(Spec.t()) :: :ok
   defp write_table(%{} = spec) do
     spec |> top_margin() |> IO.write()
-    Style.line_types(spec.style) |> Enum.each(&write_line_type(&1, spec))
+    Style.line_types(spec.style) |> Enum.each(&write_lines_of_type(&1, spec))
     spec |> bottom_margin() |> IO.write()
     IO.write(if spec.bell, do: "\a", else: "")
   end
 
-  @spec write_line_type(LineType.t(), Spec.t()) :: :ok
-  defp write_line_type(type, %{} = spec) when type in @rule_types do
+  @spec write_lines_of_type(LineType.t(), Spec.t()) :: :ok
+  defp write_lines_of_type(type, %{} = spec) when type in @rule_types do
+    dash = Style.dash(spec.style, type)
+
     spec.column_widths
-    |> Enum.map(&(Style.dash(spec.style, type) |> String.duplicate(&1)))
+    |> Enum.map(&String.duplicate(dash, &1))
     |> write_line(type, spec)
   end
 
-  defp write_line_type(:header = type, %{} = spec) do
+  defp write_lines_of_type(:header = type, %{} = spec) do
     write_line(spec.headings, type, spec)
   end
 
-  defp write_line_type(type, %{} = spec) when is_list(type) do
+  defp write_lines_of_type(type, %{} = spec) when is_list(type) do
     spec.rows
     |> Enum.zip(Stream.cycle(type))
     |> Enum.each(fn {row, type} -> write_line(row, type, spec) end)

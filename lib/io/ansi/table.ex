@@ -3,7 +3,7 @@
 # └───────────────────────────────────────────────────────────┘
 defmodule IO.ANSI.Table do
   @moduledoc """
-  Prints data to STDOUT in a table with borders and colors.
+  Writes data to stdout in a table with borders and colors.
 
   Can choose a table style to change the look of the table.
 
@@ -17,7 +17,7 @@ defmodule IO.ANSI.Table do
   @async get_env(:async)
 
   @doc """
-  Prints data from `maps` to STDOUT in a table tailored by `options`.
+  Writes data from `maps` to stdout in a table tailored by `options`.
 
   All options can be configured and/or passed as a keyword argument.
   Each option of the keyword will override its configured counterpart.

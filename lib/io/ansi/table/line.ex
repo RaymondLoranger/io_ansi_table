@@ -15,7 +15,7 @@ defmodule IO.ANSI.Table.Line do
   @ansi_enabled get_env(:ansi_enabled, true)
 
   @doc """
-  Deploys `elements` by mixing "fillers" and `borders` (left, inner and right).
+  Deploys `elements` by adding "fillers" and `borders` (left, inner and right).
 
   ## Examples
 
@@ -115,10 +115,12 @@ defmodule IO.ANSI.Table.Line do
   """
   @spec format([Column.width()], [Style.attr()], boolean) :: String.t()
   def format(item_widths, item_attrs, ansi_enabled? \\ @ansi_enabled) do
-    item_widths
-    |> Enum.zip(item_attrs)
-    |> Enum.map(&ansidata(&1, ansi_enabled?))
-    |> (&"#{&1}~n").() # => string embedded with ANSI escape sequences
+    ansidata_list =
+      item_widths
+      |> Enum.zip(item_attrs)
+      |> Enum.map(&ansidata(&1, ansi_enabled?))
+      
+    "#{ansidata_list}~n" # => string embedded with ANSI escape sequences
   end
 
   ## Private functions
@@ -133,7 +135,7 @@ defmodule IO.ANSI.Table.Line do
   end
 
   # @doc """
-  # Deploys `elements` by mixing `delimiters` (left, inner and right).
+  # Deploys `elements` by adding `delimiters` (left, inner and right).
 
   # The inner `delimiter` is inserted between all `elements` and
   # the result is then surrounded by the left and right `delimiters`.
@@ -180,7 +182,7 @@ defmodule IO.ANSI.Table.Line do
   @spec delimiters(any, any, any, any) :: [any]
   defp delimiters(left, inner, right, filler \\ "") do
     [
-      [        [filler, left, filler ], filler],
+      [        [filler, left,  filler], filler],
       [filler, [filler, inner, filler], filler],
       [filler, [filler, right, filler]        ]
     ]

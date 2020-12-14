@@ -5,8 +5,24 @@ defmodule IO.ANSI.Table.Heading do
 
   alias IO.ANSI.Table.{Column, Spec}
 
-  @type t :: String.t()
+  @doc """
+  Updates the headings of a table specification.
 
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Heading
+      iex> spec = %{
+      ...>   headers: [:c4, :c1, :c2],
+      ...>   header_fixes: %{},
+      ...>   headings: [],
+      ...>   sort_attrs: [:asc, nil, nil],
+      ...>   sort_specs: [:c4],
+      ...>   sort_symbols: [desc: "↓", pos: :trailing, asc: "↑"]
+      ...> }
+      iex> %{headings: headings} = Heading.headings(spec)
+      iex> headings
+      ["C4↑", "C1", "C2"]
+  """
   @spec headings(Spec.t()) :: Spec.t()
   def headings(spec) do
     headings = Enum.map(spec.headers, &to_heading(&1, spec))
@@ -18,10 +34,11 @@ defmodule IO.ANSI.Table.Heading do
   # @doc """
   # Converts a `header` to a "heading".
   # """
-  @spec to_heading(any, Spec.t()) :: t
+  @spec to_heading(any, Spec.t()) :: String.t()
   defp to_heading(header, spec) do
     sort_symbol(header, spec, :leading) <>
-      titlecase(header, spec) <> sort_symbol(header, spec, :trailing)
+      titlecase(header, spec) <>
+      sort_symbol(header, spec, :trailing)
   end
 
   @spec sort_symbol(any, Spec.t(), atom) :: String.t()
@@ -32,8 +49,8 @@ defmodule IO.ANSI.Table.Heading do
   end
 
   @spec titlecase(any, Spec.t()) :: String.t()
-  # string, atom or charlist
   defp titlecase(header, spec)
+       # string, atom or charlist
        when is_binary(header) or is_atom(header) or is_list(header) do
     title =
       header
@@ -46,6 +63,8 @@ defmodule IO.ANSI.Table.Heading do
 
   defp titlecase(header, _spec), do: inspect(header)
 
+  # title("MPH") => "MPH"
+  # title("miles") => "Miles"
   @spec title(String.t()) :: String.t()
   defp title(word) do
     word
@@ -54,6 +73,7 @@ defmodule IO.ANSI.Table.Heading do
     |> Kernel.<>(String.slice(word, 1..-1))
   end
 
+  # fix({" Of ", " of "}, "Nbr Of Yrs") => "Nbr of Yrs"
   @spec fix(tuple, String.t()) :: String.t()
   defp fix({key, value}, title), do: String.replace(title, key, value)
 end

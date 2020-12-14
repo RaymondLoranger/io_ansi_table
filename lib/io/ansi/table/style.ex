@@ -5,7 +5,7 @@ defmodule IO.ANSI.Table.Style do
 
   use PersistConfig
 
-  alias IO.ANSI.Table.{Column, LineType}
+  alias IO.ANSI.Table.{Column, LineType, LineTypes}
 
   @type attr :: atom | [atom]
   @type border :: String.t()
@@ -165,7 +165,7 @@ defmodule IO.ANSI.Table.Style do
       end
     end
 
-    @line_types {style, LineType.to_line_types(@types)}
+    @line_types {style, LineTypes.new(@types)}
     def line_types(unquote(style)), do: @line_types[unquote(style)]
 
     Module.delete_attribute(__MODULE__, :left_lengths)
