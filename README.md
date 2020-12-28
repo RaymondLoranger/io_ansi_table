@@ -101,5 +101,5 @@ The latest version supports:
   [github_issues]: https://hex.pm/packages/github_issues
   [noaa_observations]: https://hex.pm/packages/noaa_observations
   [00ffff]: https://placehold.it/15/00ffff/000000?text=+
-  [87ff00]: https://placehold.it/15/87ff00/000000?text=+
-  [d700ff]: https://placehold.it/15/d700ff/000000?text=+
+  [87ff00]: https://placehold.it/15/87ff00/000000?text=*
+  [d700ff]: https://placehold.it/15/d700ff/000000?text=*
