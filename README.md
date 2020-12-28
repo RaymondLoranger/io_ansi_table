@@ -61,9 +61,10 @@ In addition to the 16 standard ANSI colors<sup>[1](#footnote1)</sup> and their
 background counterparts, this package also supports the 256 Xterm colors (foreground and background).
 
 Most of these 256 colors were given names like:
-- <img src="images/aqua.png" width="13"/> `:aqua`
-- <img src="images/chartreuse.png" width="13"/> `:chartreuse`
+- <img src="images/aqua.png"/> `:aqua`
+- <img src="images/chartreuse.png"/> `:chartreuse`
 - <img src="images/psychedelic_purple.png"/> `:psychedelic_purple`
+- <img src="images/pacific_blue.png"/> `:pacific_blue`
 
 For details, see file `config/persist_colors.exs` of dependency
 [io_ansi_plus][io_ansi_plus].
