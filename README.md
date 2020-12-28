@@ -66,7 +66,7 @@ Most of these 256 colors were given names like:
 - ![#d700ff](https://placehold.it/15/d700ff/000000?text=+)`:psychedelic_purple`
 
 For details, see file `config/persist_colors.exs` of dependency
-[io_ansi_table](https://github.com/RaymondLoranger/io_ansi_table).
+[io_ansi_plus](https://github.com/RaymondLoranger/io_ansi_plus).
 
 The following 2 packages use `io_ansi_table` as a dependency to tabulate
 data fetched from the web:
