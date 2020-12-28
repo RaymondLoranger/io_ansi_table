@@ -165,7 +165,7 @@ defmodule IO.ANSI.Table.Style do
       end
     end
 
-    @line_types {style, LineTypes.new(@types)}
+    @line_types {style, LineTypes.from(@types)}
     def line_types(unquote(style)), do: @line_types[unquote(style)]
 
     Module.delete_attribute(__MODULE__, :left_lengths)

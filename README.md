@@ -19,23 +19,11 @@ def deps do
 end
 ```
 
-## Usage
-
-In your `config/config.exs`, you should then configure the table formatting
-[options](https://hexdocs.pm/io_ansi_table/IO.ANSI.Table.Options.html).
-
 ## Examples
 
 ```elixir
-config :io_ansi_table, headers: [:name, :dob, :likes]
-config :io_ansi_table, header_fixes: %{~r[dob]i => "Date of Birth"}
-config :io_ansi_table, sort_specs: [asc: :dob]
-config :io_ansi_table, align_specs: [center: :dob]
-config :io_ansi_table, margins: [top: 2, bottom: 2]
-```
-
-```elixir
 alias IO.ANSI.Table
+
 people = [
   %{name: "Mike", likes: "ski, arts", dob: "1992-04-15", bmi: 23.9},
   %{name: "Mary", likes: "travels"  , dob: "1992-04-15", bmi: 26.8},
@@ -45,6 +33,14 @@ people = [
   %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28", bmi: 20.8},
   %{name: "Jill", likes: "cooking"  , dob: "1976-09-28", bmi: 25.8}
 ]
+
+Table.start([:name, :dob, :likes],
+  header_fixes: %{~r[dob]i => "Date of Birth"},
+  sort_specs: [asc: :dob],
+  align_specs: [center: :dob],
+  margins: [top: 2, bottom: 2, left: 2]
+)
+
 Table.format(people, style: :light)
 Table.format(people, style: :light_alt)
 Table.format(people, style: :light_mult)
@@ -59,7 +55,7 @@ Table.format(people, style: :cyan_mult)
 
 ## Notes
 
-For side-by-side tables, you can specify negative top margins.
+For side-by-side tables, you can specify a negative top margin.
 
 In addition to the 16 standard ANSI colors<sup>[1](#footnote1)</sup> and their
 background counterparts, this package also supports the 256 Xterm colors (foreground and background).
@@ -79,21 +75,19 @@ data fetched from the web:
 
 Invocation from a remote shell is now supported (courtesy of [milkwine](https://github.com/milkwine)).
 
+Sorting on `Date` columns or other struct types like `Version` is now supported.
+
 <sup><a name="footnote1">1</a></sup> Actually 8 colors and their "bright" variants.
-
-## Customization
-
-You can create new table styles or modify any predefined one by changing file `config/persist_styles.exs`.
-You would then need to run `mix deps.compile io_ansi_table [--force]` to make the changes effective.
 
 ## Latest version
 
 The latest version supports:
 
-  - sorting on multiple headers
+  - sorting on multiple columns
   - alternating row attributes
   - alignment of column elements
   - sort direction indicators
-  - negative top margins
+  - negative top margin
   - ANSI and Xterm colors
   - invocation from remote shell
+  - sorting on `Date` columns

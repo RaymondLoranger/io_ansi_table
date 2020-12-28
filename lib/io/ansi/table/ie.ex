@@ -4,292 +4,249 @@ defmodule IO.ANSI.Table.IE do
   # Example of an IEx session...
   #
   #   use IO.ANSI.Table.IE
-  #   people()
-  #   people_sorted() # to test sorting on structs, see below..
-  #   people_as_keywords()
-  #   people_sorted_as_keywords()
-  #   print_people(:dotted_mult)
-  #   put_env(:pretty_alt)
-  #   people() |> Table.format()
-  #   GenServer.stop(Server, :shutdown)
-  #   people() |> Table.format()
-  #   print_people(:dotted_mult)
-  #   print_people(:dotted_mult, 9)
-  #   print_people_as_keywords(:green_mult)
-  #   print_people_as_keywords(:green_mult, 9)
-  #   styles()
+  #   styles
   #   styles(:light_green)
-  #   Style.styles()
-  #   print_islands([:medium, :medium_alt, :medium_mult])
-  #   print_islands()
-  #   print_islands(:game)
-  #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
-  #   print_people()
-  #   Application.put_env(:io_ansi_table, :async, true)
-  #   r(Table) # recompile
-  #   print_people([:pretty_alt, :dotted_alt, :medium_alt])
-  #   print_people()
+  #   Style.styles
+  #   people_with_date_dobs
+  #   people_with_string_dobs
+  #   sort_people(people_with_date_dobs, asc: {:dob, Date}, desc: :likes)
+  #   sort_people(people_with_string_dobs, asc: :dob, desc: :likes)
+  #   start
+  #   format_islands
+  #   write_islands
+  #   format_islands(:game)
+  #   write_islands(:game)
+  #   format_islands(:game, 111)
+  #   write_islands(:game, 111)
+  #   format_people
+  #   write_people
+  #   format_people(:pretty)
+  #   write_people(:pretty)
+  #   format_people(:pretty, 111)
+  #   write_people(:pretty, 111)
+  #   get
+  #   stop
+
+  use PersistConfig
 
   alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table
   alias IO.ANSI.Table.Style
 
-  require MapSorter
+  @islands get_env(:islands)
+  @attacks get_env(:attacks)
+  @islands_headers get_env(:islands_headers)
+  @islands_options get_env(:islands_options)
 
-  @align_specs [center: :dob, right: :weight]
-  @headers [:name, :dob, :likes, :bmi]
-  @header_fixes %{"Dob" => "DOB", "Bmi" => "BMI"}
-
-  @i "#{ANSI.format([:sandy_brown, :sandy_brown_background, "isl"], true)}"
-  @f "#{ANSI.format([:islamic_green, :islamic_green_background, "for"], true)}"
-  @w "#{ANSI.format([:dodger_blue, :dodger_blue_background, "wat"], true)}"
-  @h "#{ANSI.format([:islamic_green, :islamic_green_background, "hit"], true)}"
-  @m "#{ANSI.format([:mortar, :mortar_background, "mis"], true)}"
-
-  @islands [
-    %{:row =>  1, 1 => @i, 2 => @f, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  2, 1 => @w, 2 => @f, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  3, 1 => @i, 2 => @f, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @i, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  4, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @i, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  5, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @f, 8 => @i, 9 => @w, :A => @w},
-    %{:row =>  6, 1 => @w, 2 => @w, 3 => @i, 4 => @i, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  7, 1 => @w, 2 => @i, 3 => @i, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  8, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  9, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @i,
-                  6 => @i, 7 => @w, 8 => @w, 9 => @f, :A => @w},
-    %{:row => 10, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @i,
-                  6 => @i, 7 => @w, 8 => @w, 9 => @w, :A => @w}
-  ]
-
-  @attacks [
-    %{:row =>  1, 1 => @w, 2 => @m, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  2, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  3, 1 => @w, 2 => @w, 3 => @w, 4 => @h, 5  => @h,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  4, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @h, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  5, 1 => @w, 2 => @w, 3 => @m, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @h, 9 => @w, :A => @w},
-    %{:row =>  6, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  7, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @m},
-    %{:row =>  8, 1 => @w, 2 => @w, 3 => @w, 4 => @m, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row =>  9, 1 => @w, 2 => @w, 3 => @h, 4 => @m, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w},
-    %{:row => 10, 1 => @w, 2 => @w, 3 => @w, 4 => @w, 5  => @w,
-                  6 => @w, 7 => @w, 8 => @w, 9 => @w, :A => @w}
-  ]
-
-  @margins [top: 1, bottom: 0]
-
-  # Using @people with struct dob's requires to...
-  # - config :map_sorter, sorting_on_structs?: true
-  # - mix deps.compile map_sorter
-
-  # struct dob's...
-  @people [
-    %{name: "Mike", likes: "ski, arts", dob: ~D[1992-04-15], bmi: 23.9},
-    %{name: "Mary", likes: "travels"  , dob: ~D[1992-04-15], bmi: 26.8},
-    %{name: "Ann" , likes: "reading"  , dob: ~D[1992-04-15], bmi: 24.7},
-    %{name: "Ray" , likes: "cycling"  , dob: ~D[1977-08-28], bmi: 19.1},
-    %{name: "Bill", likes: "karate"   , dob: ~D[1977-08-28], bmi: 18.1},
-    %{name: "Joe" , likes: "boxing"   , dob: ~D[1977-08-28], bmi: 20.8},
-    %{name: "Jill", likes: "cooking"  , dob: ~D[1976-09-28], bmi: 25.8}
-  ]
-
-  # string dob's...
-  @people [
-    %{name: "Mike", likes: "ski, arts", dob: "1992-04-15", bmi: 23.9},
-    %{name: "Mary", likes: "travels"  , dob: "1992-04-15", bmi: 26.8},
-    %{name: "Ann" , likes: "reading"  , dob: "1992-04-15", bmi: 24.7},
-    %{name: "Ray" , likes: "cycling"  , dob: "1977-08-28", bmi: 19.1},
-    %{name: "Bill", likes: "karate"   , dob: "1977-08-28", bmi: 18.1},
-    %{name: "Joe" , likes: "boxing"   , dob: "1977-08-28", bmi: 20.8},
-    %{name: "Jill", likes: "cooking"  , dob: "1976-09-28", bmi: 25.8}
-  ]
-
-  @sort_specs [:dob, desc: :likes]
-  @sort_symbols [asc: "▲", desc: "▼", pos: :trailing]
+  @people_with_date_dobs get_env(:people_with_date_dobs)
+  @people_with_string_dobs get_env(:people_with_string_dobs)
+  @people %{
+    date_dobs: @people_with_date_dobs,
+    string_dobs: @people_with_string_dobs
+  }
+  @people_headers get_env(:people_headers)
+  @people_options get_env(:people_options)
 
   defmacro __using__(_options) do
     quote do
       import unquote(__MODULE__)
       alias unquote(__MODULE__)
       alias IO.ANSI.Plus, as: ANSI
-      alias IO.ANSI.Table.{App, Column, Config, Formatter, Heading}
-      alias IO.ANSI.Table.{Line_Type, Line, Options, Row, Server, Spec, Style}
+
+      alias IO.ANSI.Table.Spec.{
+        AlignAttrs,
+        ColumnWidths,
+        Headings,
+        LeftMargin,
+        Rows,
+        SortAttrs
+      }
+
+      alias IO.ANSI.Table.{
+        Column,
+        DynSpecSup,
+        Header,
+        LineType,
+        LineTypes,
+        Line,
+        Log,
+        Options,
+        Row,
+        SpecRecovery,
+        SpecServer,
+        SpecSup,
+        Spec,
+        Style,
+        TopSup
+      }
+
       alias IO.ANSI.Table
       require MapSorter
       :ok
     end
   end
 
-  def people(), do: @people()
+  def islands, do: @islands
+  def attacks, do: @attacks
+  def islands_options, do: @islands_options
+  def islands_headers, do: @islands_headers
 
-  def people_as_keywords(), do: Enum.map(@people, &Keyword.new/1)
+  def people_with_date_dobs, do: @people_with_date_dobs
+  def people_with_string_dobs, do: @people_with_string_dobs
+  def people, do: @people
+  def people_options, do: @people_options
+  def people_headers, do: @people_headers
 
-  def print_people(styles \\ Style.styles())
+  # Format people...
+  def format_people(style \\ :pretty, times \\ 1)
+      when is_atom(style) and is_integer(times) and times >= 1 do
+    import Table, only: [format: 2]
 
-  def print_people(styles) when is_list(styles) do
-    Enum.each(styles, &print_people/1)
+    {usecs, _} =
+      :timer.tc(fn ->
+        for _ <- 1..times do
+          format(@people.string_dobs, style: style, spec_name: "string_dobs")
+          format(@people.date_dobs, style: style, spec_name: "date_dobs")
+        end
+      end)
+
+    IO.puts("#{usecs / 1_000_000} sec")
   end
 
-  def print_people(style) do
-    Table.format(
-      @people,
-      bell: true,
-      count: length(@people),
-      style: style,
-      headers: @headers,
-      header_fixes: @header_fixes,
-      sort_specs: @sort_specs,
-      align_specs: @align_specs,
-      margins: @margins
-    )
+  # Write people...
+  def write_people(style \\ :pretty, times \\ 1)
+      when is_atom(style) and is_integer(times) and times >= 1 do
+    left_spec = Table.get(spec_name: "string_dobs")
+    right_spec = Table.get(spec_name: "date_dobs")
+
+    {usecs, _} =
+      :timer.tc(fn ->
+        for _ <- 1..times do
+          Table.write(left_spec, @people_with_string_dobs, style: style)
+          Table.write(right_spec, @people_with_date_dobs, style: style)
+        end
+      end)
+
+    IO.puts("#{usecs / 1_000_000} sec")
   end
 
-  def put_env(style) do
-    Application.put_env(:io_ansi_table, :bell, true)
-    Application.put_env(:io_ansi_table, :count, length(@people))
-    Application.put_env(:io_ansi_table, :style, style)
-    Application.put_env(:io_ansi_table, :headers, @headers)
-    Application.put_env(:io_ansi_table, :header_fixes, @header_fixes)
-    Application.put_env(:io_ansi_table, :sort_specs, @sort_specs)
-    Application.put_env(:io_ansi_table, :align_specs, @align_specs)
-    Application.put_env(:io_ansi_table, :margins, @margins)
-    Application.put_env(:io_ansi_table, :sort_symbols, @sort_symbols)
+  # Format islands...
+  def format_islands(style \\ :game, times \\ 1)
+      when is_atom(style) and is_integer(times) and times >= 1 do
+    {usecs, _} =
+      :timer.tc(fn ->
+        for _ <- 1..times do
+          Table.format(@islands, style: style, spec_name: "left_board")
+          Table.format(@attacks, style: style, spec_name: "right_board")
+        end
+      end)
+
+    IO.puts("#{usecs / 1_000_000} sec")
   end
 
-  def print_islands(styles \\ Style.styles())
+  # Write islands...
+  def write_islands(style \\ :game, times \\ 1)
+      when is_atom(style) and is_integer(times) and times >= 1 do
+    left_spec = Table.get(spec_name: "left_board")
+    right_spec = Table.get(spec_name: "right_board")
 
-  def print_islands(styles) when is_list(styles) do
-    Enum.each(styles, &print_islands/1)
+    {usecs, _} =
+      :timer.tc(fn ->
+        for _ <- 1..times do
+          Table.write(left_spec, @islands, style: style)
+          Table.write(right_spec, @attacks, style: style)
+        end
+      end)
+
+    IO.puts("#{usecs / 1_000_000} sec")
   end
 
-  def print_islands(style) do
-    Table.format(
-      @islands,
-      bell: false,
-      count: 10,
-      style: style,
-      headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, :A],
-      header_fixes: %{"Row" => "", "A" => "10"},
-      align_specs: [
-        right: :row,
-        center: 1,
-        center: 2,
-        center: 3,
-        center: 4,
-        center: 5,
-        center: 6,
-        center: 7,
-        center: 8,
-        center: 9,
-        center: :A
-      ],
-      sort_specs: [:row],
-      sort_symbols: [asc: ""],
-      margins: @margins
-    )
+  # Start servers...
+  def start do
+    left_board =
+      Table.start(
+        islands_headers(),
+        islands_options() ++
+          [margins: [top: 1, bottom: 0, left: 2], spec_name: "left_board"]
+      )
 
-    Table.format(
-      @attacks,
-      bell: false,
-      count: 10,
-      style: style,
-      headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, :A],
-      header_fixes: %{"Row" => "", "A" => "10"},
-      align_specs: [
-        right: :row,
-        center: 1,
-        center: 2,
-        center: 3,
-        center: 4,
-        center: 5,
-        center: 6,
-        center: 7,
-        center: 8,
-        center: 9,
-        center: :A
-      ],
-      sort_specs: [:row],
-      sort_symbols: [asc: ""],
-      margins: [left: 35, top: -11]
-    )
+    right_board =
+      Table.start(
+        islands_headers(),
+        islands_options() ++
+          [margins: [top: -11, bottom: 1, left: 35], spec_name: "right_board"]
+      )
+
+    string_dobs =
+      Table.start(
+        people_headers(),
+        people_options() ++
+          [
+            margins: [top: 1, bottom: 0, left: 2],
+            sort_specs: [:dob, desc: :likes],
+            spec_name: "string_dobs",
+            header_fixes: %{"Dob" => "String DOB", "Bmi" => "BMI"}
+          ]
+      )
+
+    date_dobs =
+      Table.start(
+        people_headers(),
+        people_options() ++
+          [
+            margins: [top: -11, bottom: 1, left: 52],
+            sort_specs: [{:dob, Date}, desc: :likes],
+            spec_name: "date_dobs",
+            header_fixes: %{"Dob" => "Date DOB", "Bmi" => "BMI"}
+          ]
+      )
+
+    [
+      left_board: left_board,
+      right_board: right_board,
+      string_dobs: string_dobs,
+      date_dobs: date_dobs
+    ]
   end
 
-  def print_people_as_keywords(style) do
-    Table.format(
-      people_as_keywords(),
-      bell: true,
-      count: length(@people),
-      style: style,
-      headers: @headers,
-      header_fixes: @header_fixes,
-      sort_specs: @sort_specs,
-      align_specs: @align_specs,
-      margins: @margins
-    )
+  # Get server specs...
+  def get do
+    left_board = Table.get(spec_name: "left_board")
+    right_board = Table.get(spec_name: "right_board")
+    string_dobs = Table.get(spec_name: "string_dobs")
+    date_dobs = Table.get(spec_name: "date_dobs")
+
+    [
+      left_board: left_board,
+      right_board: right_board,
+      string_dobs: string_dobs,
+      date_dobs: date_dobs
+    ]
   end
 
-  def print_people(style, max_width) do
-    Table.format(
-      @people,
-      bell: true,
-      count: length(@people),
-      style: style,
-      headers: @headers,
-      header_fixes: @header_fixes,
-      sort_specs: @sort_specs,
-      align_specs: @align_specs,
-      margins: @margins,
-      max_width: max_width
-    )
-  end
+  # Stop servers...
+  def stop do
+    left_board = Table.stop(spec_name: "left_board")
+    right_board = Table.stop(spec_name: "right_board")
+    string_dobs = Table.stop(spec_name: "string_dobs")
+    date_dobs = Table.stop(spec_name: "date_dobs")
 
-  def print_people_as_keywords(style, max_width) do
-    Table.format(
-      people_as_keywords(),
-      bell: true,
-      count: length(@people),
-      style: style,
-      headers: @headers,
-      header_fixes: @header_fixes,
-      sort_specs: @sort_specs,
-      align_specs: @align_specs,
-      margins: @margins,
-      max_width: max_width
-    )
+    [
+      left_board: left_board,
+      right_board: right_board,
+      string_dobs: string_dobs,
+      date_dobs: date_dobs
+    ]
   end
 
   def styles(color \\ :light_magenta) do
     chardata = [color, " &style&filler", :reset, " - &rank - &note"]
     ansidata = ANSI.format(chardata)
-
-    "#{ansidata}"
-    |> Style.texts(&IO.puts/1)
-    |> length()
+    Style.texts("#{ansidata}", &IO.puts/1) |> length()
   end
 
-  @dialyzer {:nowarn_function, people_sorted: 0}
-  def people_sorted() do
-    MapSorter.sort(@people, @sort_specs)
-  end
-
-  @dialyzer {:nowarn_function, people_sorted_as_keywords: 0}
-  def people_sorted_as_keywords() do
-    MapSorter.sort(people_as_keywords(), @sort_specs)
+  def sort_people(people, sort_specs) do
+    require MapSorter
+    MapSorter.sort(people, sort_specs)
   end
 end

@@ -1,6 +1,6 @@
 defmodule IO.ANSI.Table.LineTypes do
   @moduledoc """
-  Structures a reversed flat list of line `types`.
+  Nests row line types in a reversed flat list of line `types`.
   """
 
   use PersistConfig
@@ -10,28 +10,28 @@ defmodule IO.ANSI.Table.LineTypes do
   @row_types get_env(:row_types)
 
   @doc """
-  Structures a reversed flat list of line `types`.
+  Nests row line types in a reversed flat list of line `types`.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.LineTypes
       iex> types = Enum.reverse([:top, :header, :separator, :row, :bottom])
-      iex> LineTypes.new(types)
+      iex> LineTypes.from(types)
       [:top, :header, :separator, [:row], :bottom]
 
       iex> alias IO.ANSI.Table.LineTypes
       iex> types = [:top, :header, :separator, :even_row, :odd_row, :bottom]
       iex> types = Enum.reverse(types)
-      iex> LineTypes.new(types)
+      iex> LineTypes.from(types)
       [:top, :header, :separator, [:even_row, :odd_row], :bottom]
 
       iex> alias IO.ANSI.Table.LineTypes
       iex> types = Enum.reverse([:header, :separator, :row_1, :row_2, :row_3])
-      iex> LineTypes.new(types)
+      iex> LineTypes.from(types)
       [:header, :separator, [:row_1, :row_2, :row_3]]
   """
-  @spec new([LineType.non_row() | LineType.row()]) :: [LineType.t()]
-  def new(types), do: Enum.reduce(types, [], &acc/2)
+  @spec from([LineType.non_row() | LineType.row()]) :: [LineType.t()]
+  def from(types), do: Enum.reduce(types, [], &acc/2)
 
   ## Private functions
 

@@ -119,7 +119,7 @@ defmodule IO.ANSI.Table.Line do
       item_widths
       |> Enum.zip(item_attrs)
       |> Enum.map(&ansidata(&1, ansi_enabled?))
-      
+
     "#{ansidata_list}~n" # => string embedded with ANSI escape sequences
   end
 
