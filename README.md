@@ -63,7 +63,7 @@ background counterparts, this package also supports the 256 Xterm colors (foregr
 Most of these 256 colors were given names like:
 - <font color="#87ffff"><></font> `:aqua`
 - ![aqua](images/aqua.png) `:aqua`
-- <img src="images/aqua.png" alt="aqua" width="15"/> `:aqua`
+- <img src="images/aqua.png" alt="aqua" width="14"/> `:aqua`
 - <sup style="color:blue;background:blue">+</sup> `:aqua`
 - `:chartreuse`
 - `:psychedelic_purple`
