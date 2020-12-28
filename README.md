@@ -65,7 +65,8 @@ Most of these 256 colors were given names like:
 - ![#87ff00](https://placehold.it/15/87ff00/000000?text=+)`:chartreuse`
 - ![#d700ff](https://placehold.it/15/d700ff/000000?text=+)`:psychedelic_purple`
 
-For details, see file `config/persist_colors.exs` of dependency `io_ansi_plus`.
+For details, see file `config/persist_colors.exs` of dependency
+[io_ansi_table](https://github.com/RaymondLoranger/io_ansi_table).
 
 The following 2 packages use `io_ansi_table` as a dependency to tabulate
 data fetched from the web:
@@ -75,8 +76,8 @@ data fetched from the web:
 
 Invocation from a remote shell is now supported (courtesy of [milkwine](https://github.com/milkwine)).
 
-Sorting on [Date](`t:Date.t/0`) columns or other struct types like
-[Version](`t:Version.t/0`) is now supported.
+Sorting on [Date](https://hexdocs.pm/elixir/Date.html) columns or other struct
+types like [Version](https://hexdocs.pm/elixir/Version.html) is now supported.
 
 <sup><a name="footnote1">1</a></sup> Actually 8 colors and their "bright" variants.
 
