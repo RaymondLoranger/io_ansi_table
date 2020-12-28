@@ -61,26 +61,10 @@ In addition to the 16 standard ANSI colors<sup>[1](#footnote1)</sup> and their
 background counterparts, this package also supports the 256 Xterm colors (foreground and background).
 
 Most of these 256 colors were given names like:
-- <span style="color:#00ffff;background:#00ffff">__</span> `:aqua`
+- ![#00ffff][00ffff]`:aqua`
 - <span style="color:#87ff00;background:#87ff00">__</span> `:chartreuse`
 - <span style="color:#d700ff;background:#d700ff">__</span> `:psychedelic_purple`
 - `#d700ff` `:psychedelic_purple`
-
-
-## COLOR!
-
-- ![#ff0000](https://placehold.it/12/ff0000?text=+) red!
-- ![#9900c5](https://placehold.it/15/9900c5?text=+) purple!
-- ![#157500](https://placehold.it/20/157500?text=+) green!
-
-![](https://placehold.it/400x90/ff0000/000000?text=IMPORTANT!)
-
-![](https://placehold.it/400x90/ff6600/000?text=WARNING!)
-
-![](https://placehold.it/350x90/009955/fff?text=SUCCESS!)
-
-
-
 
 For details, see file `config/persist_colors.exs` of dependency
 [io_ansi_plus][io_ansi_plus].
@@ -117,3 +101,4 @@ The latest version supports:
   [mw]: https://github.com/milkwine
   [github_issues]: https://hex.pm/packages/github_issues
   [noaa_observations]: https://hex.pm/packages/noaa_observations
+  [00ffff]: https://placehold.it/15/00ffff/000000?text=+
