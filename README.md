@@ -64,6 +64,7 @@ Most of these 256 colors were given names like:
 - <span style="color:#00ffff;background:#00ffff">__</span> `:aqua`
 - <span style="color:#87ff00;background:#87ff00">__</span> `:chartreuse`
 - <span style="color:#d700ff;background:#d700ff">__</span> `:psychedelic_purple`
+- `#d700ff` `:psychedelic_purple`
 
 For details, see file `config/persist_colors.exs` of dependency
 [io_ansi_plus](https://github.com/RaymondLoranger/io_ansi_plus).
