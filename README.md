@@ -66,19 +66,35 @@ Most of these 256 colors were given names like:
 - <span style="color:#d700ff;background:#d700ff">__</span> `:psychedelic_purple`
 - `#d700ff` `:psychedelic_purple`
 
+
+## COLOR!
+
+- ![#ff0000](https://placehold.it/12/ff0000?text=+) red!
+- ![#9900c5](https://placehold.it/15/9900c5?text=+) purple!
+- ![#157500](https://placehold.it/20/157500?text=+) green!
+
+![](https://placehold.it/400x90/ff0000/000000?text=IMPORTANT!)
+
+![](https://placehold.it/400x90/ff6600/000?text=WARNING!)
+
+![](https://placehold.it/350x90/009955/fff?text=SUCCESS!)
+
+
+
+
 For details, see file `config/persist_colors.exs` of dependency
 [io_ansi_plus][io_ansi_plus].
 
 The following 2 packages use `io_ansi_table` as a dependency to tabulate
 data fetched from the web:
 
-  - [Github Issues](https://hex.pm/packages/github_issues)
-  - [NOAA Observations](https://hex.pm/packages/noaa_observations)
+  - [Github Issues][github_issues]
+  - [NOAA Observations][noaa_observations]
 
-Invocation from a remote shell is now supported (courtesy of [milkwine](https://github.com/milkwine)).
+Invocation from a remote shell is now supported (courtesy of [milkwine][mw]).
 
-Sorting on [Date](https://hexdocs.pm/elixir/Date.html) columns or other struct
-types like [Version](https://hexdocs.pm/elixir/Version.html) is now supported.
+Sorting on [Date][Date] columns or other struct types like [Version][Version]
+is now supported.
 
 <sup><a name="footnote1">1</a></sup> Actually 8 colors and their "bright" variants.
 
@@ -93,6 +109,11 @@ The latest version supports:
   - negative top margin
   - ANSI and Xterm colors
   - invocation from remote shell
-  - sorting on [Date](https://hexdocs.pm/elixir/Date.html) columns
+  - sorting on [Date][Date] columns
 
   [io_ansi_plus]: https://github.com/RaymondLoranger/io_ansi_plus
+  [Date]: https://hexdocs.pm/elixir/Date.html
+  [Version]: https://hexdocs.pm/elixir/Version.html
+  [mw]: https://github.com/milkwine
+  [github_issues]: https://hex.pm/packages/github_issues
+  [noaa_observations]: https://hex.pm/packages/noaa_observations
