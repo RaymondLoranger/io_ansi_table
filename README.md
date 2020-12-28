@@ -92,4 +92,4 @@ The latest version supports:
   - negative top margin
   - ANSI and Xterm colors
   - invocation from remote shell
-  - sorting on `Date` columns
+  - sorting on [Date](https://hexdocs.pm/elixir/Date.html) columns
