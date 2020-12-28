@@ -67,7 +67,7 @@ Most of these 256 colors were given names like:
 - `#d700ff` `:psychedelic_purple`
 
 For details, see file `config/persist_colors.exs` of dependency
-[io_ansi_plus](https://github.com/RaymondLoranger/io_ansi_plus).
+[io_ansi_plus][io_ansi_plus].
 
 The following 2 packages use `io_ansi_table` as a dependency to tabulate
 data fetched from the web:
@@ -94,3 +94,5 @@ The latest version supports:
   - ANSI and Xterm colors
   - invocation from remote shell
   - sorting on [Date](https://hexdocs.pm/elixir/Date.html) columns
+
+  [io_ansi_plus]: https://github.com/RaymondLoranger/io_ansi_plus
