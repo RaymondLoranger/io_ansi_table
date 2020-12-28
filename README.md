@@ -75,7 +75,8 @@ data fetched from the web:
 
 Invocation from a remote shell is now supported (courtesy of [milkwine](https://github.com/milkwine)).
 
-Sorting on `Date` columns or other struct types like `Version` is now supported.
+Sorting on [Date](`t:Date.t/0`) columns or other struct types like
+[Version](`t:Version.t/0`) is now supported.
 
 <sup><a name="footnote1">1</a></sup> Actually 8 colors and their "bright" variants.
 
