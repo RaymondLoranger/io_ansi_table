@@ -61,7 +61,7 @@ In addition to the 16 standard ANSI colors<sup>[1](#footnote1)</sup> and their
 background counterparts, this package also supports the 256 Xterm colors (foreground and background).
 
 Most of these 256 colors were given names like:
-- <span style="color:blue;background:blue">+</span> `:aqua`
+- <font color="#87ffff"><></font> `:aqua`
 - <sup style="color:blue;background:blue">+</sup> `:aqua`
 - `:chartreuse`
 - `:psychedelic_purple`
