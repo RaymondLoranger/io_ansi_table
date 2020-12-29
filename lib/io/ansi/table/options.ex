@@ -96,9 +96,9 @@ defmodule IO.ANSI.Table.Options do
 
   * `:max_width` - to cap column widths (non neg integer). Defaults to `99`.
 
-  * `:sort_specs` - to sort the maps/keywords/structs (list of
-    [sort specs](`t:IO.ANSI.Table.Header.sort_spec/0`) where `:asc` is the
-    default [sort attribute](`t:IO.ANSI.Table.Header.sort_attr/0`)).
+  * `:sort_specs` - to sort the [maps/keywords/structs](`t:Access.container/0`)
+    (list of [sort specs](`t:IO.ANSI.Table.Header.sort_spec/0`) where `:asc` is
+    the default [sort attribute](`t:IO.ANSI.Table.Header.sort_attr/0`)).
     Defaults to `[]`.
 
     ```elixir
