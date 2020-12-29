@@ -25,8 +25,8 @@ defmodule IO.ANSI.Table.Options do
     align_specs: ["station_id", right: "wind_mph"]
     ```
 
-  * `:async` - whether to write the table asynchronously (boolean). Defaults to
-    `false`.
+  * `:async` - whether to format the table asynchronously (boolean).
+    Defaults to `false`.
 
   * `:bell` - whether to ring the bell (boolean). Defaults to `false`.
 
