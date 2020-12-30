@@ -15,7 +15,7 @@ defmodule IO.ANSI.Table.Column do
   @type t :: [String.t()]
   @type width :: non_neg_integer
 
-  @doc """
+  @doc ~S'''
   Returns a list of column widths capped by `maximum width`.
 
   ## Examples
@@ -39,7 +39,7 @@ defmodule IO.ANSI.Table.Column do
       iex> data = [["\e[32m\e[42mCHEETAH\e[0m", "elk"], ["mongoose", "ant"]]
       iex> Column.widths(data, 6)
       [6, 6]
-  """
+  '''
   @spec widths([t], width) :: [width]
   def widths(columns, max_width) do
     for column <- columns do
@@ -47,7 +47,7 @@ defmodule IO.ANSI.Table.Column do
     end
   end
 
-  @doc """
+  @doc ~S'''
   Spreads a `width` given an `element` and its `align attribute`.
 
   ## Examples
@@ -83,7 +83,7 @@ defmodule IO.ANSI.Table.Column do
       ...>   Column.spread(7, "\e[32m\e[42mCHEETAH\e[0m", :right )
       ...> }
       {[0, 21, 0], [0, 21, 0], [0, 21, 0]}
-  """
+  '''
   @spec spread(width, Line.elem(), Header.align_attr()) :: spread
   def spread(width, elem, _align_attr = :left) do
     elem_width = elem |> width() |> min(width)
