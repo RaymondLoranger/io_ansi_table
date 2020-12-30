@@ -28,7 +28,7 @@ defmodule IO.ANSI.Table.Spec.Rows do
       [["1", "4"], ["2", "5"], ["3", "6"]]
   """
   @spec transpose([Row.t()]) :: [Column.t()]
-  def transpose(rows), do: rows |> Enum.zip() |> Enum.map(&Tuple.to_list/1)
+  def transpose(rows), do: Enum.zip(rows) |> Enum.map(&Tuple.to_list/1)
 
   ## Private functions
 

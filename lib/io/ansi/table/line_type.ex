@@ -28,14 +28,13 @@ defmodule IO.ANSI.Table.LineType do
   end
 
   def write_lines(type, spec) when is_list(type) do
-    spec.rows
-    |> Enum.zip(Stream.cycle(type))
+    Enum.zip(spec.rows, Stream.cycle(type))
     |> Enum.each(fn {row, type} -> write_line(row, type, spec) end)
   end
 
   ## Private functions
 
-  @spec write_line([Line.elem()], t, Spec.t()) :: :ok
+  @spec write_line([Line.elem()], non_row | row, Spec.t()) :: :ok
   defp write_line(elems, type, spec) do
     IO.write(spec.left_margin)
     items = Line.items(elems, Style.borders(spec.style, type))

@@ -222,8 +222,7 @@ defmodule IO.ANSI.Table do
       ]
 
       spec =
-        Spec.new(
-          [:name, :dob, :likes],
+        Spec.new([:name, :dob, :likes],
           header_fixes: %{~r[dob]i => "Date of Birth"},
           sort_specs: [asc: :dob],
           align_specs: [center: :dob],

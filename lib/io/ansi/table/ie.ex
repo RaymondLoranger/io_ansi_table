@@ -242,7 +242,9 @@ defmodule IO.ANSI.Table.IE do
   def styles(color \\ :light_magenta) do
     chardata = [color, " &style&filler", :reset, " - &rank - &note"]
     ansidata = ANSI.format(chardata)
-    Style.texts("#{ansidata}", &IO.puts/1) |> length()
+    texts = Style.texts("#{ansidata}")
+    Enum.each(texts, &IO.puts/1)
+    length(texts)
   end
 
   def sort_people(people, sort_specs) do

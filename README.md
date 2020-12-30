@@ -14,7 +14,19 @@ Add `io_ansi_table` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:io_ansi_table, "~> 0.4"}
+    {:io_ansi_table, "~> 1.0"}
+  ]
+end
+```
+
+You may _additionally_ add `io_ansi_table` to your list of included
+applications, if only using the [IO.ANSI.Table.write/3][write/3] function:
+
+```elixir
+def application do
+  [
+    included_applications: [:io_ansi_table],
+    extra_applications: [:logger]
   ]
 end
 ```
@@ -100,3 +112,4 @@ The latest version supports:
   [mw]: https://github.com/milkwine
   [github_issues]: https://hex.pm/packages/github_issues
   [noaa_observations]: https://hex.pm/packages/noaa_observations
+  [write/3]: https://hexdocs.pm/io_ansi_table/IO.ANSI.Table.html#write/3

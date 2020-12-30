@@ -1,6 +1,6 @@
 defmodule IO.ANSI.Table.Style do
   @moduledoc """
-  Defines functions returning the properties of configured table styles.
+  Defines functions returning the properties of the configured table styles.
   """
 
   use PersistConfig
@@ -12,6 +12,7 @@ defmodule IO.ANSI.Table.Style do
   @type t :: atom
 
   @styles get_env(:table_styles)
+  @sorted_styles Enum.sort(@styles, fn {sty1, _}, {sty2, _} -> sty1 <= sty2 end)
 
   Module.register_attribute(__MODULE__, :inner_lengths, accumulate: true)
   Module.register_attribute(__MODULE__, :left_lengths, accumulate: true)
@@ -23,6 +24,7 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Converts a switch `argument` to a table style.
+  E.g. `green-alt` in: `no tx -blt green-alt 11`.
 
   ## Examples
 
@@ -53,10 +55,10 @@ defmodule IO.ANSI.Table.Style do
   @spec to_switch_arg(t) :: String.t() | nil
   def to_switch_arg(style)
 
-  for {style, %{}} <- @styles do
+  for {style, _} <- @styles do
     @style_ids style
-    @style_lengths style |> inspect() |> String.length()
-    arg = style |> to_string() |> String.replace("_", "-")
+    @style_lengths inspect(style) |> String.length()
+    arg = to_string(style) |> String.replace("_", "-")
     def from_switch_arg(unquote(arg)), do: {:ok, unquote(style)}
     def to_switch_arg(unquote(style)), do: unquote(arg)
   end
@@ -65,18 +67,23 @@ defmodule IO.ANSI.Table.Style do
   def to_switch_arg(_style), do: nil
 
   @max_length Enum.max(@style_lengths)
+  @sorted_style_ids Enum.sort(@style_ids)
 
   @doc """
-  Returns the list of all table styles.
+  Returns the sorted list of all style IDs.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.styles() |> length()
+      iex> length Style.styles
       36
+
+      iex> alias IO.ANSI.Table.Style
+      iex> Enum.take Style.styles, 7
+      [:bare, :barish, :cyan, :cyan_alt, :cyan_border, :cyan_mult, :dark]
   """
-  @spec styles() :: [t]
-  def styles(), do: Enum.sort(@style_ids)
+  @spec styles :: [t]
+  def styles, do: @sorted_style_ids
 
   @doc """
   Returns the dash of a given table `style` and line `type`.
@@ -103,11 +110,11 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.borders(:cyan, :bottom)
       ["╚═", "═╩═", "═╝"]
   """
-  @spec borders(t, LineType.t()) :: [border] | []
+  @spec borders(t, LineType.t()) :: [border]
   def borders(style, type)
 
   @doc """
-  Returns the border spreads of a given table `style` and line `type`.
+  Returns the "border spreads" of a given table `style` and line `type`.
 
   ## Examples
 
@@ -119,11 +126,11 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.border_spreads(:plain, :header)
       [[0, 1, 1], [1, 1, 1], [1, 1, 0]] # borders: "│" ,  "│" ,  "│"
   """
-  @spec border_spreads(t, LineType.t()) :: [Column.spread()] | []
+  @spec border_spreads(t, LineType.t()) :: [Column.spread()]
   def border_spreads(style, type)
 
   @doc """
-  Returns the line types of a given table `style`.
+  Returns the "line types" of a given table `style`.
 
   ## Examples
 
@@ -135,7 +142,7 @@ defmodule IO.ANSI.Table.Style do
       iex> Style.line_types(:green_alt)
       [:top, :header, :separator, [:even_row, :odd_row]]
   """
-  @spec line_types(t) :: [LineType.t()] | []
+  @spec line_types(t) :: [LineType.t()]
   def line_types(style)
 
   for {style, %{borders: borders}} <- @styles do
@@ -180,7 +187,7 @@ defmodule IO.ANSI.Table.Style do
   def line_types(_style), do: []
 
   @doc """
-  Returns the border attribute of a given table `style` and line `type`.
+  Returns the "border attribute" of a given table `style` and line `type`.
 
   ## Examples
 
@@ -192,7 +199,7 @@ defmodule IO.ANSI.Table.Style do
   def border_attr(style, type)
 
   @doc """
-  Returns the filler attribute of a given table `style` and line `type`.
+  Returns the "filler attribute" of a given table `style` and line `type`.
 
   ## Examples
 
@@ -204,7 +211,7 @@ defmodule IO.ANSI.Table.Style do
   def filler_attr(style, type)
 
   @doc """
-  Returns the key attribute of a given table `style` and line `type`.
+  Returns the "key attribute" of a given table `style` and line `type`.
 
   ## Examples
 
@@ -220,7 +227,7 @@ defmodule IO.ANSI.Table.Style do
   def key_attr(style, type)
 
   @doc """
-  Returns the non key attribute of a given table `style` and line `type`.
+  Returns the "non key attribute" of a given table `style` and line `type`.
 
   ## Examples
 
@@ -234,7 +241,7 @@ defmodule IO.ANSI.Table.Style do
   @attr_funs [:border_attr, :filler_attr, :key_attr, :non_key_attr]
 
   for fun <- @attr_funs do
-    key = "#{fun}s" |> String.to_atom()
+    key = :"#{fun}s"
 
     for {style, style_map} <- @styles do
       attrs = Map.get(style_map, key)
@@ -254,13 +261,15 @@ defmodule IO.ANSI.Table.Style do
   end
 
   @doc ~S"""
-  Returns a list of interpolated texts (one per table style)
-  and optionally passes each one to a function.
+  Returns a list of interpolated texts (for all styles) based on `template`.
 
   ## Examples
 
-      alias IO.ANSI.Table.Style
-      Style.texts("  - `&style`&filler - &note\n")
+      iex> alias IO.ANSI.Table.Style
+      iex> Style.texts("  - `&style`&filler - &note\n") |> Enum.slice(16..18)
+      ["  - `:green_border`          - light green border\n",
+       "  - `:green_border_padded`   - light green border with extra padding\n",
+       "  - `:green_border_unpadded` - light green border without padding\n"]
 
       alias IO.ANSI.Table.Style
       Style.texts("  - `&style`&filler - &note", &IO.puts/1)
@@ -273,16 +282,46 @@ defmodule IO.ANSI.Table.Style do
     - `&note`   - table style note
     - `&rank`   - table style rank (3 digits)
   """
-  @spec texts(String.t(), (String.t() -> any)) :: [any]
-  def texts(template, fun \\ & &1) when is_function(fun, 1) do
-    @styles
-    |> Enum.sort(&(elem(&1, 0) <= elem(&2, 0)))
-    |> Enum.map(&interpolate(&1, template))
-    |> Enum.map(&fun.(&1))
-  end
+  @spec texts(String.t()) :: [String.t()]
+  def texts(template), do: Enum.map(@sorted_styles, &interpolate(&1, template))
+
+  @spec table_styles :: Keyword.t()
+  def table_styles, do: @sorted_styles
 
   ## Private functions
 
+  # @doc ~S'''
+  # Replaces interpolation placeholders of a table `style` in `template`.
+
+  # ## Examples
+
+  #     iex> alias IO.ANSI.Table.Style
+  #     iex> template = "• (&rank) &style&filler ➜ &note"
+  #     iex> sty1 = :green_border_unpadded
+  #     iex> sty2 = :light
+  #     iex> sty3 = :medium
+  #     iex> {Style.interpolate({sty1, Style.table_styles[sty1]}, template),
+  #     ...>  Style.interpolate({sty2, Style.table_styles[sty2]}, template),
+  #     ...>  Style.interpolate({sty3, Style.table_styles[sty3]}, template)}
+  #     {"• (210) :green_border_unpadded ➜ light green border without padding",
+  #      "• (010) :light                 ➜ light colors",
+  #      "• (020) :medium                ➜ medium colors"}
+
+  #     iex> alias IO.ANSI.Table.Style
+  #     iex> template = "• (&rank) &style&filler ➜ &note\n"
+  #     iex> sty1 = :green_border_unpadded
+  #     iex> sty2 = :light
+  #     iex> sty3 = :medium
+  #     iex> sty1_map = Style.table_styles[sty1] |> put_in([:note], "")
+  #     iex> sty2_map = Style.table_styles[sty2] |> put_in([:note], "")
+  #     iex> sty3_map = Style.table_styles[sty3] |> put_in([:note], "")
+  #     iex> {Style.interpolate({sty1, sty1_map}, template),
+  #     ...>  Style.interpolate({sty2, sty2_map}, template),
+  #     ...>  Style.interpolate({sty3, sty3_map}, template)}
+  #     {"• (210) :green_border_unpadded\n",
+  #      "• (010) :light\n",
+  #      "• (020) :medium\n"}
+  # '''
   @spec interpolate({t, map}, String.t()) :: String.t()
   defp interpolate({style, %{note: note, rank: rank}}, template) do
     import String, only: [duplicate: 2, replace: 3, slice: 2]

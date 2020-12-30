@@ -29,6 +29,13 @@ defmodule IO.ANSI.Table.LineTypes do
       iex> types = Enum.reverse([:header, :separator, :row_1, :row_2, :row_3])
       iex> LineTypes.from(types)
       [:header, :separator, [:row_1, :row_2, :row_3]]
+
+      iex> alias IO.ANSI.Table.LineTypes
+      iex> types = Enum.reverse(
+      ...>   [:header, :separator, :row, :separator, :row_1, :row_2, :row_3]
+      ...> )
+      iex> LineTypes.from(types)
+      [:header, :separator, [:row], :separator, [:row_1, :row_2, :row_3]]
   """
   @spec from([LineType.non_row() | LineType.row()]) :: [LineType.t()]
   def from(types), do: Enum.reduce(types, [], &acc/2)
