@@ -19,8 +19,8 @@ def deps do
 end
 ```
 
-You may _additionally_ add `io_ansi_table` to your list of included
-applications, if only using the [IO.ANSI.Table.write/3][write/3] function:
+You may _additionally_ define `io_ansi_table` as an included application,
+if only using the [IO.ANSI.Table.write/3][write/3] function:
 
 ```elixir
 def application do
