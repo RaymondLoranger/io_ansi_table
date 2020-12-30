@@ -20,7 +20,7 @@ end
 ```
 
 You may _additionally_ define `io_ansi_table` as an included application,
-if only using the [IO.ANSI.Table.write/3][write/3] function:
+if only using function [IO.ANSI.Table.write/3][write/3]:
 
 ```elixir
 def application do
