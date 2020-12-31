@@ -223,14 +223,12 @@ defmodule IO.ANSI.Table do
         %{name: "Jill", likes: "cooking"  , dob: "1976-09-28", bmi: 25.8}
       ]
 
-      spec =
-        Spec.new([:name, :dob, :likes],
-          header_fixes: %{~r[dob]i => "Date of Birth"},
-          sort_specs: [asc: :dob],
-          align_specs: [center: :dob],
-          margins: [top: 2, bottom: 2, left: 2]
-        )
-        |> Spec.extend()
+      spec = Spec.new([:name, :dob, :likes],
+        header_fixes: %{~r[dob]i => "Date of Birth"},
+        sort_specs: [asc: :dob],
+        align_specs: [center: :dob],
+        margins: [top: 2, bottom: 2, left: 2]
+      ) |> Spec.extend()
 
       Table.write(people, spec, style: :light)
       Table.write(people, spec, style: :light_alt)
