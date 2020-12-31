@@ -95,7 +95,8 @@ defmodule IO.ANSI.Table do
   Also supports:
 
     - keywords
-    - structs implementing the `Access` behaviour
+    - structs implementing the [Access](https://hexdocs.pm/elixir/Access.html)
+      behaviour.
 
   Does not support:
 
@@ -185,7 +186,8 @@ defmodule IO.ANSI.Table do
   Also supports:
 
     - keywords
-    - structs implementing the `Access` behaviour
+    - structs implementing the [Access](https://hexdocs.pm/elixir/Access.html)
+      behaviour
 
   Does not support:
 

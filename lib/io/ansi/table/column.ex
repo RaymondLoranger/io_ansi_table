@@ -10,7 +10,9 @@ defmodule IO.ANSI.Table.Column do
   @ansi_escape_char "\e"
   @ansi_escape_codes ~r/\e\[([0-9]{1,3}(;[0-9]{1,3})*)?[m|K]/
 
-  # spread :: [left_width, inner_width, right_width]
+  @typedoc """
+  A list of 3 contiguous widths: [left_width, inner_width, right_width]
+  """
   @type spread :: [width]
   @type t :: [String.t()]
   @type width :: non_neg_integer
