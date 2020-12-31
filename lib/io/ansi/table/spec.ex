@@ -135,10 +135,10 @@ defmodule IO.ANSI.Table.Spec do
   end
 
   @doc """
-  Writes data from `maps` to stdout per the table `spec`.
+  Writes data from `maps` to stdout per table `spec` and `options`.
   """
-  @spec write_table(t, [Access.container()], Keyword.t()) :: :ok
-  def write_table(%Spec{} = spec, maps, options \\ [])
+  @spec write_table([Access.container()], t, Keyword.t()) :: :ok
+  def write_table(maps, %Spec{} = spec, options \\ [])
       when is_list(maps) and is_list(options) do
     spec
     |> put(:bell, options[:bell])

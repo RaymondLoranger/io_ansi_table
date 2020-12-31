@@ -232,12 +232,12 @@ defmodule IO.ANSI.Table do
         )
         |> Spec.extend()
 
-      Table.write(spec, people, style: :light)
-      Table.write(spec, people, style: :light_alt)
-      Table.write(spec, people, style: :light_mult)
-      Table.write(spec, people, style: :cyan_alt)
-      Table.write(spec, people, style: :cyan_mult)
+      Table.write(people, spec, style: :light)
+      Table.write(people, spec, style: :light_alt)
+      Table.write(people, spec, style: :light_mult)
+      Table.write(people, spec, style: :cyan_alt)
+      Table.write(people, spec, style: :cyan_mult)
   """
-  @spec write(Spec.t(), [Access.container()], Keyword.t()) :: :ok
-  defdelegate write(spec, maps, options \\ []), to: Spec, as: :write_table
+  @spec write([Access.container()], Spec.t(), Keyword.t()) :: :ok
+  defdelegate write(maps, spec, options \\ []), to: Spec, as: :write_table
 end

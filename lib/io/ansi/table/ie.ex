@@ -122,8 +122,8 @@ defmodule IO.ANSI.Table.IE do
     {usecs, _} =
       :timer.tc(fn ->
         for _ <- 1..times do
-          Table.write(left_spec, @people_with_string_dobs, style: style)
-          Table.write(right_spec, @people_with_date_dobs, style: style)
+          Table.write(@people_with_string_dobs, left_spec, style: style)
+          Table.write(@people_with_date_dobs, right_spec, style: style)
         end
       end)
 
@@ -153,8 +153,8 @@ defmodule IO.ANSI.Table.IE do
     {usecs, _} =
       :timer.tc(fn ->
         for _ <- 1..times do
-          Table.write(left_spec, @islands, style: style)
-          Table.write(right_spec, @attacks, style: style)
+          Table.write(@islands, left_spec, style: style)
+          Table.write(@attacks, right_spec, style: style)
         end
       end)
 

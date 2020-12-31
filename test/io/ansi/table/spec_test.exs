@@ -53,7 +53,7 @@ defmodule IO.ANSI.Table.SpecTest do
   describe "Spec.write_table/2" do
     test "formats table ok", %{spec_000: spec, maps: maps} do
       capture =
-        fn -> Spec.write_table(spec, maps) end
+        fn -> Spec.write_table(maps, spec) end
         |> CaptureIO.capture_io()
 
       output = """
@@ -72,7 +72,7 @@ defmodule IO.ANSI.Table.SpecTest do
 
     test "positions table ok", %{spec_102: spec, maps: maps} do
       capture =
-        fn -> Spec.write_table(spec, maps) end
+        fn -> Spec.write_table(maps, spec) end
         |> CaptureIO.capture_io()
         |> String.replace(spec.left_margin, "  ")
 
@@ -93,7 +93,7 @@ defmodule IO.ANSI.Table.SpecTest do
 
     test "bad margins ignored", %{bad_margins: spec, maps: maps} do
       capture =
-        fn -> Spec.write_table(spec, maps) end
+        fn -> Spec.write_table(maps, spec) end
         |> CaptureIO.capture_io()
         |> String.replace(spec.left_margin, "  ")
 
@@ -107,7 +107,7 @@ defmodule IO.ANSI.Table.SpecTest do
         │ r3 c4   │ r3 c1 │ r3 c2  │
         │ r4 c4   │ r4 c1 │ r4++c2 │
         └─────────┴───────┴────────┘
-      
+
       """
 
       assert capture == output

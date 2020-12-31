@@ -60,7 +60,7 @@ defmodule IO.ANSI.Table.SpecServer do
   @spec handle_cast(term, Spec.t()) :: {:noreply, Spec.t()}
   def handle_cast({:write, maps, options} = request, spec) do
     :ok = Log.info(:handle_cast, {spec, request, __ENV__})
-    :ok = Spec.write_table(spec, maps, options)
+    :ok = Spec.write_table(maps, spec, options)
     {:noreply, spec}
   end
 
@@ -70,7 +70,7 @@ defmodule IO.ANSI.Table.SpecServer do
     group_leader = Process.info(from_pid)[:group_leader]
     if group_leader, do: self() |> Process.group_leader(group_leader)
     :ok = Log.info(:handle_call, {spec, request, __ENV__})
-    :ok = Spec.write_table(spec, maps, options)
+    :ok = Spec.write_table(maps, spec, options)
     {:reply, :ok, spec}
   end
 
