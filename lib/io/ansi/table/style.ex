@@ -23,7 +23,7 @@ defmodule IO.ANSI.Table.Style do
   Module.register_attribute(__MODULE__, :types, accumulate: true)
 
   @doc """
-  Converts a switch `argument` to a table style.
+  Converts a switch `argument` into a table style.
   E.g. `green-alt` in: `no tx -blt green-alt 11`.
 
   ## Examples
@@ -40,7 +40,7 @@ defmodule IO.ANSI.Table.Style do
   def from_switch_arg(arg)
 
   @doc """
-  Converts a table `style` to a switch argument.
+  Converts a table `style` into a switch argument.
 
   ## Examples
 

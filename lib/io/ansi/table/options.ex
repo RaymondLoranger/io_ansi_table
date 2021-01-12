@@ -42,7 +42,7 @@ defmodule IO.ANSI.Table.Options do
     ```
 
   * `:header_fixes` - to alter the [headers](`t:IO.ANSI.Table.Header.t/0`)
-    once converted to "title case" (map). Defaults to %{}.
+    once changed to "title case" (map). Defaults to %{}.
 
     ```elixir
     header_fixes: %{

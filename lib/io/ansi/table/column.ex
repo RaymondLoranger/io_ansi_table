@@ -45,7 +45,7 @@ defmodule IO.ANSI.Table.Column do
   @spec widths([t], width) :: [width]
   def widths(columns, max_width) do
     for column <- columns do
-      column |> Enum.map(&width/1) |> Enum.max() |> min(max_width)
+      Enum.map(column, &width/1) |> Enum.max() |> min(max_width)
     end
   end
 
@@ -88,17 +88,17 @@ defmodule IO.ANSI.Table.Column do
   '''
   @spec spread(width, Line.elem(), Header.align_attr()) :: spread
   def spread(width, elem, _align_attr = :left) do
-    elem_width = elem |> width() |> min(width)
+    elem_width = width(elem) |> min(width)
     [0, io_width(elem, elem_width), width - elem_width]
   end
 
   def spread(width, elem, _align_attr = :right) do
-    elem_width = elem |> width() |> min(width)
+    elem_width = width(elem) |> min(width)
     [width - elem_width, io_width(elem, elem_width), 0]
   end
 
   def spread(width, elem, _align_attr = :center) do
-    elem_width = elem |> width() |> min(width)
+    elem_width = width(elem) |> min(width)
     left_width = div(width - elem_width, 2)
     right_width = width - left_width - elem_width
     [left_width, io_width(elem, elem_width), right_width]
@@ -111,7 +111,7 @@ defmodule IO.ANSI.Table.Column do
   # The "visible" width of an element (ignoring ANSI codes)...
   @spec width(String.t()) :: non_neg_integer
   defp width(@ansi_escape_char <> _rest = elem) do
-    elem |> String.replace(@ansi_escape_codes, "") |> String.length()
+    String.replace(elem, @ansi_escape_codes, "") |> String.length()
   end
 
   defp width(elem), do: String.length(elem)

@@ -6,7 +6,7 @@ defmodule IO.ANSI.Table.StyleTest do
   doctest Style
 
   describe "Style.from_switch_arg/1" do
-    test "converts a switch arg to a table style" do
+    test "converts a switch arg into a table style" do
       assert Style.from_switch_arg("light") == {:ok, :light}
       assert Style.from_switch_arg("green-alt") == {:ok, :green_alt}
       assert Style.from_switch_arg("Light") == :error
@@ -14,7 +14,7 @@ defmodule IO.ANSI.Table.StyleTest do
   end
 
   describe "Style.to_switch_arg/1" do
-    test "converts a table style to a switch arg" do
+    test "converts a table style into a switch arg" do
       assert Style.to_switch_arg(:light) == "light"
       assert Style.to_switch_arg(:green_alt) == "green-alt"
       assert Style.to_switch_arg(:Light) == nil

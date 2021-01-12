@@ -175,9 +175,9 @@ defmodule IO.ANSI.Table.Spec do
 
   @spec write_table(t) :: :ok
   defp write_table(spec) do
-    spec |> top_margin() |> IO.write()
+    top_margin(spec) |> IO.write()
     Style.line_types(spec.style) |> Enum.each(&LineType.write_lines(&1, spec))
-    spec |> bottom_margin() |> IO.write()
+    bottom_margin(spec) |> IO.write()
     IO.write(if spec.bell, do: "\a", else: "")
   end
 end

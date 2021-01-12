@@ -9,7 +9,7 @@ defmodule IO.ANSI.Table.Log do
     • Inside function:
       #{fun(env)}
     • Server:
-      #{spec.spec_name |> SpecServer.via() |> inspect()}
+      #{SpecServer.via(spec.spec_name) |> inspect()}
     • Server PID: #{self() |> inspect()}
     • 'terminate' reason: #{inspect(reason)}
     • Spec:
@@ -24,7 +24,7 @@ defmodule IO.ANSI.Table.Log do
     • Inside function:
       #{fun(env)}
     • Server:
-      #{spec.spec_name |> SpecServer.via() |> inspect()}
+      #{SpecServer.via(spec.spec_name) |> inspect()}
     • Server PID: #{self() |> inspect()}
     • 'terminate' reason: #{inspect(reason)}
     • Spec:
@@ -39,7 +39,7 @@ defmodule IO.ANSI.Table.Log do
     • Inside function:
       #{fun(env)}
     • Server:
-      #{spec.spec_name |> SpecServer.via() |> inspect()}
+      #{SpecServer.via(spec.spec_name) |> inspect()}
     • Server PID: #{self() |> inspect()}
     • Spec:
       #{inspect(spec)}
@@ -53,7 +53,7 @@ defmodule IO.ANSI.Table.Log do
     • Inside function:
       #{fun(env)}
     • Server:
-      #{spec.spec_name |> SpecServer.via() |> inspect()}
+      #{SpecServer.via(spec.spec_name) |> inspect()}
     • Server PID: #{self() |> inspect()}
     • Request: '{:write, <maps>, <options>}'
     • Number of maps: #{length(maps)}
@@ -70,7 +70,7 @@ defmodule IO.ANSI.Table.Log do
     • Inside function:
       #{fun(env)}
     • Server:
-      #{spec.spec_name |> SpecServer.via() |> inspect()}
+      #{SpecServer.via(spec.spec_name) |> inspect()}
     • Server PID: #{self() |> inspect()}
     • Request: '{:format, <maps>, <options>}'
     • Number of maps: #{length(maps)}
@@ -87,7 +87,7 @@ defmodule IO.ANSI.Table.Log do
     • Inside function:
       #{fun(env)}
     • Server:
-      #{spec.spec_name |> SpecServer.via() |> inspect()}
+      #{SpecServer.via(spec.spec_name) |> inspect()}
     • Server PID: #{self() |> inspect()}
     • Request: ':get'
     • Spec:

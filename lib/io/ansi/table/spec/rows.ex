@@ -10,7 +10,7 @@ defmodule IO.ANSI.Table.Spec.Rows do
   def derive(%Spec{sort_specs: sort_specs, headers: headers} = spec, maps) do
     import MapSorter, only: [sort: 2]
 
-    rows = maps |> sort(sort_specs) |> Enum.take(spec.count) |> select(headers)
+    rows = sort(maps, sort_specs) |> Enum.take(spec.count) |> select(headers)
     put_in(spec.rows, rows)
   end
 
