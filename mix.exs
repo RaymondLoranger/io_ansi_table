@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "1.0.7",
+      version: "1.0.8",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "IO ANSI Table",
@@ -55,8 +55,6 @@ defmodule IO.ANSI.Table.Mixfile do
       {:io_ansi_plus, "~> 0.1"},
       {:log_reset, "~> 0.1"},
       {:map_sorter, "~> 0.2"},
-      {:mix_tasks,
-       github: "RaymondLoranger/mix_tasks", only: :dev, runtime: false},
       {:persist_config, "~> 0.4", runtime: false}
     ]
   end
