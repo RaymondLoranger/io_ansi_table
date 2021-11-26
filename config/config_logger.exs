@@ -10,11 +10,12 @@ config :logger, :console,
   ]
 
 format = "$date $time [$level] $levelpad$message\n"
+cwd = File.cwd!()
 
-debug_path = "./log/debug.log"
-info_path = "./log/info.log"
-warn_path = "./log/warn.log"
-error_path = "./log/error.log"
+debug_path = "#{cwd}/log/debug.log"
+info_path = "#{cwd}/log/info.log"
+warn_path = "#{cwd}/log/warn.log"
+error_path = "#{cwd}/log/error.log"
 
 config :logger, :console, format: format
 config :logger, :debug_log, format: format, path: debug_path, level: :debug

@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "1.0.13",
+      version: "1.0.14",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "IO ANSI Table",
@@ -13,7 +13,7 @@ defmodule IO.ANSI.Table.Mixfile do
       package: package(),
       # aliases: aliases(),
       deps: deps(),
-      # IO.ANSI.Table.Spec.spec_name/1...
+      # See IO.ANSI.Table.Spec.spec_name/1...
       dialyzer: [plt_add_apps: [:mix]]
     ]
   end
