@@ -108,7 +108,7 @@ defmodule IO.ANSI.Table.Column do
 
   ## Private functions
 
-  # The "visible" width of an element (ignoring ANSI codes)...
+  # The "visible" width of an element (ignoring embedded ANSI escapes)...
   @spec width(String.t()) :: non_neg_integer
   defp width(@ansi_escape_char <> _rest = elem) do
     String.replace(elem, @ansi_escape_codes, "") |> String.length()
@@ -119,7 +119,7 @@ defmodule IO.ANSI.Table.Column do
   # The field width to be used in an Erlang io format...
   @spec io_width(String.t(), non_neg_integer) :: non_neg_integer
   defp io_width(@ansi_escape_char <> _rest = elem, _elem_width) do
-    # We do not cap the width of an element with ANSI codes...
+    # We do not cap the width of an element with embedded ANSI escapes...
     String.length(elem)
   end
 

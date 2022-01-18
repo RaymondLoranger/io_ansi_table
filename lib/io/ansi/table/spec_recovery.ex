@@ -8,7 +8,7 @@ defmodule IO.ANSI.Table.SpecRecovery do
   @ets get_env(:ets_name)
 
   @spec start_link(term) :: GenServer.on_start()
-  def start_link(:ok),
+  def start_link(:ok = _arg),
     do: GenServer.start_link(SpecRecovery, :ok, name: SpecRecovery)
 
   ## Private functions

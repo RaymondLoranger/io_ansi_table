@@ -14,7 +14,7 @@ defmodule IO.ANSI.Table.SpecServer do
   @wait 50
 
   @doc """
-  Spawns a new table spec server process to be registered via a `spec name`.
+  Spawns a table spec server process to be registered via a `spec name`.
   """
   @spec start_link(Spec.t()) :: GenServer.on_start()
   def start_link(spec) do
@@ -36,11 +36,11 @@ defmodule IO.ANSI.Table.SpecServer do
   defp extend(spec) do
     case :ets.lookup(@ets, key(spec.spec_name)) do
       [] ->
-        :ok = Log.info(:spawned, {spec})
+        :ok = Log.info(:spawned, {spec, __ENV__})
         Spec.extend(spec) |> save()
 
       [{_key, spec}] ->
-        :ok = Log.info(:restarted, {spec})
+        :ok = Log.info(:restarted, {spec, __ENV__})
         spec
     end
   end

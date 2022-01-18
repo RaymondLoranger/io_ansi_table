@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/RaymondLoranger/io_ansi_table.svg?branch=master)](https://travis-ci.org/RaymondLoranger/io_ansi_table)
 
-Writes data to stdout in a table with borders and colors.
+Writes data to `:stdio` in a table with borders and colors.
 Can choose a table style to change the look of the table.
 
 ##### Inspired by the book [Programming Elixir](https://pragprog.com/book/elixir16/programming-elixir-1-6) by Dave Thomas.

@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "1.0.14",
+      version: "1.0.15",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "IO ANSI Table",
@@ -13,7 +13,7 @@ defmodule IO.ANSI.Table.Mixfile do
       package: package(),
       # aliases: aliases(),
       deps: deps(),
-      # See IO.ANSI.Table.Spec.spec_name/1...
+      # See IO.ANSI.Table.Spec...
       dialyzer: [plt_add_apps: [:mix]]
     ]
   end
@@ -24,7 +24,7 @@ defmodule IO.ANSI.Table.Mixfile do
 
   defp description do
     """
-    Writes data to stdout in a table with borders and colors.
+    Writes data to "stdio" in a table with borders and colors.
     Can choose a table style to change the look of the table.
     """
   end

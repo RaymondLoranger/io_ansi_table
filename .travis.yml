@@ -1,5 +1,5 @@
 language: elixir
 elixir:
-  - '1.11.1'
+  - '1.13.1'
 otp_release:
-  - '21.3'
+  - '24.2'

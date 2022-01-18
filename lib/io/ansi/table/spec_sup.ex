@@ -5,7 +5,8 @@ defmodule IO.ANSI.Table.SpecSup do
   alias IO.ANSI.Table.{DynSpecSup, SpecRecovery}
 
   @spec start_link(term) :: Supervisor.on_start()
-  def start_link(:ok), do: Supervisor.start_link(SpecSup, :ok, name: SpecSup)
+  def start_link(:ok = _arg),
+    do: Supervisor.start_link(SpecSup, :ok, name: SpecSup)
 
   ## Callbacks
 

@@ -8,7 +8,7 @@ defmodule IO.ANSI.Table.DynSpecSup do
   alias __MODULE__
 
   @spec start_link(term) :: Supervisor.on_start()
-  def start_link(:ok),
+  def start_link(:ok = _arg),
     do: DynamicSupervisor.start_link(DynSpecSup, :ok, name: DynSpecSup)
 
   ## Callbacks

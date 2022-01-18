@@ -9,8 +9,6 @@ defmodule IO.ANSI.Table.Line do
   alias IO.ANSI.Table.{Column, LineType, Spec, Style}
 
   @type elem :: String.t()
-  @typep item :: String.t()
-  @typep delimiter :: any
 
   @ansi_enabled get_env(:ansi_enabled, true)
 
@@ -132,6 +130,9 @@ defmodule IO.ANSI.Table.Line do
   end
 
   ## Private functions
+  
+  @typep item :: String.t()
+  @typep delimiter :: any
 
   # @doc """
   # Deploys `elements` by interlacing them with `delimiters`

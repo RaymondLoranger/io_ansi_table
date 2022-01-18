@@ -1,7 +1,7 @@
 defmodule IO.ANSI.Table.Spec do
   @moduledoc """
   Creates a table `spec` struct from `headers` and `options`.
-  Also writes data (from `maps`) to stdout per a table `spec`.
+  Also writes data (from `maps`) to `:stdio` per a table `spec`.
   """
 
   use PersistConfig
@@ -10,6 +10,7 @@ defmodule IO.ANSI.Table.Spec do
   alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table.{Column, Header, LineType, Row, Style}
 
+  @app Mix.Project.config()[:app]
   @default_bell get_env(:default_bell)
   @default_count get_env(:default_count)
   @default_margins get_env(:default_margins)
@@ -125,7 +126,7 @@ defmodule IO.ANSI.Table.Spec do
       nil ->
         case :application.get_application() do
           {:ok, app} -> app
-          :undefined -> Mix.Project.config()[:app]
+          :undefined -> @app
         end
         |> to_string()
 
@@ -135,7 +136,7 @@ defmodule IO.ANSI.Table.Spec do
   end
 
   @doc """
-  Writes data from `maps` to stdout per table `spec` and `options`.
+  Writes data from `maps` to `:stdio` per table `spec` and `options`.
   """
   @spec write_table([Access.container()], t, Keyword.t()) :: :ok
   def write_table(maps, %Spec{} = spec, options \\ [])

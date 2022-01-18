@@ -3,7 +3,7 @@
 # └───────────────────────────────────────────────────────────┘
 defmodule IO.ANSI.Table do
   @moduledoc """
-  Writes data to stdout in a table with borders and colors.
+  Writes data to `:stdio` in a table with borders and colors.
   Can choose a table style to change the look of the table.
 
   ##### Inspired by the book [Programming Elixir](https://pragprog.com/book/elixir16/programming-elixir-1-6) by Dave Thomas.
@@ -16,9 +16,9 @@ defmodule IO.ANSI.Table do
   @doc """
   Starts a new table spec server process and supervises it.
   Upon request (see `format/2`), the server will write data from
-  `maps` to stdout in a table formatted per `headers` and `options`.
+  `maps` to `:stdio` in a table formatted per `headers` and `options`.
 
-  The table columns are identified by `headers` (`map` keys).
+  The table columns are identified by `headers` (`Map` keys).
   We calculate the width of each column to fit the longest element
   in that column, also considering the column heading.
   However, the `:max_width` option prevails.
@@ -89,8 +89,8 @@ defmodule IO.ANSI.Table do
 
   @doc """
   Sends a request to the table spec server identified by `option` `:spec_name`.
-  The server will write data from `maps` to stdout in a table formatted per its
-  spec and `options`.
+  The server will write data from `maps` to `:stdio` in a table formatted per
+  its spec and `options`.
 
   Also supports:
 
@@ -180,7 +180,7 @@ defmodule IO.ANSI.Table do
   end
 
   @doc """
-  Writes data from `maps` to stdout in a table formatted per `spec` and
+  Writes data from `maps` to `:stdio` in a table formatted per `spec` and
   `options`.
 
   Also supports:
