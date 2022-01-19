@@ -13,7 +13,7 @@ defmodule IO.ANSI.Table.Spec.Headings do
       iex> alias IO.ANSI.Table.Spec.Headings
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2], sort_specs: [:c4])
-      iex> %Spec{headings: headings} = Headings.derive(spec)
+      iex> %Spec{headings: headings} = Headings.derive_and_put(spec)
       iex> headings
       ["C4↑", "C1", "C2"]
 
@@ -24,12 +24,12 @@ defmodule IO.ANSI.Table.Spec.Headings do
       ...>   sort_specs: ["station_id"],
       ...>   header_fixes: %{"Id" => "ID", "Mph" => "MPH"}
       ...> )
-      iex> %Spec{headings: headings} = Headings.derive(spec)
+      iex> %Spec{headings: headings} = Headings.derive_and_put(spec)
       iex> headings
       ["Station ID↑", "Wind MPH"]
   """
-  @spec derive(Spec.t()) :: Spec.t()
-  def derive(%Spec{headers: headers} = spec) do
+  @spec derive_and_put(Spec.t()) :: Spec.t()
+  def derive_and_put(%Spec{headers: headers} = spec) do
     headings = Enum.map(headers, &Header.to_heading(&1, spec))
     put_in(spec.headings, headings)
   end

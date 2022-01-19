@@ -32,12 +32,12 @@ defmodule IO.ANSI.Table.SpecServer do
   @spec key(String.t()) :: tuple
   defp key(spec_name), do: {SpecServer, spec_name}
 
-  @spec extend(Spec.t()) :: Spec.t()
-  defp extend(spec) do
+  @spec develop_or_lookup(Spec.t()) :: Spec.t()
+  defp develop_or_lookup(spec) do
     case :ets.lookup(@ets, key(spec.spec_name)) do
       [] ->
         :ok = Log.info(:spawned, {spec, __ENV__})
-        Spec.extend(spec) |> save()
+        Spec.develop(spec) |> save()
 
       [{_key, spec}] ->
         :ok = Log.info(:restarted, {spec, __ENV__})
@@ -55,12 +55,12 @@ defmodule IO.ANSI.Table.SpecServer do
   ## Callbacks
 
   @spec init(Spec.t()) :: {:ok, Spec.t()}
-  def init(spec), do: {:ok, extend(spec)}
+  def init(spec), do: {:ok, develop_or_lookup(spec)}
 
   @spec handle_cast(term, Spec.t()) :: {:noreply, Spec.t()}
   def handle_cast({:write, maps, options} = request, spec) do
     :ok = Log.info(:handle_cast, {spec, request, __ENV__})
-    :ok = Spec.write_table(maps, spec, options)
+    :ok = Spec.write_table(spec, maps, options)
     {:noreply, spec}
   end
 
@@ -70,11 +70,11 @@ defmodule IO.ANSI.Table.SpecServer do
     group_leader = Process.info(from_pid)[:group_leader]
     if group_leader, do: self() |> Process.group_leader(group_leader)
     :ok = Log.info(:handle_call, {spec, request, __ENV__})
-    :ok = Spec.write_table(maps, spec, options)
+    :ok = Spec.write_table(spec, maps, options)
     {:reply, :ok, spec}
   end
 
-  def handle_call(:get = request, _from, spec) do
+  def handle_call(:get_spec = request, _from, spec) do
     :ok = Log.info(:handle_call, {spec, request, __ENV__})
     {:reply, spec, spec}
   end

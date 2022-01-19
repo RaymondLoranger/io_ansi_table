@@ -47,11 +47,12 @@ defmodule IO.ANSI.Table.Spec do
     :style,
     # derived fields
     align_attrs: [],
-    column_widths: [],
     headings: [],
     left_margin: "",
-    rows: [],
-    sort_attrs: []
+    sort_attrs: [],
+    # data dependent fields
+    column_widths: [],
+    rows: []
   ]
 
   @type t :: %Spec{
@@ -69,11 +70,12 @@ defmodule IO.ANSI.Table.Spec do
           style: Style.t(),
           # derived fields
           align_attrs: [Header.align_attr()],
-          column_widths: [Column.width()],
           headings: [String.t()],
           left_margin: String.t(),
-          rows: [Row.t()],
-          sort_attrs: [Header.sort_attr()]
+          sort_attrs: [Header.sort_attr()],
+          # data dependent fields
+          column_widths: [Column.width()],
+          rows: [Row.t()]
         }
 
   @doc """
@@ -97,13 +99,13 @@ defmodule IO.ANSI.Table.Spec do
     }
   end
 
-  @spec extend(t) :: t
-  def extend(%Spec{} = spec) do
+  @spec develop(t) :: t
+  def develop(%Spec{} = spec) do
     spec
-    |> Spec.AlignAttrs.derive()
-    |> Spec.Headings.derive()
-    |> Spec.LeftMargin.derive()
-    |> Spec.SortAttrs.derive()
+    |> Spec.AlignAttrs.derive_and_put()
+    |> Spec.Headings.derive_and_put()
+    |> Spec.LeftMargin.derive_and_put()
+    |> Spec.SortAttrs.derive_and_put()
   end
 
   @doc """
@@ -138,16 +140,16 @@ defmodule IO.ANSI.Table.Spec do
   @doc """
   Writes data from `maps` to `:stdio` per table `spec` and `options`.
   """
-  @spec write_table([Access.container()], t, Keyword.t()) :: :ok
-  def write_table(maps, %Spec{} = spec, options \\ [])
+  @spec write_table(t, [Access.container()], Keyword.t()) :: :ok
+  def write_table(%Spec{} = spec, maps, options \\ [])
       when is_list(maps) and is_list(options) do
     spec
     |> put(:bell, options[:bell])
     |> put(:count, options[:count])
     |> put(:max_width, options[:max_width])
     |> put(:style, options[:style])
-    |> Spec.Rows.derive(maps)
-    |> Spec.ColumnWidths.derive()
+    |> Spec.Rows.derive_and_put(maps)
+    |> Spec.ColumnWidths.derive_and_put()
     |> write_table()
   end
 

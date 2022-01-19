@@ -174,9 +174,10 @@ defmodule IO.ANSI.Table do
 
     - `:spec_name` - to identify the table spec server (string)
   """
-  def get(options \\ []) when is_list(options) do
+  @spec get_spec(Keyword.t()) :: Spec.t()
+  def get_spec(options \\ []) when is_list(options) do
     spec_name = Spec.spec_name(options)
-    GenServer.call(SpecServer.via(spec_name), :get)
+    GenServer.call(SpecServer.via(spec_name), :get_spec)
   end
 
   @doc """
@@ -228,7 +229,7 @@ defmodule IO.ANSI.Table do
         sort_specs: [asc: :dob],
         align_specs: [center: :dob],
         margins: [top: 2, bottom: 2, left: 2]
-      ) |> Spec.extend()
+      ) |> Spec.develop()
 
       Table.write(people, spec, style: :light)
       Table.write(people, spec, style: :light_alt)
@@ -236,6 +237,6 @@ defmodule IO.ANSI.Table do
       Table.write(people, spec, style: :cyan_alt)
       Table.write(people, spec, style: :cyan_mult)
   """
-  @spec write([Access.container()], Spec.t(), Keyword.t()) :: :ok
-  defdelegate write(maps, spec, options \\ []), to: Spec, as: :write_table
+  @spec write(Spec.t(), [Access.container()], Keyword.t()) :: :ok
+  defdelegate write(spec, maps, options \\ []), to: Spec, as: :write_table
 end

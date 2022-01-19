@@ -6,8 +6,8 @@ defmodule IO.ANSI.Table.Spec.LeftMargin do
   alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table.Spec
 
-  @spec derive(Spec.t()) :: Spec.t()
-  def derive(%Spec{margins: margins} = spec) do
+  @spec derive_and_put(Spec.t()) :: Spec.t()
+  def derive_and_put(%Spec{margins: margins} = spec) do
     left_margin =
       case margins[:left] do
         # Move the cursor forward N columns: \e[<N>C

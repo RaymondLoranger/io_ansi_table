@@ -102,7 +102,7 @@ defmodule IO.ANSI.Table.IE do
       when is_atom(style) and is_integer(times) and times >= 1 do
     import Table, only: [format: 2]
 
-    {usecs, _} =
+    {microsecs, _} =
       :timer.tc(fn ->
         for _ <- 1..times do
           format(@people.string_dobs, style: style, spec_name: "string_dobs")
@@ -110,30 +110,30 @@ defmodule IO.ANSI.Table.IE do
         end
       end)
 
-    IO.puts("#{usecs / 1_000_000} sec")
+    IO.puts("#{microsecs / 1_000_000} sec")
   end
 
   # Write people...
   def write_people(style \\ :pretty, times \\ 1)
       when is_atom(style) and is_integer(times) and times >= 1 do
-    left_spec = Table.get(spec_name: "string_dobs")
-    right_spec = Table.get(spec_name: "date_dobs")
+    left_spec = Table.get_spec(spec_name: "string_dobs")
+    right_spec = Table.get_spec(spec_name: "date_dobs")
 
-    {usecs, _} =
+    {microsecs, _} =
       :timer.tc(fn ->
         for _ <- 1..times do
-          Table.write(@people_with_string_dobs, left_spec, style: style)
-          Table.write(@people_with_date_dobs, right_spec, style: style)
+          Table.write(left_spec, @people_with_string_dobs, style: style)
+          Table.write(right_spec, @people_with_date_dobs, style: style)
         end
       end)
 
-    IO.puts("#{usecs / 1_000_000} sec")
+    IO.puts("#{microsecs / 1_000_000} sec")
   end
 
   # Format islands...
   def format_islands(style \\ :game, times \\ 1)
       when is_atom(style) and is_integer(times) and times >= 1 do
-    {usecs, _} =
+    {microsecs, _} =
       :timer.tc(fn ->
         for _ <- 1..times do
           Table.format(@islands, style: style, spec_name: "left_board")
@@ -141,24 +141,24 @@ defmodule IO.ANSI.Table.IE do
         end
       end)
 
-    IO.puts("#{usecs / 1_000_000} sec")
+    IO.puts("#{microsecs / 1_000_000} sec")
   end
 
   # Write islands...
   def write_islands(style \\ :game, times \\ 1)
       when is_atom(style) and is_integer(times) and times >= 1 do
-    left_spec = Table.get(spec_name: "left_board")
-    right_spec = Table.get(spec_name: "right_board")
+    left_spec = Table.get_spec(spec_name: "left_board")
+    right_spec = Table.get_spec(spec_name: "right_board")
 
-    {usecs, _} =
+    {microsecs, _} =
       :timer.tc(fn ->
         for _ <- 1..times do
-          Table.write(@islands, left_spec, style: style)
-          Table.write(@attacks, right_spec, style: style)
+          Table.write(left_spec, @islands, style: style)
+          Table.write(right_spec, @attacks, style: style)
         end
       end)
 
-    IO.puts("#{usecs / 1_000_000} sec")
+    IO.puts("#{microsecs / 1_000_000} sec")
   end
 
   # Start servers...
@@ -211,10 +211,10 @@ defmodule IO.ANSI.Table.IE do
 
   # Get server specs...
   def get do
-    left_board = Table.get(spec_name: "left_board")
-    right_board = Table.get(spec_name: "right_board")
-    string_dobs = Table.get(spec_name: "string_dobs")
-    date_dobs = Table.get(spec_name: "date_dobs")
+    left_board = Table.get_spec(spec_name: "left_board")
+    right_board = Table.get_spec(spec_name: "right_board")
+    string_dobs = Table.get_spec(spec_name: "string_dobs")
+    date_dobs = Table.get_spec(spec_name: "date_dobs")
 
     [
       left_board: left_board,

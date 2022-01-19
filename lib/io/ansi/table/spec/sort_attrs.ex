@@ -5,8 +5,8 @@ defmodule IO.ANSI.Table.Spec.SortAttrs do
 
   alias IO.ANSI.Table.{Header, Spec}
 
-  @spec derive(Spec.t()) :: Spec.t()
-  def derive(%Spec{headers: headers, sort_specs: sort_specs} = spec) do
+  @spec derive_and_put(Spec.t()) :: Spec.t()
+  def derive_and_put(%Spec{headers: headers, sort_specs: sort_specs} = spec) do
     attrs = Enum.map(headers, &Header.find_attr(&1, sort_specs, :asc))
     put_in(spec.sort_attrs, attrs)
   end

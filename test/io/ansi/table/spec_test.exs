@@ -38,9 +38,9 @@ defmodule IO.ANSI.Table.SpecTest do
       style: :test
     ]
 
-    spec_000 = Spec.new(headers, options_000) |> Spec.extend()
-    spec_102 = Spec.new(headers, options_102) |> Spec.extend()
-    bad_margins = Spec.new(headers, bad_margins) |> Spec.extend()
+    spec_000 = Spec.new(headers, options_000) |> Spec.develop()
+    spec_102 = Spec.new(headers, options_102) |> Spec.develop()
+    bad_margins = Spec.new(headers, bad_margins) |> Spec.develop()
 
     %{
       spec_000: spec_000,
@@ -53,7 +53,7 @@ defmodule IO.ANSI.Table.SpecTest do
   describe "Spec.write_table/2" do
     test "formats table ok", %{spec_000: spec, maps: maps} do
       capture =
-        fn -> Spec.write_table(maps, spec) end
+        fn -> Spec.write_table(spec, maps) end
         |> CaptureIO.capture_io()
 
       output = """
@@ -72,7 +72,7 @@ defmodule IO.ANSI.Table.SpecTest do
 
     test "positions table ok", %{spec_102: spec, maps: maps} do
       capture =
-        fn -> Spec.write_table(maps, spec) end
+        fn -> Spec.write_table(spec, maps) end
         |> CaptureIO.capture_io()
         |> String.replace(spec.left_margin, "  ")
 
@@ -93,7 +93,7 @@ defmodule IO.ANSI.Table.SpecTest do
 
     test "bad margins ignored", %{bad_margins: spec, maps: maps} do
       capture =
-        fn -> Spec.write_table(maps, spec) end
+        fn -> Spec.write_table(spec, maps) end
         |> CaptureIO.capture_io()
         |> String.replace(spec.left_margin, "  ")
 

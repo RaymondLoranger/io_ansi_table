@@ -6,8 +6,14 @@ defmodule IO.ANSI.Table.Spec.Rows do
 
   alias IO.ANSI.Table.{Column, Header, Row, Spec}
 
-  @spec derive(Spec.t(), [Access.container()]) :: Spec.t()
-  def derive(%Spec{sort_specs: sort_specs, headers: headers} = spec, maps) do
+  @spec derive_and_put(Spec.t(), [Access.container()]) :: Spec.t()
+  def derive_and_put(
+        %Spec{
+          sort_specs: sort_specs,
+          headers: headers
+        } = spec,
+        maps
+      ) do
     import MapSorter, only: [sort: 2]
 
     rows = sort(maps, sort_specs) |> Enum.take(spec.count) |> select(headers)
