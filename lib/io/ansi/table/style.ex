@@ -29,13 +29,13 @@ defmodule IO.ANSI.Table.Style do
   @doc """
   Converts a switch `argument` into a table style.
   E.g. `green-alt` in: `no tx -blt green-alt 11`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.from_switch_arg("green-alt")
       {:ok, :green_alt}
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.from_switch_arg("lite")
       :error
@@ -45,13 +45,13 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Converts a table `style` into a switch argument.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.to_switch_arg(:green_alt)
       "green-alt"
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.to_switch_arg(:lite)
       nil
@@ -75,13 +75,13 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the sorted list of all style IDs.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> length Style.styles
       36
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Enum.take Style.styles, 7
       [:bare, :barish, :cyan, :cyan_alt, :cyan_border, :cyan_mult, :dark]
@@ -91,13 +91,13 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the dash of a given table `style` and line `type`.
-
+  
   ## Examples
-
+  
       iex> IO.ANSI.Table.Style
       iex> Style.dash(:dark, :top)
       "═"
-
+  
       iex> IO.ANSI.Table.Style
       iex> Style.dash(:dark, :row)
       nil
@@ -107,9 +107,9 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the borders of a given table `style` and line `type`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.borders(:cyan, :bottom)
       ["╚═", "═╩═", "═╝"]
@@ -119,13 +119,13 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the "border spreads" of a given table `style` and line `type`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.border_spreads(:plain, :bottom)
       [[0, 2, 0], [0, 3, 0], [0, 2, 0]] # borders: "└─", "─┴─", "─┘"
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.border_spreads(:plain, :header)
       [[0, 1, 1], [1, 1, 1], [1, 1, 0]] # borders: "│" ,  "│" ,  "│"
@@ -135,13 +135,13 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the "line types" of a given table `style`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.line_types(:light)
       [:top, :header, :separator, [:row], :bottom]
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.line_types(:green_alt)
       [:top, :header, :separator, [:even_row, :odd_row]]
@@ -192,13 +192,13 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the "border attribute" of a given table `style` and line `type`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.border_attr(:green, :top)
       [:light_white, :green_background]
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.border_attr(:cyan_alt, :odd_row)
       [:chartreuse_yellow, :chartreuse_yellow_background]
@@ -208,13 +208,13 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the "filler attribute" of a given table `style` and line `type`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.filler_attr(:mixed, :row)
       :green_background
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.filler_attr(:cyan_alt, :odd_row)
       :chartreuse_yellow_background
@@ -224,13 +224,13 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the "key attribute" of a given table `style` and line `type`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.key_attr(:light, :row)
       :chartreuse
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.key_attr(:light, :header)
       [:gold, :underline]
@@ -240,9 +240,9 @@ defmodule IO.ANSI.Table.Style do
 
   @doc """
   Returns the "non-key attribute" of a given table `style` and line `type`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.non_key_attr(:cyan, :row)
       [:black, :cyan_background]
@@ -274,17 +274,17 @@ defmodule IO.ANSI.Table.Style do
 
   @doc ~S"""
   Returns a list of interpolated texts (for all styles) based on `template`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Style
       iex> Style.texts("  - `&style`&filler - &note\n") |> Enum.slice(16..18)
       ["  - `:green_border`          - light green border\n",
        "  - `:green_border_padded`   - light green border with extra padding\n",
        "  - `:green_border_unpadded` - light green border without padding\n"]
-
+  
   ## Interpolation placeholders
-
+  
     - `&style`  - table style (e.g. ":light_alt")
     - `&arg`    - table style switch arg (e.g. "light-alt")
     - `&filler` - padding after &style or &arg

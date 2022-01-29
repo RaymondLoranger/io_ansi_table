@@ -8,16 +8,16 @@ defmodule IO.ANSI.Table.Spec.LeftMargin do
 
   @doc """
   Derives the left margin of a table.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Spec.LeftMargin
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2], margins: [left: 3])
       iex> %Spec{left_margin: left_margin} = LeftMargin.derive_and_put(spec)
       iex> left_margin
       "\e[3C"
-
+  
       iex> alias IO.ANSI.Table.Spec.LeftMargin
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2], margins: [left: 0])

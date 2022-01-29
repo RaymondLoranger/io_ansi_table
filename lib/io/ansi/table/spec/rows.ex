@@ -8,9 +8,9 @@ defmodule IO.ANSI.Table.Spec.Rows do
 
   @doc """
   Derives the rows of a table given `spec` and `maps`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Spec.Rows
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2])
@@ -35,9 +35,9 @@ defmodule IO.ANSI.Table.Spec.Rows do
 
   @doc """
   Transposes `rows` into columns.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Spec.Rows
       iex> rows = [
       ...>   ["1", "2", "3"],

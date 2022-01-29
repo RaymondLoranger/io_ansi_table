@@ -23,24 +23,24 @@ defmodule IO.ANSI.Table.Column do
 
   @doc ~S'''
   Returns a list of column widths capped by `maximum width`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Column
       iex> columns = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
       iex> Column.widths(columns, 99)
       [6, 8]
-
+  
       iex> alias IO.ANSI.Table.Column
       iex> columns = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
       iex> Column.widths(columns, 7)
       [6, 7]
-
+  
       iex> alias IO.ANSI.Table.Column
       iex> columns = [["\e[32m\e[42mCHEETAH\e[0m", "elk"], ["mongoose", "ant"]]
       iex> Column.widths(columns, 99)
       [7, 8]
-
+  
       iex> alias IO.ANSI.Table.Column
       iex> columns = [["\e[32m\e[42mCHEETAH\e[0m", "elk"], ["mongoose", "ant"]]
       iex> Column.widths(columns, 6)
@@ -55,9 +55,9 @@ defmodule IO.ANSI.Table.Column do
 
   @doc ~S'''
   Spreads a `width` given an `element` and its `align attribute`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Column
       iex> {
       ...>   Column.spread(7, "name", :left  ),
@@ -65,7 +65,7 @@ defmodule IO.ANSI.Table.Column do
       ...>   Column.spread(7, "name", :right )
       ...> }
       {[0, 4, 3], [1, 4, 2], [3, 4, 0]}
-
+  
       iex> alias IO.ANSI.Table.Column
       iex> {
       ...>   Column.spread(3, "name", :left  ),
@@ -73,7 +73,7 @@ defmodule IO.ANSI.Table.Column do
       ...>   Column.spread(3, "name", :right )
       ...> }
       {[0, 3, 0], [0, 3, 0], [0, 3, 0]}
-
+  
       iex> alias IO.ANSI.Table.Column
       iex> {
       ...>   Column.spread(10, "\e[32m\e[42mCHEETAH\e[0m", :left  ),
@@ -81,7 +81,7 @@ defmodule IO.ANSI.Table.Column do
       ...>   Column.spread(10, "\e[32m\e[42mCHEETAH\e[0m", :right )
       ...> }
       {[0, 21, 3], [1, 21, 2], [3, 21, 0]}
-
+  
       iex> alias IO.ANSI.Table.Column
       iex> {
       ...>   Column.spread(7, "\e[32m\e[42mCHEETAH\e[0m", :left  ),

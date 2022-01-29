@@ -7,16 +7,16 @@ defmodule IO.ANSI.Table.Spec.Headings do
 
   @doc """
   Derives the headings of a table.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Spec.Headings
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2], sort_specs: [:c4])
       iex> %Spec{headings: headings} = Headings.derive_and_put(spec)
       iex> headings
       ["C4↑", "C1", "C2"]
-
+  
       iex> alias IO.ANSI.Table.Spec.Headings
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new(

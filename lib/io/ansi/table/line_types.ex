@@ -11,25 +11,25 @@ defmodule IO.ANSI.Table.LineTypes do
 
   @doc """
   Builds a list of line types from a reversed list of non-row/row line `types`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.LineTypes
       iex> types = Enum.reverse([:top, :header, :separator, :row, :bottom])
       iex> LineTypes.from(types)
       [:top, :header, :separator, [:row], :bottom]
-
+  
       iex> alias IO.ANSI.Table.LineTypes
       iex> types = [:top, :header, :separator, :even_row, :odd_row, :bottom]
       iex> types = Enum.reverse(types)
       iex> LineTypes.from(types)
       [:top, :header, :separator, [:even_row, :odd_row], :bottom]
-
+  
       iex> alias IO.ANSI.Table.LineTypes
       iex> types = Enum.reverse([:header, :separator, :row_1, :row_2, :row_3])
       iex> LineTypes.from(types)
       [:header, :separator, [:row_1, :row_2, :row_3]]
-
+  
       iex> alias IO.ANSI.Table.LineTypes
       iex> types = Enum.reverse(
       ...>   [:header, :separator, :row, :separator, :row_1, :row_2, :row_3]

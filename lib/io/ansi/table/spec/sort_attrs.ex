@@ -7,9 +7,9 @@ defmodule IO.ANSI.Table.Spec.SortAttrs do
 
   @doc """
   Derives the sort attributes of a table.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Spec.SortAttrs
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2], sort_specs: [desc: :c2])

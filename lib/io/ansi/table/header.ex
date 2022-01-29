@@ -23,9 +23,9 @@ defmodule IO.ANSI.Table.Header do
 
   @doc """
   Finds the align or sort attribute of a `header`.
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.Header
       iex> sort_specs = ["dept", desc: "hired"]
       iex> {
@@ -34,7 +34,7 @@ defmodule IO.ANSI.Table.Header do
       ...>   Header.find_attr("job"  , sort_specs, :asc)
       ...> }
       {:asc, :desc, nil}
-
+  
       iex> alias IO.ANSI.Table.Header
       iex> sort_specs = ["dept", desc: {"hired", Date}]
       iex> {
@@ -43,7 +43,7 @@ defmodule IO.ANSI.Table.Header do
       ...>   Header.find_attr("job"  , sort_specs, :asc)
       ...> }
       {:asc, :desc, nil}
-
+  
       iex> alias IO.ANSI.Table.Header
       iex> sort_specs = [{"hired", Date}, "job", {:desc, "dept"}]
       iex> {
@@ -52,7 +52,7 @@ defmodule IO.ANSI.Table.Header do
       ...>   Header.find_attr("job"  , sort_specs, :asc)
       ...> }
       {:desc, :asc, :asc}
-
+  
       iex> alias IO.ANSI.Table.Header
       iex> sort_specs = [{"hired", Date}, desc: "dept"]
       iex> {
@@ -61,7 +61,7 @@ defmodule IO.ANSI.Table.Header do
       ...>   Header.find_attr("job"  , sort_specs, :asc)
       ...> }
       {:desc, :asc, nil}
-
+  
       iex> alias IO.ANSI.Table.Header
       iex> align_specs = ["dept", right: "hired"]
       iex> {
@@ -89,9 +89,9 @@ defmodule IO.ANSI.Table.Header do
 
   @doc """
   Converts a `header` into a "heading".
-
+  
   ## Examples
-
+  
       iex> alias IO.ANSI.Table.{Header, Spec}
       iex> spec = Spec.new([:col_4, :col_1, :col_2], sort_specs: [asc: :col_2])
       iex> Header.to_heading(:col_2, spec)
