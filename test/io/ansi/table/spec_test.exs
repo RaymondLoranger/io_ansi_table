@@ -31,21 +31,21 @@ defmodule IO.ANSI.Table.SpecTest do
       style: :test
     ]
 
-    bad_margins = [
-      margins: [before: 1, after: 0, left: 2],
+    bad_margins_101 = [
+      margins: [before: 1, after: 0, left: 1],
       sort_specs: [:c4],
-      sort_symbols: [asc: "⬆", pos: :leading],
+      sort_symbols: [asc: "⬆", pos: [:leading, :trailing]],
       style: :test
     ]
 
     spec_000 = Spec.new(headers, options_000) |> Spec.develop()
     spec_102 = Spec.new(headers, options_102) |> Spec.develop()
-    bad_margins = Spec.new(headers, bad_margins) |> Spec.develop()
+    bad_margins_101 = Spec.new(headers, bad_margins_101) |> Spec.develop()
 
     %{
       spec_000: spec_000,
       spec_102: spec_102,
-      bad_margins: bad_margins,
+      bad_margins_101: bad_margins_101,
       maps: maps
     }
   end
@@ -88,29 +88,29 @@ defmodule IO.ANSI.Table.SpecTest do
         └─────────┴───────┴────────┘
       """
 
-      assert capture == output
+      assert capture == output and spec.left_margin == "\e[2C"
     end
 
-    test "bad margins ignored", %{bad_margins: spec, maps: maps} do
+    test "bad margins ignored", %{bad_margins_101: spec, maps: maps} do
       capture =
         fn -> Spec.write_table(spec, maps) end
         |> CaptureIO.capture_io()
-        |> String.replace(spec.left_margin, "  ")
+        |> String.replace(spec.left_margin, " ")
 
       output = """
 
-        ┌─────────┬───────┬────────┐
-        │ ⬆C4     │ C1    │ C2     │
-        ├─────────┼───────┼────────┤
-        │ r1+++c4 │ r1 c1 │ r1 c2  │
-        │ r2 c4   │ r2 c1 │ r2 c2  │
-        │ r3 c4   │ r3 c1 │ r3 c2  │
-        │ r4 c4   │ r4 c1 │ r4++c2 │
-        └─────────┴───────┴────────┘
+       ┌─────────┬───────┬────────┐
+       │ ⬆C4⬆    │ C1    │ C2     │
+       ├─────────┼───────┼────────┤
+       │ r1+++c4 │ r1 c1 │ r1 c2  │
+       │ r2 c4   │ r2 c1 │ r2 c2  │
+       │ r3 c4   │ r3 c1 │ r3 c2  │
+       │ r4 c4   │ r4 c1 │ r4++c2 │
+       └─────────┴───────┴────────┘
 
       """
 
-      assert capture == output
+      assert capture == output and spec.left_margin == "\e[1C"
     end
   end
 end

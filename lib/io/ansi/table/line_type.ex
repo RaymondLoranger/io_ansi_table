@@ -1,7 +1,7 @@
 defmodule IO.ANSI.Table.LineType do
   @moduledoc """
-  Defines the `line type` types.
-  Also writes the line(s) of a given `line type`.
+  Defines the "line type" types.
+  Also writes the line(s) of a given "line type".
   """
 
   use PersistConfig
@@ -10,10 +10,16 @@ defmodule IO.ANSI.Table.LineType do
 
   @rule_types get_env(:rule_types)
 
+  @typedoc "Non-row line types"
   @type non_row :: :top | :header | :separator | :bottom
+  @typedoc "Row line types"
   @type row :: :row | :even_row | :odd_row | :row_1 | :row_2 | :row_3
+  @typedoc "Line types"
   @type t :: non_row | [row]
 
+  @doc """
+  Writes the line(s) of the given line `type` and table `spec`.
+  """
   @spec write_lines(t, Spec.t()) :: :ok
   def write_lines(type, spec) when type in @rule_types do
     dash = Style.dash(spec.style, type)

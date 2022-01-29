@@ -86,7 +86,7 @@ defmodule IO.ANSI.Table.StyleTest do
   end
 
   describe "Style.non_key_attr/2" do
-    test "returns the non key attribute of a table style and line type" do
+    test "returns the non-key attribute of a table style and line type" do
       expected = [:light_white, :cyan_background]
       assert Style.non_key_attr(:medium, :header) == :canary
       assert Style.non_key_attr(:cyan, :bottom) == expected

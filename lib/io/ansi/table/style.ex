@@ -1,18 +1,22 @@
 defmodule IO.ANSI.Table.Style do
   @moduledoc """
-  Defines functions returning the properties of the configured table styles.
+  Defines functions returning various aspects of the configured table styles.
   """
 
   use PersistConfig
 
   alias IO.ANSI.Table.{Column, LineType, LineTypes}
 
+  @typedoc "Style attribute"
   @type attr :: atom | [atom]
+  @typedoc "Table border"
   @type border :: String.t()
+  @typedoc "Table style"
   @type t :: atom
 
   @styles get_env(:table_styles)
-  @sorted_styles Enum.sort(@styles, fn {sty1, _}, {sty2, _} -> sty1 <= sty2 end)
+  # Enum.sort(@styles, fn {style1, _}, {style2, _} -> style1 <= style2 end)
+  @sorted_styles Enum.sort(@styles)
 
   Module.register_attribute(__MODULE__, :inner_lengths, accumulate: true)
   Module.register_attribute(__MODULE__, :left_lengths, accumulate: true)
@@ -194,6 +198,10 @@ defmodule IO.ANSI.Table.Style do
       iex> alias IO.ANSI.Table.Style
       iex> Style.border_attr(:green, :top)
       [:light_white, :green_background]
+
+      iex> alias IO.ANSI.Table.Style
+      iex> Style.border_attr(:cyan_alt, :odd_row)
+      [:chartreuse_yellow, :chartreuse_yellow_background]
   """
   @spec border_attr(t, LineType.t()) :: attr | nil
   def border_attr(style, type)
@@ -206,6 +214,10 @@ defmodule IO.ANSI.Table.Style do
       iex> alias IO.ANSI.Table.Style
       iex> Style.filler_attr(:mixed, :row)
       :green_background
+
+      iex> alias IO.ANSI.Table.Style
+      iex> Style.filler_attr(:cyan_alt, :odd_row)
+      :chartreuse_yellow_background
   """
   @spec filler_attr(t, LineType.t()) :: attr | nil
   def filler_attr(style, type)
@@ -227,7 +239,7 @@ defmodule IO.ANSI.Table.Style do
   def key_attr(style, type)
 
   @doc """
-  Returns the "non key attribute" of a given table `style` and line `type`.
+  Returns the "non-key attribute" of a given table `style` and line `type`.
 
   ## Examples
 
@@ -271,9 +283,6 @@ defmodule IO.ANSI.Table.Style do
        "  - `:green_border_padded`   - light green border with extra padding\n",
        "  - `:green_border_unpadded` - light green border without padding\n"]
 
-      alias IO.ANSI.Table.Style
-      Style.texts("  - `&style`&filler - &note", &IO.puts/1)
-
   ## Interpolation placeholders
 
     - `&style`  - table style (e.g. ":light_alt")
@@ -285,6 +294,9 @@ defmodule IO.ANSI.Table.Style do
   @spec texts(String.t()) :: [String.t()]
   def texts(template), do: Enum.map(@sorted_styles, &interpolate(&1, template))
 
+  @doc """
+  Lists all the table styles alphabetically.
+  """
   @spec table_styles :: Keyword.t()
   def table_styles, do: @sorted_styles
 

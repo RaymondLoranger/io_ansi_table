@@ -40,6 +40,6 @@ config :logger,
 # Logs only error messages...
 # config :logger, level: :error
 
-truncate_default_in_bytes = 8 * 1024
+# truncate_default_in_bytes = 8 * 1024
 
-config :logger, truncate: truncate_default_in_bytes * 2
+# config :logger, truncate: truncate_default_in_bytes * 2

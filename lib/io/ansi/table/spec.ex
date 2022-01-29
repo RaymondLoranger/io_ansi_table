@@ -1,7 +1,34 @@
 defmodule IO.ANSI.Table.Spec do
   @moduledoc """
-  Creates a table `spec` struct from `headers` and `options`.
-  Also writes data (from `maps`) to `:stdio` per a table `spec`.
+  A table spec struct and functions for the IO ANSI Table app.
+
+  The table spec struct contains the following fields:
+
+  * initial fields:
+
+    - `spec_name`,
+    - `headers`,
+    - `align_specs`,
+    - `bell`,
+    - `count`,
+    - `header_fixes`,
+    - `margins`,
+    - `max_width`,
+    - `sort_specs`,
+    - `sort_symbols`,
+    - `style`
+
+  * derived fields:
+
+    - `align_attrs`,
+    - `headings`,
+    - `left_margin`,
+    - `sort_attrs`
+
+  * data dependent fields:
+
+    - `column_widths`
+    - `rows`
   """
 
   use PersistConfig
@@ -10,7 +37,6 @@ defmodule IO.ANSI.Table.Spec do
   alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table.{Column, Header, LineType, Row, Style}
 
-  @app Mix.Project.config()[:app]
   @default_bell get_env(:default_bell)
   @default_count get_env(:default_count)
   @default_margins get_env(:default_margins)
@@ -55,6 +81,7 @@ defmodule IO.ANSI.Table.Spec do
     rows: []
   ]
 
+  @typedoc "A table spec struct for the IO ANSI Table app"
   @type t :: %Spec{
           # initial fields
           spec_name: String.t(),
@@ -79,7 +106,7 @@ defmodule IO.ANSI.Table.Spec do
         }
 
   @doc """
-  Creates a table `spec` struct from `headers` and `options`.
+  Creates a table spec struct from `headers` and `options`.
   """
   @spec new([Header.t(), ...], Keyword.t()) :: t
   def new([_ | _] = headers, options \\ []) when is_list(options) do
@@ -99,6 +126,9 @@ defmodule IO.ANSI.Table.Spec do
     }
   end
 
+  @doc """
+  Updates the derived fields of `spec`.
+  """
   @spec develop(t) :: t
   def develop(%Spec{} = spec) do
     spec
@@ -109,8 +139,8 @@ defmodule IO.ANSI.Table.Spec do
   end
 
   @doc """
-  Identifies a table spec server.
-  Defaults to the current application name expressed as a string.
+  Gets the table spec server name in `options`.
+  Defaults to the current app name expressed as a string.
 
   ## Examples
 
@@ -123,11 +153,12 @@ defmodule IO.ANSI.Table.Spec do
       "io_ansi_table"
   """
   @spec spec_name(Keyword.t()) :: String.t()
-  def spec_name(options) do
+  def spec_name(options) when is_list(options) do
     case options[:spec_name] do
       nil ->
         case :application.get_application() do
           {:ok, app} -> app
+          # Thanks to `use PersistConfig`...
           :undefined -> @app
         end
         |> to_string()
@@ -155,7 +186,7 @@ defmodule IO.ANSI.Table.Spec do
 
   ## Private functions
 
-  @spec put(t, atom, Map.value()) :: t
+  @spec put(t, atom, Keyword.value()) :: t
   defp put(spec, _key, nil), do: spec
   defp put(spec, key, value), do: Map.put(spec, key, value)
 
@@ -171,7 +202,7 @@ defmodule IO.ANSI.Table.Spec do
   @spec bottom_margin(t) :: String.t()
   defp bottom_margin(%Spec{margins: margins} = _spec) do
     case margins[:bottom] do
-      n when n >= 0 -> String.duplicate("\n", margins[:bottom])
+      n when n >= 0 -> String.duplicate("\n", n)
       _ -> ""
     end
   end

@@ -18,13 +18,15 @@ defmodule IO.ANSI.Table.IE do
   #   write_islands(:game)
   #   format_islands(:game, 111)
   #   write_islands(:game, 111)
+  #   format_people_sync(:dotted_alt)
+  #   format_people_async(:dotted_alt)
   #   format_people
   #   write_people
-  #   format_people(:pretty)
-  #   write_people(:pretty)
+  #   format_people(:pretty_alt)
+  #   write_people(:pretty_alt)
   #   format_people(:pretty, 111)
   #   write_people(:pretty, 111)
-  #   get
+  #   get_spec
   #   stop
 
   use PersistConfig
@@ -97,6 +99,38 @@ defmodule IO.ANSI.Table.IE do
   def people_options, do: @people_options
   def people_headers, do: @people_headers
 
+  # Format people synchronously...
+  def format_people_sync(style \\ :pretty) when is_atom(style) do
+    import Table, only: [format: 2]
+
+    {microsecs, _} =
+      :timer.tc(fn ->
+        format(@people.string_dobs,
+          style: style,
+          spec_name: "string_dobs",
+          async: false
+        )
+      end)
+
+    puts(microsecs)
+  end
+
+  # Format people asynchronously...
+  def format_people_async(style \\ :pretty) when is_atom(style) do
+    import Table, only: [format: 2]
+
+    {microsecs, _} =
+      :timer.tc(fn ->
+        format(@people.string_dobs,
+          style: style,
+          spec_name: "string_dobs",
+          async: true
+        )
+      end)
+
+    puts(microsecs)
+  end
+
   # Format people...
   def format_people(style \\ :pretty, times \\ 1)
       when is_atom(style) and is_integer(times) and times >= 1 do
@@ -110,7 +144,7 @@ defmodule IO.ANSI.Table.IE do
         end
       end)
 
-    IO.puts("#{microsecs / 1_000_000} sec")
+    puts(microsecs)
   end
 
   # Write people...
@@ -127,7 +161,7 @@ defmodule IO.ANSI.Table.IE do
         end
       end)
 
-    IO.puts("#{microsecs / 1_000_000} sec")
+    puts(microsecs)
   end
 
   # Format islands...
@@ -141,7 +175,7 @@ defmodule IO.ANSI.Table.IE do
         end
       end)
 
-    IO.puts("#{microsecs / 1_000_000} sec")
+    puts(microsecs)
   end
 
   # Write islands...
@@ -158,7 +192,7 @@ defmodule IO.ANSI.Table.IE do
         end
       end)
 
-    IO.puts("#{microsecs / 1_000_000} sec")
+    puts(microsecs)
   end
 
   # Start servers...
@@ -210,7 +244,7 @@ defmodule IO.ANSI.Table.IE do
   end
 
   # Get server specs...
-  def get do
+  def get_spec do
     left_board = Table.get_spec(spec_name: "left_board")
     right_board = Table.get_spec(spec_name: "right_board")
     string_dobs = Table.get_spec(spec_name: "string_dobs")
@@ -250,5 +284,17 @@ defmodule IO.ANSI.Table.IE do
   def sort_people(people, sort_specs) do
     require MapSorter
     MapSorter.sort(people, sort_specs)
+  end
+
+  def puts(microsecs) when microsecs >= 1_000_000 do
+    IO.puts("#{microsecs / 1_000_000} sec")
+  end
+
+  def puts(microsecs) when microsecs >= 1_000 do
+    IO.puts("#{microsecs / 1_000} msec")
+  end
+
+  def puts(microsecs) do
+    IO.puts("#{microsecs} μsec")
   end
 end

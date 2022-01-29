@@ -1,6 +1,6 @@
 defmodule IO.ANSI.Table.LineTypes do
   @moduledoc """
-  Nests row line types in a reversed flat list of line `types`.
+  Builds a list of line types from a reversed list of non-row/row line types.
   """
 
   use PersistConfig
@@ -10,7 +10,7 @@ defmodule IO.ANSI.Table.LineTypes do
   @row_types get_env(:row_types)
 
   @doc """
-  Nests row line types in a reversed flat list of line `types`.
+  Builds a list of line types from a reversed list of non-row/row line `types`.
 
   ## Examples
 

@@ -1,4 +1,9 @@
 defmodule IO.ANSI.Table.SpecRecovery do
+  @moduledoc """
+  Makes processes under the spec supervisor fault-tolerant. If any crashes (or
+  is killed), it is immediately restarted and the system remains undisturbed.
+  """
+
   use GenServer
   use PersistConfig
 
@@ -8,7 +13,7 @@ defmodule IO.ANSI.Table.SpecRecovery do
   @ets get_env(:ets_name)
 
   @spec start_link(term) :: GenServer.on_start()
-  def start_link(:ok = _arg),
+  def start_link(:ok = _init_arg),
     do: GenServer.start_link(SpecRecovery, :ok, name: SpecRecovery)
 
   ## Private functions
@@ -25,6 +30,6 @@ defmodule IO.ANSI.Table.SpecRecovery do
 
   ## Callbacks
 
-  @spec init(term) :: {:ok, :ok}
-  def init(:ok), do: {:ok, restart_servers()}
+  @spec init(term) :: {:ok, term}
+  def init(:ok = _init_arg), do: {:ok, restart_servers()}
 end

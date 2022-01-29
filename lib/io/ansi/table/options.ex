@@ -2,7 +2,7 @@ defmodule IO.ANSI.Table.Options do
   alias IO.ANSI.Table.Style
 
   @moduledoc """
-  Lists the options and table styles used in the `IO.ANSI.Table` API.
+  Documents the options and table styles used in the `IO.ANSI.Table` API.
 
   ## Options
 

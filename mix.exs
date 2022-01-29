@@ -12,9 +12,7 @@ defmodule IO.ANSI.Table.Mixfile do
       description: description(),
       package: package(),
       # aliases: aliases(),
-      deps: deps(),
-      # See IO.ANSI.Table.Spec...
-      dialyzer: [plt_add_apps: [:mix]]
+      deps: deps()
     ]
   end
 

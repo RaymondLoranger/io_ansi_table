@@ -15,6 +15,7 @@ defmodule IO.ANSI.Table.TopSup do
 
     [
       {Registry, keys: :unique, name: @reg},
+
       # Child spec relying on `use Supervisor`...
       {SpecSup, :ok}
     ]

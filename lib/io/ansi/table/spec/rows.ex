@@ -6,22 +6,35 @@ defmodule IO.ANSI.Table.Spec.Rows do
 
   alias IO.ANSI.Table.{Column, Header, Row, Spec}
 
+  @doc """
+  Derives the rows of a table given `spec` and `maps`.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Spec.Rows
+      iex> alias IO.ANSI.Table.Spec
+      iex> spec = Spec.new([:c4, :c1, :c2])
+      iex> maps = [%{c1: 11, c2: 12, c4: 14}, %{c1: 21, c2: 22, c4: 24}]
+      iex> %Spec{rows: rows} = Rows.derive_and_put(spec, maps)
+      iex> rows
+      [["14", "11", "12"], ["24", "21", "22"]]
+  """
   @spec derive_and_put(Spec.t(), [Access.container()]) :: Spec.t()
   def derive_and_put(
         %Spec{
-          sort_specs: sort_specs,
-          headers: headers
+          count: count,
+          headers: headers,
+          sort_specs: specs
         } = spec,
         maps
       ) do
-    import MapSorter, only: [sort: 2]
-
-    rows = sort(maps, sort_specs) |> Enum.take(spec.count) |> select(headers)
+    require MapSorter
+    rows = MapSorter.sort(maps, specs) |> Enum.take(count) |> select(headers)
     put_in(spec.rows, rows)
   end
 
   @doc """
-  Transposes `rows` into `columns`.
+  Transposes `rows` into columns.
 
   ## Examples
 
@@ -39,7 +52,7 @@ defmodule IO.ANSI.Table.Spec.Rows do
   ## Private functions
 
   # @doc """
-  # Gets the values for `headers` in `maps` and returns a list of `rows`.
+  # Gets the values for `headers` in `maps` and returns a list of rows.
 
   # ## Examples
 

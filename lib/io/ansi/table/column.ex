@@ -7,14 +7,18 @@ defmodule IO.ANSI.Table.Column do
 
   alias IO.ANSI.Table.{Header, Line}
 
-  @ansi_escape_char "\e"
+  @ansi_escape "\e"
+  # "\e[1;31mHello" => bold with red foreground
+  # "\e[2;37;41mWorld => dimmed white foreground with red background
   @ansi_escape_codes ~r/\e\[([0-9]{1,3}(;[0-9]{1,3})*)?[m|K]/
 
   @typedoc """
-  A list of 3 contiguous widths: [left_width, inner_width, right_width]
+  A list of 3 contiguous widths: left width, inner width and right width
   """
   @type spread :: [width]
+  @typedoc "Table column"
   @type t :: [String.t()]
+  @typedoc "Column width"
   @type width :: non_neg_integer
 
   @doc ~S'''
@@ -23,23 +27,23 @@ defmodule IO.ANSI.Table.Column do
   ## Examples
 
       iex> alias IO.ANSI.Table.Column
-      iex> data = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
-      iex> Column.widths(data, 99)
+      iex> columns = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
+      iex> Column.widths(columns, 99)
       [6, 8]
 
       iex> alias IO.ANSI.Table.Column
-      iex> data = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
-      iex> Column.widths(data, 7)
+      iex> columns = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
+      iex> Column.widths(columns, 7)
       [6, 7]
 
       iex> alias IO.ANSI.Table.Column
-      iex> data = [["\e[32m\e[42mCHEETAH\e[0m", "elk"], ["mongoose", "ant"]]
-      iex> Column.widths(data, 99)
+      iex> columns = [["\e[32m\e[42mCHEETAH\e[0m", "elk"], ["mongoose", "ant"]]
+      iex> Column.widths(columns, 99)
       [7, 8]
 
       iex> alias IO.ANSI.Table.Column
-      iex> data = [["\e[32m\e[42mCHEETAH\e[0m", "elk"], ["mongoose", "ant"]]
-      iex> Column.widths(data, 6)
+      iex> columns = [["\e[32m\e[42mCHEETAH\e[0m", "elk"], ["mongoose", "ant"]]
+      iex> Column.widths(columns, 6)
       [6, 6]
   '''
   @spec widths([t], width) :: [width]
@@ -108,9 +112,10 @@ defmodule IO.ANSI.Table.Column do
 
   ## Private functions
 
-  # The "visible" width of an element (ignoring embedded ANSI escapes)...
+  # The "visible" width of an element (ignoring embedded ANSI escape codes)...
+  # See function `Islands.Grid.to_maps/2` for an example of such elements.
   @spec width(String.t()) :: non_neg_integer
-  defp width(@ansi_escape_char <> _rest = elem) do
+  defp width(@ansi_escape <> _rest = elem) do
     String.replace(elem, @ansi_escape_codes, "") |> String.length()
   end
 
@@ -118,8 +123,8 @@ defmodule IO.ANSI.Table.Column do
 
   # The field width to be used in an Erlang io format...
   @spec io_width(String.t(), non_neg_integer) :: non_neg_integer
-  defp io_width(@ansi_escape_char <> _rest = elem, _elem_width) do
-    # We do not cap the width of an element with embedded ANSI escapes...
+  defp io_width(@ansi_escape <> _rest = elem, _elem_width) do
+    # We do not cap the width of an element with embedded ANSI escape codes...
     String.length(elem)
   end
 

@@ -14,5 +14,5 @@ defmodule IO.ANSI.Table.DynSpecSup do
   ## Callbacks
 
   @spec init(term) :: {:ok, DynamicSupervisor.sup_flags()} | :ignore
-  def init(:ok), do: DynamicSupervisor.init(strategy: :one_for_one)
+  def init(:ok = _arg), do: DynamicSupervisor.init(strategy: :one_for_one)
 end

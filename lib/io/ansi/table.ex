@@ -15,8 +15,8 @@ defmodule IO.ANSI.Table do
 
   @doc """
   Starts a new table spec server process and supervises it.
-  Upon request (see `format/2`), the server will write data from
-  `maps` to `:stdio` in a table formatted per `headers` and `options`.
+  Upon request (see `format/2`), the server will write data from a list of
+  maps to `:stdio` in a table formatted per `headers` and `options`.
 
   The table columns are identified by `headers` (`Map` keys).
   We calculate the width of each column to fit the longest element
@@ -24,7 +24,7 @@ defmodule IO.ANSI.Table do
   However, the `:max_width` option prevails.
 
   If the `:count` option is positive, we format the first _count_
-  `maps` in the list, once sorted. If negative, the last _count_ ones.
+  maps in the list, once sorted. If negative, the last _count_ ones.
 
   See `IO.ANSI.Table.Options` for a list of all options in this API.
 
@@ -35,13 +35,13 @@ defmodule IO.ANSI.Table do
 
   ## Options
 
-    - `:align_specs`  - to align column elements (list)
+    - `:align_specs`  - to align column elements (list/keyword)
     - `:bell`         - whether to ring the bell (boolean)
-    - `:count`        - number of `maps` to format (integer)
+    - `:count`        - number of maps to format (integer)
     - `:header_fixes` - to alter the `headers` (map)
     - `:margins`      - to position the table (keyword)
     - `:max_width`    - to cap column widths (non neg integer)
-    - `:sort_specs`   - to sort the `maps` (list)
+    - `:sort_specs`   - to sort the maps (list/keyword)
     - `:sort_symbols` - to denote sort direction (keyword)
     - `:spec_name`    - to identify the table spec server (string)
     - `:style`        - table style (atom)
@@ -50,8 +50,8 @@ defmodule IO.ANSI.Table do
 
       iex> alias IO.ANSI.Table
       iex> alias IO.ANSI.Table.SpecServer
-      iex> {:ok, pid} = Table.start([:name, :dob, :likes])
-      iex> pid == SpecServer.via("io_ansi_table") |> GenServer.whereis()
+      iex> {:ok, pid} = Table.start([:name, :dob, :likes], spec_name: "people")
+      iex> pid == SpecServer.via("people") |> GenServer.whereis()
       true
   """
   @spec start([Header.t(), ...], Keyword.t()) :: Supervisor.on_start_child()
@@ -79,6 +79,11 @@ defmodule IO.ANSI.Table do
       iex> alias IO.ANSI.Table
       iex> Table.start([:name, :dob, :likes])
       iex> Table.stop
+      :ok
+
+      iex> alias IO.ANSI.Table
+      iex> Table.start([:name, :dob, :likes], spec_name: "stats")
+      iex> Table.stop(spec_name: "stats")
       :ok
   """
   @spec stop(Keyword.t()) :: :ok
@@ -173,6 +178,20 @@ defmodule IO.ANSI.Table do
   ## Options
 
     - `:spec_name` - to identify the table spec server (string)
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table
+      iex> Table.start([:name, :dob, :likes])
+      iex> spec = Table.get_spec()
+      iex> {spec.headers, spec.spec_name}
+      {[:name, :dob, :likes], "io_ansi_table"}
+
+      iex> alias IO.ANSI.Table
+      iex> Table.start([:name, :dob, :likes], spec_name: "members")
+      iex> spec = Table.get_spec(spec_name: "members")
+      iex> {spec.headers, spec.spec_name}
+      {[:name, :dob, :likes], "members"}
   """
   @spec get_spec(Keyword.t()) :: Spec.t()
   def get_spec(options \\ []) when is_list(options) do
@@ -231,11 +250,11 @@ defmodule IO.ANSI.Table do
         margins: [top: 2, bottom: 2, left: 2]
       ) |> Spec.develop()
 
-      Table.write(people, spec, style: :light)
-      Table.write(people, spec, style: :light_alt)
-      Table.write(people, spec, style: :light_mult)
-      Table.write(people, spec, style: :cyan_alt)
-      Table.write(people, spec, style: :cyan_mult)
+      Table.write(spec, people, style: :light)
+      Table.write(spec, people, style: :light_alt)
+      Table.write(spec, people, style: :light_mult)
+      Table.write(spec, people, style: :cyan_alt)
+      Table.write(spec, people, style: :cyan_mult)
   """
   @spec write(Spec.t(), [Access.container()], Keyword.t()) :: :ok
   defdelegate write(spec, maps, options \\ []), to: Spec, as: :write_table

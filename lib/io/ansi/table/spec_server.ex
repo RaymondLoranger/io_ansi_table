@@ -1,6 +1,6 @@
 defmodule IO.ANSI.Table.SpecServer do
   @moduledoc """
-  A server process that holds a table `spec` struct as its state.
+  A server process that holds a table spec struct as its state.
   """
 
   use GenServer, restart: :transient
@@ -14,7 +14,7 @@ defmodule IO.ANSI.Table.SpecServer do
   @wait 50
 
   @doc """
-  Spawns a table spec server process to be registered via a `spec name`.
+  Spawns a table `spec` server process to be registered via a spec name.
   """
   @spec start_link(Spec.t()) :: GenServer.on_start()
   def start_link(spec) do
@@ -58,7 +58,7 @@ defmodule IO.ANSI.Table.SpecServer do
   def init(spec), do: {:ok, develop_or_lookup(spec)}
 
   @spec handle_cast(term, Spec.t()) :: {:noreply, Spec.t()}
-  def handle_cast({:write, maps, options} = request, spec) do
+  def handle_cast({:format, maps, options} = request, spec) do
     :ok = Log.info(:handle_cast, {spec, request, __ENV__})
     :ok = Spec.write_table(spec, maps, options)
     {:noreply, spec}
@@ -67,6 +67,7 @@ defmodule IO.ANSI.Table.SpecServer do
   @spec handle_call(term, GenServer.from(), Spec.t()) ::
           {:reply, :ok | Spec.t(), Spec.t()}
   def handle_call({:format, maps, options} = request, {from_pid, _tag}, spec) do
+    # Update group leader in case request comes from remote shell...
     group_leader = Process.info(from_pid)[:group_leader]
     if group_leader, do: self() |> Process.group_leader(group_leader)
     :ok = Log.info(:handle_call, {spec, request, __ENV__})

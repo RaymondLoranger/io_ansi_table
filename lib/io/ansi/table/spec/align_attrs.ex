@@ -1,10 +1,22 @@
 defmodule IO.ANSI.Table.Spec.AlignAttrs do
   @moduledoc """
-  Derives the alignment attributes of a table.
+  Derives the align attributes of a table.
   """
 
   alias IO.ANSI.Table.{Header, Spec}
 
+  @doc """
+  Derives the align attributes of a table.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Spec.AlignAttrs
+      iex> alias IO.ANSI.Table.Spec
+      iex> spec = Spec.new([:c4, :c1, :c2], align_specs: [right: :c2])
+      iex> %Spec{align_attrs: align_attrs} = AlignAttrs.derive_and_put(spec)
+      iex> align_attrs
+      [nil, nil, :right]
+  """
   @spec derive_and_put(Spec.t()) :: Spec.t()
   def derive_and_put(
         %Spec{

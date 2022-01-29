@@ -1,6 +1,6 @@
 defmodule IO.ANSI.Table.Line do
   @moduledoc """
-  Formats the line of a table.
+  Formats the lines of a table.
   """
 
   use PersistConfig
@@ -8,7 +8,10 @@ defmodule IO.ANSI.Table.Line do
   alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table.{Column, LineType, Spec, Style}
 
+  @typedoc "Line element"
   @type elem :: String.t()
+  @typedoc "Line item"
+  @type item :: String.t()
 
   @ansi_enabled get_env(:ansi_enabled, true)
 
@@ -33,8 +36,8 @@ defmodule IO.ANSI.Table.Line do
       ]
   """
   @spec items([elem], [Style.border()], String.t) :: [item]
-  def items(elems, [left, inner, right] = _borders, filler \\ "") do
-    deploy(elems, delimiters(left, inner, right, filler))
+  def items(elems, borders, filler \\ "") do
+    deploy(elems, delimiters(borders, filler))
   end
 
   @doc """
@@ -49,11 +52,11 @@ defmodule IO.ANSI.Table.Line do
       iex> Line.item_attrs(type, spec)
       [
         :normal, :gold                , :normal, # left border
-        :normal, :canary              , :normal, # non key column
+        :normal, :canary              , :normal, # non-key column
         :normal, :gold                , :normal, # inner border
         :normal, [:canary, :underline], :normal, # key column
         :normal, :gold                , :normal, # inner border
-        :normal, :canary              , :normal, # non key column
+        :normal, :canary              , :normal, # non-key column
         :normal, :gold                , :normal  # right border
       ]
   """
@@ -98,16 +101,18 @@ defmodule IO.ANSI.Table.Line do
   end
 
   @doc ~S"""
-  Returns an Erlang io format reflecting `item widths` and `item attributes`.
-  It consists of a string with embedded
+  Returns an Erlang I/O format (see `:io.format/2`) reflecting `item widths` and
+  `item attributes`.
+
+  It consists of a string with control sequences and embedded
   [ANSI codes](https://en.wikipedia.org/wiki/ANSI_escape_code)
   (escape sequences), if emitting ANSI codes is enabled.
 
   Here are a few ANSI codes:
 
-    - light yellow - \\e[93m
-    - light cyan   - \\e[96m
-    - reset        - \\e[0m
+    - light yellow - `\e[93m`
+    - light cyan   - `\e[96m`
+    - reset        - `\e[0m`
 
   ## Examples
 
@@ -130,9 +135,6 @@ defmodule IO.ANSI.Table.Line do
   end
 
   ## Private functions
-  
-  @typep item :: String.t()
-  @typep delimiter :: any
 
   # @doc """
   # Deploys `elements` by interlacing them with `delimiters`
@@ -141,7 +143,7 @@ defmodule IO.ANSI.Table.Line do
   # The inner `delimiter` is inserted between all `elements` and
   # the result is then surrounded by the left and right `delimiters`.
 
-  # Returns a flattened list in case any `element` or `delimiter` is a list.
+  # Returns a flattened list in case any `element` or `delimiter` is a list!
 
   # ## Examples
 
@@ -152,19 +154,19 @@ defmodule IO.ANSI.Table.Line do
   #     ["<", "Number", "=", "Created at", "=", "Title", ">"]
 
   #     iex> alias IO.ANSI.Table.Line
-  #     iex> elems = [[1, 6, 0], [1, 10, 2], [0, 5, 4]]
-  #     iex> delimiters = [[0, 1, 1], [1, 1, 1], [1, 1, 0]]
-  #     iex> Line.deploy(elems, delimiters)
+  #     iex> column_spreads = [[1, 6, 0], [1, 10, 2], [0, 5, 4]]
+  #     iex> border_spreads = [[0, 1, 1], [1, 1, 1], [1, 1, 0]]
+  #     iex> Line.deploy(column_spreads, border_spreads)
   #     [0, 1, 1,  1, 6, 0,  1, 1, 1,  1, 10, 2,  1, 1, 1,  0, 5, 4,  1, 1, 0]
 
   #     iex> alias IO.ANSI.Table.Line
   #     iex> elems = ["Number", "Created at", "Title"]
-  #     iex> delimiters = [
+  #     iex> border_delimiters = [
   #     ...>   [    ["", "+-" , ""], ""],
   #     ...>   ["", ["", "-+-", ""], ""],
   #     ...>   ["", ["", "-+" , ""]    ]
   #     ...> ]
-  #     iex> Line.deploy(elems, delimiters)
+  #     iex> Line.deploy(elems, border_delimiters)
   #     [
   #       "", "+-"        , "",
   #       "", "Number"    , "",
@@ -176,13 +178,13 @@ defmodule IO.ANSI.Table.Line do
   #     ]
 
   #     iex> alias IO.ANSI.Table.Line
-  #     iex> elems = [{:canary}, {[:canary, :underline]}, {:canary}]
-  #     iex> delimiters = [
+  #     iex> border_attrs = [{:canary}, {[:canary, :underline]}, {:canary}]
+  #     iex> attr_delimiters = [
   #     ...>   [           [{:normal}, {:gold}, {:normal}], {:normal}],
   #     ...>   [{:normal}, [{:normal}, {:gold}, {:normal}], {:normal}],
   #     ...>   [{:normal}, [{:normal}, {:gold}, {:normal}]           ]
   #     ...> ]
-  #     iex> Line.deploy(elems, delimiters)
+  #     iex> Line.deploy(border_attrs, attr_delimiters)
   #     [
   #       {:normal}, {:gold}                , {:normal},
   #       {:normal}, {:canary}              , {:normal},
@@ -193,15 +195,31 @@ defmodule IO.ANSI.Table.Line do
   #       {:normal}, {:gold}                , {:normal}
   #     ]
   # """
-  @spec deploy([any], [delimiter]) :: [any]
+  @spec deploy([any], [any]) :: [any]
   defp deploy(elems, [left, inner, right] = _delimiters) do
     [left] ++ Enum.intersperse(elems, inner) ++ [right] |> List.flatten()
   end
 
   # @doc """
-  # Returns a list of `delimiters` for deployment.
+  # Returns a list of "delimiters" (left, inner and right).
 
   # ## Examples
+
+  #     iex> alias IO.ANSI.Table.Line
+  #     iex> Line.delimiters(["+-", "-+-", "-+"], "")
+  #     [
+  #       [    ["", "+-" , ""], ""],
+  #       ["", ["", "-+-", ""], ""],
+  #       ["", ["", "-+" , ""]    ]
+  #     ]
+
+  #     iex> alias IO.ANSI.Table.Line
+  #     iex> Line.delimiters(["╔═", "═╦═", "═╗"], "~")
+  #     [
+  #       [     ["~", "╔═" , "~"], "~"],
+  #       ["~", ["~", "═╦═", "~"], "~"],
+  #       ["~", ["~", "═╗" , "~"]     ]
+  #     ]
 
   #     iex> alias IO.ANSI.Table.Line
   #     iex> Line.delimiters(:gold, :normal)
@@ -210,29 +228,33 @@ defmodule IO.ANSI.Table.Line do
   #       [:normal, [:normal, :gold, :normal], :normal],
   #       [:normal, [:normal, :gold, :normal]         ]
   #     ]
-  # """
-  @spec delimiters(any, any) :: [any]
-  defp delimiters(uniq, filler), do: delimiters(uniq, uniq, uniq, filler)
-
-  # @doc """
-  # Returns a list of `delimiters` (left, inner and right) for deployment.
-
-  # ## Examples
 
   #     iex> alias IO.ANSI.Table.Line
-  #     iex> Line.delimiters("+-", "-+-", "-+", "")
+  #     iex> Line.delimiters({[:gold, :underline]}, {:normal})
   #     [
-  #       [    ["", "+-" , ""], ""],
-  #       ["", ["", "-+-", ""], ""],
-  #       ["", ["", "-+" , ""]    ]
+  #       [           [{:normal}, {[:gold, :underline]}, {:normal}], {:normal}],
+  #       [{:normal}, [{:normal}, {[:gold, :underline]}, {:normal}], {:normal}],
+  #       [{:normal}, [{:normal}, {[:gold, :underline]}, {:normal}]           ]
+  #     ]
+
+  #     iex> alias IO.ANSI.Table.Line
+  #     iex> Line.delimiters('what', %{})
+  #     [
+  #       [     [%{}, 'what', %{}], %{}],
+  #       [%{}, [%{}, 'what', %{}], %{}],
+  #       [%{}, [%{}, 'what', %{}]     ]
   #     ]
   # """
-  @spec delimiters(any, any, any, any) :: [any]
-  defp delimiters(left, inner, right, filler) do
+  @spec delimiters(any, any) :: [any]
+  defp delimiters([left, inner, right] = _borders, filler) do
     [
       [        [filler, left,  filler], filler], # left delimiter
       [filler, [filler, inner, filler], filler], # inner delimiter
       [filler, [filler, right, filler]        ]  # right delimiter
     ]
+  end
+
+  defp delimiters(border_attr, filler_attr) do
+    delimiters([border_attr, border_attr, border_attr], filler_attr)
   end
 end
