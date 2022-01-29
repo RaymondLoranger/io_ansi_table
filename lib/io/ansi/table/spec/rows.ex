@@ -6,11 +6,15 @@ defmodule IO.ANSI.Table.Spec.Rows do
 
   alias IO.ANSI.Table.{Column, Header, Row, Spec}
 
+  # Reset log files at compile time to log debug messages.
+  # May need `mix compile --force` and `mix test --force`.
+  {:ok, _apps} = Application.ensure_all_started(:log_reset)
+
   @doc """
   Derives the rows of a table given `spec` and `maps`.
-  
+
   ## Examples
-  
+
       iex> alias IO.ANSI.Table.Spec.Rows
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2])
@@ -35,9 +39,9 @@ defmodule IO.ANSI.Table.Spec.Rows do
 
   @doc """
   Transposes `rows` into columns.
-  
+
   ## Examples
-  
+
       iex> alias IO.ANSI.Table.Spec.Rows
       iex> rows = [
       ...>   ["1", "2", "3"],

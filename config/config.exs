@@ -4,3 +4,4 @@ import Config
 config :io_ansi_table, ansi_enabled: true
 
 import_config "config_logger.exs"
+import_config "#{Mix.env()}.exs"
