@@ -30,7 +30,7 @@ defmodule IO.ANSI.Table.Log do
     \nHandling cast...
     • Server: #{via(spec.spec_name) |> inspect() |> maybe_break(10)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
-    • Request: '{:format, <maps>, <options>}'
+    • Request: {:format, <maps>, <options>}
     • Number of maps: #{length(maps)}
     • Options: #{inspect(options) |> maybe_break(11)}
     • Spec: #{inspect(spec) |> maybe_break(8)}
@@ -43,7 +43,7 @@ defmodule IO.ANSI.Table.Log do
     \nHandling call...
     • Server: #{via(spec.spec_name) |> inspect() |> maybe_break(10)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
-    • Request: '{:format, <maps>, <options>}'
+    • Request: {:format, <maps>, <options>}
     • Number of maps: #{length(maps)}
     • Options: #{inspect(options) |> maybe_break(11)}
     • Spec: #{inspect(spec) |> maybe_break(8)}
@@ -56,7 +56,7 @@ defmodule IO.ANSI.Table.Log do
     \nHandling call...
     • Server: #{via(spec.spec_name) |> inspect() |> maybe_break(10)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
-    • Request: ':get_spec'
+    • Request: :get_spec
     • Spec: #{inspect(spec) |> maybe_break(8)}
     #{from(env, __MODULE__)}
     """
