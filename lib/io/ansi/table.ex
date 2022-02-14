@@ -62,7 +62,7 @@ defmodule IO.ANSI.Table do
 
   @doc """
   Stops a table spec server process normally. It won't be restarted.
-  The table spec server to stop is identified by `option` `:spec_name`.
+  The table spec server to stop is identified by option `:spec_name`.
 
   See `IO.ANSI.Table.Options` for a list of all options in this API.
 
@@ -93,7 +93,7 @@ defmodule IO.ANSI.Table do
   end
 
   @doc """
-  Sends a request to the table spec server identified by `option` `:spec_name`.
+  Sends a request to the table spec server identified by option `:spec_name`.
   The server will write data from `maps` to `:stdio` in a table formatted per
   its spec and `options`.
 
@@ -166,7 +166,7 @@ defmodule IO.ANSI.Table do
   end
 
   @doc """
-  Sends a request to the table spec server identified by `option` `:spec_name`.
+  Sends a request to the table spec server identified by option `:spec_name`.
   Returns the server's table spec.
 
   See `IO.ANSI.Table.Options` for a list of all options in this API.
