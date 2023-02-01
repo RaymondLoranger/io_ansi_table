@@ -8,7 +8,6 @@ defmodule IO.ANSI.Table.TopSup do
   @ets get_env(:ets_name)
   @reg get_env(:registry)
 
-  # @impl Application
   @spec start(Application.start_type(), term) :: {:ok, pid}
   def start(_start_type, :ok = _start_args) do
     :ets.new(@ets, [:public, :named_table])

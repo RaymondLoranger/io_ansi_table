@@ -124,14 +124,14 @@ defmodule IO.ANSI.Table.Line do
   """
   @spec format([Column.width()], [Style.attr()], boolean) :: String.t()
   def format(item_widths, item_attrs, ansi_enabled? \\ @ansi_enabled) do
-    ansidata_list =
+    chardata_list =
       Enum.zip(item_widths, item_attrs)
       |> Enum.map(fn
         {width, :normal} -> "~-#{width}ts" # t for Unicode translation
         {width, attr} -> ANSI.format([attr, "~-#{width}ts"], ansi_enabled?)
       end)
 
-    "#{ansidata_list}~n" # => string embedded with ANSI escape sequences
+    "#{chardata_list}~n" # => string embedded with ANSI escape sequences
   end
 
   ## Private functions
