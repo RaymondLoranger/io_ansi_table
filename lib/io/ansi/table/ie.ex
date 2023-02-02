@@ -274,8 +274,8 @@ defmodule IO.ANSI.Table.IE do
   end
 
   def styles(color \\ :light_magenta) do
-    ansidata = [color, " &style&filler", :reset, " - &rank - &note"]
-    chardata = ANSI.format(ansidata)
+    ansilist = [color, " &style&filler", :reset, " - &rank - &note"]
+    chardata = ANSI.format(ansilist)
     texts = Style.texts("#{chardata}")
     Enum.each(texts, &IO.puts/1)
     length(texts)
