@@ -10,8 +10,7 @@ defmodule IO.ANSI.Table.SpecSup do
 
   ## Callbacks
 
-  @spec init(term) ::
-          {:ok, {:supervisor.sup_flags(), [:supervisor.child_spec()]}} | :ignore
+  @spec init(term) :: {:ok, {Supervisor.sup_flags(), [Supervisor.child_spec()]}}
   def init(:ok = _init_arg) do
     [
       # Child spec relying on `use DynamicSupervisor`...
