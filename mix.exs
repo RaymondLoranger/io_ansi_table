@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "1.0.27",
+      version: "1.0.28",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "IO ANSI Table",
@@ -49,7 +49,7 @@ defmodule IO.ANSI.Table.Mixfile do
     [
       {:dialyxir, "~> 1.0", only: :dev, runtime: false},
       {:ex_doc, "~> 0.22", only: :dev, runtime: false},
-      {:file_only_logger, "~> 0.1"},
+      {:file_only_logger, "~> 0.2"},
       {:io_ansi_plus, "~> 0.1"},
       {:log_reset, "~> 0.1"},
       {:map_sorter, "~> 0.2"},
