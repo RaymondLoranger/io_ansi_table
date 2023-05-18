@@ -297,4 +297,8 @@ defmodule IO.ANSI.Table.IE do
   def puts(microsecs) do
     IO.puts("#{microsecs} μsec")
   end
+
+  def color_samples do
+    IO.ANSI.Plus.IE.actual_color_samples()
+  end
 end
