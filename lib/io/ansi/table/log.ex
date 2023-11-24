@@ -10,7 +10,7 @@ defmodule IO.ANSI.Table.Log do
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
     • 'terminate' reason: #{inspect(reason) |> maybe_break(22)}
     • Spec: #{inspect(spec) |> maybe_break(8)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -21,7 +21,7 @@ defmodule IO.ANSI.Table.Log do
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
     • 'terminate' reason: #{inspect(reason) |> maybe_break(22)}
     • Spec: #{inspect(spec) |> maybe_break(8)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -34,7 +34,7 @@ defmodule IO.ANSI.Table.Log do
     • Number of maps: #{length(maps)}
     • Options: #{inspect(options) |> maybe_break(11)}
     • Spec: #{inspect(spec) |> maybe_break(8)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -47,7 +47,7 @@ defmodule IO.ANSI.Table.Log do
     • Number of maps: #{length(maps)}
     • Options: #{inspect(options) |> maybe_break(11)}
     • Spec: #{inspect(spec) |> maybe_break(8)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -58,7 +58,7 @@ defmodule IO.ANSI.Table.Log do
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
     • Request: :get_spec
     • Spec: #{inspect(spec) |> maybe_break(8)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -67,7 +67,7 @@ defmodule IO.ANSI.Table.Log do
     \nSpawned table spec server...
     • Spec name: #{inspect(spec.spec_name)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -76,7 +76,7 @@ defmodule IO.ANSI.Table.Log do
     \nRestarted table spec server...
     • Spec name: #{inspect(spec.spec_name)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 
@@ -86,7 +86,7 @@ defmodule IO.ANSI.Table.Log do
     • Server: #{via(spec.spec_name) |> inspect() |> maybe_break(10)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
     • Spec: #{inspect(spec) |> maybe_break(8)}
-    #{from(env, __MODULE__)}
+    #{from(env, __MODULE__)}\
     """
   end
 end

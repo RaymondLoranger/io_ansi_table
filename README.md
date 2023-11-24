@@ -1,7 +1,5 @@
 # IO ANSI Table
 
-[![Build Status](https://travis-ci.org/RaymondLoranger/io_ansi_table.svg?branch=master)](https://travis-ci.org/RaymondLoranger/io_ansi_table)
-
 Writes data to `:stdio` in a table with borders and colors.
 Can choose a table style to change the look of the table.
 
