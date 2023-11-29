@@ -15,10 +15,11 @@ colors = [
 ]
 
 # Log file paths...
-debug_path = ~c"./log/debug.log"
-info_path = ~c"./log/info.log"
-warning_path = ~c"./log/warning.log"
-error_path = ~c"./log/error.log"
+root_dir = File.cwd!()
+debug_path = ~c"#{root_dir}/log/debug.log"
+info_path = ~c"#{root_dir}/log/info.log"
+warning_path = ~c"#{root_dir}/log/warning.log"
+error_path = ~c"#{root_dir}/log/error.log"
 
 formatter =
   Logger.Formatter.new(
