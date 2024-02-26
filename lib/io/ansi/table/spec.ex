@@ -1,11 +1,11 @@
 defmodule IO.ANSI.Table.Spec do
   @moduledoc """
   A table spec struct and functions for the IO ANSI Table app.
-  
+
   The table spec struct contains the following fields:
-  
+
   * initial fields:
-  
+
     - `spec_name`,
     - `headers`,
     - `align_specs`,
@@ -17,16 +17,16 @@ defmodule IO.ANSI.Table.Spec do
     - `sort_specs`,
     - `sort_symbols`,
     - `style`
-  
+
   * derived fields:
-  
+
     - `align_attrs`,
     - `headings`,
     - `left_margin`,
     - `sort_attrs`
-  
+
   * data dependent fields:
-  
+
     - `column_widths`
     - `rows`
   """
@@ -141,13 +141,13 @@ defmodule IO.ANSI.Table.Spec do
   @doc """
   Gets the table spec server name in `options`.
   Defaults to the current app name expressed as a string.
-  
+
   ## Examples
-  
+
       iex> alias IO.ANSI.Table.Spec
       iex> Spec.spec_name(style: :light, count: 9, spec_name: "github_issues")
       "github_issues"
-  
+
       iex> alias IO.ANSI.Table.Spec
       iex> Spec.spec_name([])
       "io_ansi_table"

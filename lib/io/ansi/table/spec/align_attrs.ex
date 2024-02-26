@@ -7,9 +7,9 @@ defmodule IO.ANSI.Table.Spec.AlignAttrs do
 
   @doc """
   Derives the align attributes of a table.
-  
+
   ## Examples
-  
+
       iex> alias IO.ANSI.Table.Spec.AlignAttrs
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2], align_specs: [right: :c2])

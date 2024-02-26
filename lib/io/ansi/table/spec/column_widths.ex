@@ -8,9 +8,9 @@ defmodule IO.ANSI.Table.Spec.ColumnWidths do
 
   @doc """
   Derives the column widths of a table.
-  
+
   ## Examples
-  
+
       iex> alias IO.ANSI.Table.Spec.{ColumnWidths, Headings, Rows}
       iex> alias IO.ANSI.Table.Spec
       iex> spec = Spec.new([:c4, :c1, :c2])
