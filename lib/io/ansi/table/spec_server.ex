@@ -11,7 +11,7 @@ defmodule IO.ANSI.Table.SpecServer do
 
   @ets get_env(:ets_name)
   @reg get_env(:registry)
-  @wait 50
+  # @wait 50
 
   @doc """
   Spawns a table `spec` server process to be registered via a spec name.
@@ -75,23 +75,23 @@ defmodule IO.ANSI.Table.SpecServer do
     {:reply, :ok, spec}
   end
 
-  def handle_call(:get_spec = request, _from, spec) do
+  def handle_call(request = :get_spec, _from, spec) do
     :ok = Log.info(:handle_call, {spec, request, __ENV__})
     {:reply, spec, spec}
   end
 
-  @spec terminate(term, Spec.t()) :: :ok
-  def terminate(:shutdown = reason, spec) do
+  @spec terminate(term, Spec.t()) :: true
+  def terminate(reason = :shutdown, spec) do
     :ok = Log.info(:terminate, {reason, spec, __ENV__})
     true = :ets.delete(@ets, key(spec.spec_name))
     # Ensure message logged before exiting...
-    Process.sleep(@wait)
+    # Process.sleep(@wait)
   end
 
   def terminate(reason, spec) do
     :ok = Log.error(:terminate, {reason, spec, __ENV__})
     true = :ets.delete(@ets, key(spec.spec_name))
     # Ensure message logged before exiting...
-    Process.sleep(@wait)
+    # Process.sleep(@wait)
   end
 end

@@ -9,58 +9,58 @@ h = "#{ANSI.format([:islamic_green, :islamic_green_background, "hit"], true)}"
 m = "#{ANSI.format([:mortar, :mortar_background, "mis"], true)}"
 
 config :io_ansi_table, islands: [
-  %{:row =>  1, 1 => i, 2 => f, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  2, 1 => w, 2 => f, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  3, 1 => i, 2 => f, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => i, 8 => w, 9 => w, :A => w},
-  %{:row =>  4, 1 => w, 2 => w, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => i, 8 => w, 9 => w, :A => w},
-  %{:row =>  5, 1 => w, 2 => w, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => f, 8 => i, 9 => w, :A => w},
-  %{:row =>  6, 1 => w, 2 => w, 3 => i, 4 => i, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  7, 1 => w, 2 => i, 3 => i, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  8, 1 => w, 2 => w, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  9, 1 => w, 2 => w, 3 => w, 4 => w, 5  => i,
-                6 => i, 7 => w, 8 => w, 9 => f, :A => w},
-  %{:row => 10, 1 => w, 2 => w, 3 => w, 4 => w, 5  => i,
-                6 => i, 7 => w, 8 => w, 9 => w, :A => w}
+  %{:row =>  1, 1 => i, 2 => f, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  2, 1 => w, 2 => f, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  3, 1 => i, 2 => f, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => i, 8 => w, 9 => w, A => w},
+  %{:row =>  4, 1 => w, 2 => w, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => i, 8 => w, 9 => w, A => w},
+  %{:row =>  5, 1 => w, 2 => w, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => f, 8 => i, 9 => w, A => w},
+  %{:row =>  6, 1 => w, 2 => w, 3 => i, 4 => i, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  7, 1 => w, 2 => i, 3 => i, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  8, 1 => w, 2 => w, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  9, 1 => w, 2 => w, 3 => w, 4 => w, 5 => i,
+                6 => i, 7 => w, 8 => w, 9 => f, A => w},
+  %{:row => 10, 1 => w, 2 => w, 3 => w, 4 => w, 5 => i,
+                6 => i, 7 => w, 8 => w, 9 => w, A => w}
 ]
 
 config :io_ansi_table, attacks: [
-  %{:row =>  1, 1 => w, 2 => m, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  2, 1 => w, 2 => w, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  3, 1 => w, 2 => w, 3 => w, 4 => h, 5  => h,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  4, 1 => w, 2 => w, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => h, 8 => w, 9 => w, :A => w},
-  %{:row =>  5, 1 => w, 2 => w, 3 => m, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => h, 9 => w, :A => w},
-  %{:row =>  6, 1 => w, 2 => w, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  7, 1 => w, 2 => w, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => m},
-  %{:row =>  8, 1 => w, 2 => w, 3 => w, 4 => m, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row =>  9, 1 => w, 2 => w, 3 => h, 4 => m, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w},
-  %{:row => 10, 1 => w, 2 => w, 3 => w, 4 => w, 5  => w,
-                6 => w, 7 => w, 8 => w, 9 => w, :A => w}
+  %{:row =>  1, 1 => w, 2 => m, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  2, 1 => w, 2 => w, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  3, 1 => w, 2 => w, 3 => w, 4 => h, 5 => h,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  4, 1 => w, 2 => w, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => h, 8 => w, 9 => w, A => w},
+  %{:row =>  5, 1 => w, 2 => w, 3 => m, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => h, 9 => w, A => w},
+  %{:row =>  6, 1 => w, 2 => w, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  7, 1 => w, 2 => w, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => m},
+  %{:row =>  8, 1 => w, 2 => w, 3 => w, 4 => m, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row =>  9, 1 => w, 2 => w, 3 => h, 4 => m, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w},
+  %{:row => 10, 1 => w, 2 => w, 3 => w, 4 => w, 5 => w,
+                6 => w, 7 => w, 8 => w, 9 => w, A => w}
 ]
 
-config :io_ansi_table, islands_headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, :A]
+config :io_ansi_table, islands_headers: [:row, 1, 2, 3, 4, 5, 6, 7, 8, 9, A]
 
 config :io_ansi_table, islands_options: [
-  header_fixes: %{"Row" => "", "A" => "10"},
+  header_fixes: %{"Row" => "", "Elixir.A" => "10"},
   align_specs: [right: :row,
     center: 1, center: 2, center: 3, center: 4, center: 5,
-    center: 6, center: 7, center: 8, center: 9, center: :A
+    center: 6, center: 7, center: 8, center: 9, center: A
   ],
   sort_specs: [:row],
   sort_symbols: [asc: "", desc: "", pos: :trailing]

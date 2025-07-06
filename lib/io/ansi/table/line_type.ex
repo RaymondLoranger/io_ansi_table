@@ -29,7 +29,7 @@ defmodule IO.ANSI.Table.LineType do
     |> write_line(type, spec)
   end
 
-  def write_lines(:header = type, spec) do
+  def write_lines(type = :header, spec) do
     write_line(spec.headings, type, spec)
   end
 

@@ -13,7 +13,7 @@ defmodule IO.ANSI.Table.SpecRecovery do
   @ets get_env(:ets_name)
 
   @spec start_link(term) :: GenServer.on_start()
-  def start_link(:ok = _init_arg),
+  def start_link(_init_arg = :ok),
     do: GenServer.start_link(SpecRecovery, :ok, name: SpecRecovery)
 
   ## Private functions
@@ -31,5 +31,5 @@ defmodule IO.ANSI.Table.SpecRecovery do
   ## Callbacks
 
   @spec init(term) :: {:ok, term}
-  def init(:ok = _init_arg), do: {:ok, restart_servers()}
+  def init(_init_arg = :ok), do: {:ok, restart_servers()}
 end

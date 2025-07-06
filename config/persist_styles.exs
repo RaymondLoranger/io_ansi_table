@@ -635,9 +635,9 @@ config :io_ansi_table, table_styles: [
     borders: [
       #           left  inner  right dash
       top:       ["┏╍", "╍┳╍", "╍┓", "╍"],
-      header:    ["┇",  "┇",  "┇", nil],
+      header:    ["┇",   "┇",   "┇", nil],
       separator: ["┣╍", "╍╋╍", "╍┫", "╍"],
-      row:       ["┇",  "┇",  "┇", nil],
+      row:       ["┇",   "┇",   "┇", nil],
       bottom:    ["┗╍", "╍┻╍", "╍┛", "╍"]
     ],
     border_attrs: :light_white,
@@ -657,10 +657,10 @@ config :io_ansi_table, table_styles: [
     borders: [
       #           left  inner  right dash
       top:       ["┏╍", "╍┳╍", "╍┓", "╍"],
-      header:    ["┇",  "┇",  "┇", nil],
+      header:    ["┇",   "┇",   "┇", nil],
       separator: ["┣╍", "╍╋╍", "╍┫", "╍"],
-      even_row:  ["┇",  "┇",  "┇", nil],
-      odd_row:   ["┇",  "┇",  "┇", nil],
+      even_row:  ["┇",   "┇",   "┇", nil],
+      odd_row:   ["┇",   "┇",   "┇", nil],
       bottom:    ["┗╍", "╍┻╍", "╍┛", "╍"]
     ],
     border_attrs: :light_white,
@@ -695,11 +695,11 @@ config :io_ansi_table, table_styles: [
     borders: [
       #           left  inner  right dash
       top:       ["┏╍", "╍┳╍", "╍┓", "╍"],
-      header:    ["┇",  "┇",  "┇", nil],
+      header:    ["┇",   "┇",   "┇", nil],
       separator: ["┣╍", "╍╋╍", "╍┫", "╍"],
-      row_1:     ["┇",  "┇",  "┇", nil],
-      row_2:     ["┇",  "┇",  "┇", nil],
-      row_3:     ["┇",  "┇",  "┇", nil],
+      row_1:     ["┇",   "┇",   "┇", nil],
+      row_2:     ["┇",   "┇",   "┇", nil],
+      row_3:     ["┇",   "┇",   "┇", nil],
       bottom:    ["┗╍", "╍┻╍", "╍┛", "╍"]
     ],
     border_attrs: :light_white,

@@ -62,19 +62,23 @@ defmodule IO.ANSI.Table.Mixfile do
 
   # defp aliases do
   #   [
-  #     docs: ["docs", &copy_images/1]
+  #     # docs: ["docs", &copy_images/1]
+  #     docs: ["docs", &echo_xcopy/1, ~S"cmd xcopy images docs\images /Y"]
   #   ]
   # end
 
-  # defp copy_images(_) do
-  #   File.cp_r("images", "doc/images", fn src, dst ->
-  #     # Always true...
-  #     src || dst
+  # defp echo_xcopy(_) do
+  #   IO.ANSI.Plus.puts([:light_yellow, "xcopy images docs\images /Y"])
+  # end
 
-  #     # IO.gets(~s|Overwriting "#{dst}" with "#{src}".\nProceed? [Yn]\s|) in [
-  #     #   "y\n",
-  #     #   "Y\n"
-  #     # ]
-  #   end)
+  # defp copy_images(_) do
+  #   File.cp_r("images", "doc/images",
+  #     on_conflict: fn src, dst ->
+  #       IO.gets(~s|Overwriting "#{dst}" with "#{src}".\nProceed? [Yn]\s|) in [
+  #         "y\n",
+  #         "Y\n"
+  #       ]
+  #     end
+  #   )
   # end
 end
