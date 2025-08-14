@@ -3,6 +3,16 @@ defmodule IO.ANSI.Table.Log do
 
   import IO.ANSI.Table.SpecServer, only: [via: 1]
 
+  error :app_start, {reason, app, env} do
+    """
+    \nError starting application...
+    • Call: 'Application.ensure_all_started/1'
+    • App argument: #{app}
+    • Reason: #{inspect(reason) |> maybe_break(10)}
+    #{from(env, __MODULE__)}\
+    """
+  end
+
   error :terminate, {reason, spec, env} do
     """
     \nTerminating table spec server...

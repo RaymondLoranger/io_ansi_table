@@ -6,7 +6,7 @@ defmodule IO.ANSI.Table do
   Writes data to `:stdio` in a table with borders and colors.
   Can choose a table style to change the look of the table.
 
-  ##### Inspired by the book [Programming Elixir](https://pragprog.com/book/elixir16/programming-elixir-1-6) by Dave Thomas.
+  ##### Inspired by the book [Programming Elixir](https://pragprog.com/titles/elixir16/programming-elixir-1-6) by Dave Thomas.
   """
 
   use PersistConfig
