@@ -36,18 +36,18 @@ defmodule IO.ANSI.Table.SpecServer do
   defp develop_or_lookup(spec) do
     case :ets.lookup(@ets, key(spec.spec_name)) do
       [] ->
-        :ok = Log.info(:spawned, {spec, __ENV__})
+        Log.info(:spawned, {spec, __ENV__})
         Spec.develop(spec) |> save()
 
       [{_key, spec}] ->
-        :ok = Log.info(:restarted, {spec, __ENV__})
+        Log.info(:restarted, {spec, __ENV__})
         spec
     end
   end
 
   @spec save(Spec.t()) :: Spec.t()
   defp save(spec) do
-    :ok = Log.info(:save, {spec, __ENV__})
+    Log.info(:save, {spec, __ENV__})
     true = :ets.insert(@ets, {key(spec.spec_name), spec})
     spec
   end
@@ -59,8 +59,8 @@ defmodule IO.ANSI.Table.SpecServer do
 
   @spec handle_cast(term, Spec.t()) :: {:noreply, Spec.t()}
   def handle_cast({:format, maps, options} = request, spec) do
-    :ok = Log.info(:handle_cast, {spec, request, __ENV__})
-    :ok = Spec.write_table(spec, maps, options)
+    Log.info(:handle_cast, {spec, request, __ENV__})
+    Spec.write_table(spec, maps, options)
     {:noreply, spec}
   end
 
@@ -70,26 +70,26 @@ defmodule IO.ANSI.Table.SpecServer do
     # Update group leader in case request comes from remote shell...
     group_leader = Process.info(from_pid)[:group_leader]
     if group_leader, do: self() |> Process.group_leader(group_leader)
-    :ok = Log.info(:handle_call, {spec, request, __ENV__})
-    :ok = Spec.write_table(spec, maps, options)
+    Log.info(:handle_call, {spec, request, __ENV__})
+    Spec.write_table(spec, maps, options)
     {:reply, :ok, spec}
   end
 
   def handle_call(request = :get_spec, _from, spec) do
-    :ok = Log.info(:handle_call, {spec, request, __ENV__})
+    Log.info(:handle_call, {spec, request, __ENV__})
     {:reply, spec, spec}
   end
 
   @spec terminate(term, Spec.t()) :: true
   def terminate(reason = :shutdown, spec) do
-    :ok = Log.info(:terminate, {reason, spec, __ENV__})
+    Log.info(:terminate, {reason, spec, __ENV__})
     true = :ets.delete(@ets, key(spec.spec_name))
     # Ensure message logged before exiting...
     # Process.sleep(@wait)
   end
 
   def terminate(reason, spec) do
-    :ok = Log.error(:terminate, {reason, spec, __ENV__})
+    Log.error(:terminate, {reason, spec, __ENV__})
     true = :ets.delete(@ets, key(spec.spec_name))
     # Ensure message logged before exiting...
     # Process.sleep(@wait)

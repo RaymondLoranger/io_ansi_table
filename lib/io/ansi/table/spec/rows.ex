@@ -10,7 +10,7 @@ defmodule IO.ANSI.Table.Spec.Rows do
   # May need `mix compile --force` and `mix test --force`.
   case Application.ensure_all_started(app = :log_reset) do
     {:ok, _apps} -> :ok
-    {:error, reason} -> :ok = Log.error(:app_start, {reason, app, __ENV__})
+    {:error, reason} -> Log.error(:app_start, {reason, app, __ENV__})
   end
 
   @doc """
