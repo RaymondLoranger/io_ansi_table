@@ -7,7 +7,7 @@ defmodule IO.ANSI.Table.Log do
     """
     \nError starting application...
     • Call: 'Application.ensure_all_started/1'
-    • App argument: #{app}
+    • App argument: #{inspect(app)}
     • Reason: #{inspect(reason) |> maybe_break(10)}
     #{from(env, __MODULE__)}\
     """
