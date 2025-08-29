@@ -90,7 +90,7 @@ defmodule IO.ANSI.Table.Spec do
           bell: boolean,
           count: integer,
           header_fixes: %{optional(String.t() | Regex.t()) => String.t()},
-          margins: Keyword.t(),
+          margins: keyword,
           max_width: pos_integer,
           sort_specs: [Header.sort_spec()],
           sort_symbols: [Header.sort_symbol()],
@@ -108,7 +108,7 @@ defmodule IO.ANSI.Table.Spec do
   @doc """
   Creates a table spec struct from `headers` and `options`.
   """
-  @spec new([Header.t(), ...], Keyword.t()) :: t
+  @spec new([Header.t(), ...], keyword) :: t
   def new([_ | _] = headers, options \\ []) when is_list(options) do
     %Spec{
       spec_name: spec_name(options),
@@ -152,7 +152,7 @@ defmodule IO.ANSI.Table.Spec do
       iex> Spec.spec_name([])
       "io_ansi_table"
   """
-  @spec spec_name(Keyword.t()) :: String.t()
+  @spec spec_name(keyword) :: String.t()
   def spec_name(options) when is_list(options) do
     case options[:spec_name] do
       nil ->
@@ -171,7 +171,7 @@ defmodule IO.ANSI.Table.Spec do
   @doc """
   Writes data from `maps` to `:stdio` per table `spec` and `options`.
   """
-  @spec write_table(t, [Access.container()], Keyword.t()) :: :ok
+  @spec write_table(t, [Access.container()], keyword) :: :ok
   def write_table(%Spec{} = spec, maps, options \\ [])
       when is_list(maps) and is_list(options) do
     spec

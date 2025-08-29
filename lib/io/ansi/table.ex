@@ -54,7 +54,7 @@ defmodule IO.ANSI.Table do
       iex> pid == SpecServer.via("people") |> GenServer.whereis()
       true
   """
-  @spec start([Header.t(), ...], Keyword.t()) :: Supervisor.on_start_child()
+  @spec start([Header.t(), ...], keyword) :: Supervisor.on_start_child()
   def start([_ | _] = headers, options \\ []) when is_list(options) do
     spec = Spec.new(headers, options)
     DynamicSupervisor.start_child(DynSpecSup, {SpecServer, spec})
@@ -86,7 +86,7 @@ defmodule IO.ANSI.Table do
       iex> Table.stop(spec_name: "stats")
       :ok
   """
-  @spec stop(Keyword.t()) :: :ok
+  @spec stop(keyword) :: :ok
   def stop(options \\ []) when is_list(options) do
     spec_name = Spec.spec_name(options)
     SpecServer.via(spec_name) |> GenServer.stop(:shutdown)
@@ -156,7 +156,7 @@ defmodule IO.ANSI.Table do
   ## ![cyan_alt](images/cyan_alt.png)
   ## ![cyan_mult](images/cyan_mult.png)
   """
-  @spec format([Access.container()], Keyword.t()) :: :ok
+  @spec format([Access.container()], keyword) :: :ok
   def format(maps, options \\ []) when is_list(maps) and is_list(options) do
     spec_name = Spec.spec_name(options)
 
@@ -193,7 +193,7 @@ defmodule IO.ANSI.Table do
       iex> {spec.headers, spec.spec_name}
       {[:name, :dob, :likes], "members"}
   """
-  @spec get_spec(Keyword.t()) :: Spec.t()
+  @spec get_spec(keyword) :: Spec.t()
   def get_spec(options \\ []) when is_list(options) do
     spec_name = Spec.spec_name(options)
     GenServer.call(SpecServer.via(spec_name), :get_spec)
@@ -256,6 +256,6 @@ defmodule IO.ANSI.Table do
       Table.write(spec, people, style: :cyan_alt)
       Table.write(spec, people, style: :cyan_mult)
   """
-  @spec write(Spec.t(), [Access.container()], Keyword.t()) :: :ok
+  @spec write(Spec.t(), [Access.container()], keyword) :: :ok
   defdelegate write(spec, maps, options \\ []), to: Spec, as: :write_table
 end

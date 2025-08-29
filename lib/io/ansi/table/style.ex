@@ -297,7 +297,7 @@ defmodule IO.ANSI.Table.Style do
   @doc """
   Lists all the table styles alphabetically.
   """
-  @spec table_styles :: Keyword.t()
+  @spec table_styles :: keyword
   def table_styles, do: @sorted_styles
 
   ## Private functions
