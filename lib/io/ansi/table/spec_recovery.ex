@@ -16,6 +16,11 @@ defmodule IO.ANSI.Table.SpecRecovery do
   def start_link(_init_arg = :ok),
     do: GenServer.start_link(SpecRecovery, :ok, name: SpecRecovery)
 
+  ## Callbacks
+
+  @spec init(term) :: {:ok, term}
+  def init(_init_arg = :ok), do: {:ok, restart_servers()}
+
   ## Private functions
 
   @spec restart_servers :: :ok
@@ -27,9 +32,4 @@ defmodule IO.ANSI.Table.SpecRecovery do
       DynamicSupervisor.start_child(DynSpecSup, {SpecServer, spec})
     end)
   end
-
-  ## Callbacks
-
-  @spec init(term) :: {:ok, term}
-  def init(_init_arg = :ok), do: {:ok, restart_servers()}
 end

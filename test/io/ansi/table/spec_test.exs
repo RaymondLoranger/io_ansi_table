@@ -1,8 +1,7 @@
 defmodule IO.ANSI.Table.SpecTest do
   use ExUnit.Case, async: true
 
-  # Allows to capture IO...
-  alias ExUnit.CaptureIO
+  alias ExUnit.CaptureIO # allows to capture IO...
   alias IO.ANSI.Table.Spec
 
   doctest Spec

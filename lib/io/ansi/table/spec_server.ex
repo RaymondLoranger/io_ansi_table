@@ -27,31 +27,6 @@ defmodule IO.ANSI.Table.SpecServer do
   @spec via(String.t()) :: {:via, Registry, tuple}
   def via(spec_name), do: {:via, Registry, {@reg, key(spec_name)}}
 
-  ## Private functions
-
-  @spec key(String.t()) :: tuple
-  defp key(spec_name), do: {SpecServer, spec_name}
-
-  @spec develop_or_lookup(Spec.t()) :: Spec.t()
-  defp develop_or_lookup(spec) do
-    case :ets.lookup(@ets, key(spec.spec_name)) do
-      [] ->
-        Log.info(:spawned, {spec, __ENV__})
-        Spec.develop(spec) |> save()
-
-      [{_key, spec}] ->
-        Log.info(:restarted, {spec, __ENV__})
-        spec
-    end
-  end
-
-  @spec save(Spec.t()) :: Spec.t()
-  defp save(spec) do
-    Log.info(:save, {spec, __ENV__})
-    true = :ets.insert(@ets, {key(spec.spec_name), spec})
-    spec
-  end
-
   ## Callbacks
 
   @spec init(Spec.t()) :: {:ok, Spec.t()}
@@ -93,5 +68,30 @@ defmodule IO.ANSI.Table.SpecServer do
     true = :ets.delete(@ets, key(spec.spec_name))
     # Ensure message logged before exiting...
     # Process.sleep(@wait)
+  end
+
+  ## Private functions
+
+  @spec key(String.t()) :: tuple
+  defp key(spec_name), do: {SpecServer, spec_name}
+
+  @spec develop_or_lookup(Spec.t()) :: Spec.t()
+  defp develop_or_lookup(spec) do
+    case :ets.lookup(@ets, key(spec.spec_name)) do
+      [] ->
+        Log.info(:spawned, {spec, __ENV__})
+        Spec.develop(spec) |> save()
+
+      [{_key, spec}] ->
+        Log.info(:restarted, {spec, __ENV__})
+        spec
+    end
+  end
+
+  @spec save(Spec.t()) :: Spec.t()
+  defp save(spec) do
+    Log.info(:save, {spec, __ENV__})
+    true = :ets.insert(@ets, {key(spec.spec_name), spec})
+    spec
   end
 end

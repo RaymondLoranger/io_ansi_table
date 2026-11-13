@@ -4,7 +4,7 @@ defmodule IO.ANSI.Table.Mixfile do
   def project do
     [
       app: :io_ansi_table,
-      version: "1.0.40",
+      version: "1.0.41",
       elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       name: "IO ANSI Table",
@@ -30,6 +30,7 @@ defmodule IO.ANSI.Table.Mixfile do
   defp package do
     [
       files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
+      exclude_patterns: ["lib/io/ansi/table/ie.ex"],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}

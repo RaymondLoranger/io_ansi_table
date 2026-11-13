@@ -68,6 +68,7 @@ defmodule IO.ANSI.Table.IE do
         Column,
         DynSpecSup,
         Header,
+        IE,
         LineType,
         LineTypes,
         Line,
