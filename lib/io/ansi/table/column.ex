@@ -8,6 +8,7 @@ defmodule IO.ANSI.Table.Column do
   alias IO.ANSI.Table.{Header, Line}
 
   @ansi_escape "\e"
+
   # "\e[1;31mHello" => bold with red foreground
   # "\e[2;37;41mWorld => dimmed white foreground with red background
   @ansi_escape_codes ~r/\e\[([0-9]{1,3}(;[0-9]{1,3})*)?[m|K]/
@@ -22,11 +23,12 @@ defmodule IO.ANSI.Table.Column do
   @type width :: non_neg_integer
 
   @doc ~S'''
-  Returns a list of column widths capped by `maximum width`.
+  Returns a list of widths for the given `columns`, capped at `max_width`.
 
   ## Examples
 
       iex> alias IO.ANSI.Table.Column
+      iex> #          <-------column 1------->  <--------column 2-------->
       iex> columns = [["cat", "wombat", "elk"], ["mongoose", "ant", "gnu"]]
       iex> Column.widths(columns, 99)
       [6, 8]
@@ -54,7 +56,7 @@ defmodule IO.ANSI.Table.Column do
   end
 
   @doc ~S'''
-  Spreads a `width` given an `element` and its `align attribute`.
+  Spreads a `width` given an `elem` and its `align_attr`.
 
   ## Examples
 
@@ -113,7 +115,15 @@ defmodule IO.ANSI.Table.Column do
   ## Private functions
 
   # The "visible" width of an element (ignoring embedded ANSI escape codes)...
-  # See function `Islands.Grid.to_maps/2` for an example of such elements.
+  # See function `Islands.Grid.to_maps/2` for examples of such elements...
+
+  # ansi_escape_codes = ~r/\e\[([0-9]{1,3}(;[0-9]{1,3})*)?[m|K]/
+  # improper_list = [[[[[] | "\e[38;5;34m"] | "\e[48;5;34m"], ">a<"] | "\e[0m"]
+  # elem = IO.iodata_to_binary(improper_list)
+  # => "\e[38;5;34m\e[48;5;34m>a<\e[0m"
+  # String.replace(elem, ansi_escape_codes, "") #=> ">a<"
+  # String.replace(elem, ansi_escape_codes, "") |> String.length() #=> 3
+
   @spec width(String.t()) :: non_neg_integer
   defp width(@ansi_escape <> _rest = elem) do
     String.replace(elem, @ansi_escape_codes, "") |> String.length()
@@ -121,7 +131,7 @@ defmodule IO.ANSI.Table.Column do
 
   defp width(elem), do: String.length(elem)
 
-  # The field width to be used in an Erlang io format...
+  # The field width to be used in an Erlang I/O format...
   @spec io_width(String.t(), non_neg_integer) :: non_neg_integer
   defp io_width(@ansi_escape <> _rest = elem, _elem_width) do
     # We do not cap the width of an element with embedded ANSI escape codes...

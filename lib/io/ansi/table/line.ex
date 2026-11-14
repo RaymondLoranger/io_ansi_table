@@ -16,7 +16,7 @@ defmodule IO.ANSI.Table.Line do
   @ansi_enabled get_env(:ansi_enabled, true)
 
   @doc """
-  Deploys `elements` by interlacing them with `filler` and `borders`
+  Deploys `elems` by interlacing them with `filler` and `borders`
   (left, inner and right).
 
   ## Examples
@@ -137,13 +137,13 @@ defmodule IO.ANSI.Table.Line do
   ## Private functions
 
   # @doc """
-  # Deploys `elements` by interlacing them with `delimiters`
-  # (left, inner and right).
+  # Deploys `elems` by interlacing them with `delimiters` (left, inner, right).
+  # Interleaves `elems` with `delimiters` (`left`, `inner`, `right`).
 
-  # The inner `delimiter` is inserted between all `elements` and
-  # the result is then surrounded by the left and right `delimiters`.
+  # The inner `delimiter` is inserted between all `elems` and the
+  # result is then surrounded by the left and right `delimiters`.
 
-  # Returns a flattened list in case any `element` or `delimiter` is a list!
+  # Returns a flattened list in case any `elem` or `delimiter` is a list!
 
   # ## Examples
 
@@ -201,7 +201,8 @@ defmodule IO.ANSI.Table.Line do
   end
 
   # @doc """
-  # Returns a list of "delimiters" (left, inner and right).
+  # Returns a list of "delimiters" (left, inner and right) by interleaving
+  # `borders` and `filler`.
 
   # ## Examples
 
@@ -238,11 +239,11 @@ defmodule IO.ANSI.Table.Line do
   #     ]
 
   #     iex> alias IO.ANSI.Table.Line
-  #     iex> Line.delimiters('what', %{})
+  #     iex> Line.delimiters(:what, %{})
   #     [
-  #       [     [%{}, 'what', %{}], %{}],
-  #       [%{}, [%{}, 'what', %{}], %{}],
-  #       [%{}, [%{}, 'what', %{}]     ]
+  #       [     [%{}, :what, %{}], %{}],
+  #       [%{}, [%{}, :what, %{}], %{}],
+  #       [%{}, [%{}, :what, %{}]     ]
   #     ]
   # """
   @spec delimiters(any, any) :: [any]

@@ -55,16 +55,19 @@ defmodule IO.ANSI.Table.SpecServer do
     {:reply, spec, spec}
   end
 
+  @spec handle_info(term, Spec.t()) :: {:noreply, Spec.t()}
+  def handle_info(_message, spec), do: {:noreply, spec}
+
   @spec terminate(term, Spec.t()) :: true
   def terminate(reason = :shutdown, spec) do
-    Log.info(:terminate, {reason, spec, __ENV__})
+    Log.info(:terminating, {reason, spec, __ENV__})
     true = :ets.delete(@ets, key(spec.spec_name))
     # Ensure message logged before exiting...
     # Process.sleep(@wait)
   end
 
   def terminate(reason, spec) do
-    Log.error(:terminate, {reason, spec, __ENV__})
+    Log.error(:terminating, {reason, spec, __ENV__})
     true = :ets.delete(@ets, key(spec.spec_name))
     # Ensure message logged before exiting...
     # Process.sleep(@wait)
@@ -79,7 +82,7 @@ defmodule IO.ANSI.Table.SpecServer do
   defp develop_or_lookup(spec) do
     case :ets.lookup(@ets, key(spec.spec_name)) do
       [] ->
-        Log.info(:spawned, {spec, __ENV__})
+        Log.info(:spawning, {spec, __ENV__})
         Spec.develop(spec) |> save()
 
       [{_key, spec}] ->
@@ -90,7 +93,7 @@ defmodule IO.ANSI.Table.SpecServer do
 
   @spec save(Spec.t()) :: Spec.t()
   defp save(spec) do
-    Log.info(:save, {spec, __ENV__})
+    Log.info(:saving, {spec, __ENV__})
     true = :ets.insert(@ets, {key(spec.spec_name), spec})
     spec
   end

@@ -13,7 +13,7 @@ defmodule IO.ANSI.Table.Log do
     """
   end
 
-  error :terminate, {reason, spec, env} do
+  error :terminating, {reason, spec, env} do
     """
     \nTerminating table spec server...
     • Server: #{via(spec.spec_name) |> inspect() |> maybe_break(10)}
@@ -24,7 +24,7 @@ defmodule IO.ANSI.Table.Log do
     """
   end
 
-  info :terminate, {reason, spec, env} do
+  info :terminating, {reason, spec, env} do
     """
     \nTerminating table spec server...
     • Server: #{via(spec.spec_name) |> inspect() |> maybe_break(10)}
@@ -72,9 +72,9 @@ defmodule IO.ANSI.Table.Log do
     """
   end
 
-  info :spawned, {spec, env} do
+  info :spawning, {spec, env} do
     """
-    \nSpawned table spec server...
+    \nSpawning table spec server...
     • Spec name: #{inspect(spec.spec_name)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
     #{from(env, __MODULE__)}\
@@ -90,7 +90,7 @@ defmodule IO.ANSI.Table.Log do
     """
   end
 
-  info :save, {spec, env} do
+  info :saving, {spec, env} do
     """
     \nSaving table spec...
     • Server: #{via(spec.spec_name) |> inspect() |> maybe_break(10)}

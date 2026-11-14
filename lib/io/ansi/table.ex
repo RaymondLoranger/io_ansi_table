@@ -160,9 +160,11 @@ defmodule IO.ANSI.Table do
   def format(maps, options \\ []) when is_list(maps) and is_list(options) do
     spec_name = Spec.spec_name(options)
 
-    if options[:async],
-      do: GenServer.cast(SpecServer.via(spec_name), {:format, maps, options}),
-      else: GenServer.call(SpecServer.via(spec_name), {:format, maps, options})
+    if options[:async] do
+      SpecServer.via(spec_name) |> GenServer.cast({:format, maps, options})
+    else
+      SpecServer.via(spec_name) |> GenServer.call({:format, maps, options})
+    end
   end
 
   @doc """
@@ -196,7 +198,7 @@ defmodule IO.ANSI.Table do
   @spec get_spec(keyword) :: Spec.t()
   def get_spec(options \\ []) when is_list(options) do
     spec_name = Spec.spec_name(options)
-    GenServer.call(SpecServer.via(spec_name), :get_spec)
+    SpecServer.via(spec_name) |> GenServer.call(:get_spec)
   end
 
   @doc """
@@ -243,18 +245,22 @@ defmodule IO.ANSI.Table do
         %{name: "Jill", likes: "cooking"  , dob: "1976-09-28", bmi: 25.8}
       ]
 
-      spec = Spec.new([:name, :dob, :likes],
-        header_fixes: %{~r[dob]i => "Date of Birth"},
-        sort_specs: [asc: :dob],
-        align_specs: [center: :dob],
-        margins: [top: 2, bottom: 2, left: 2]
-      ) |> Spec.develop()
+      spec =
+        Spec.new([:name, :dob, :likes],
+          header_fixes: %{~r[dob]i => "Date of Birth"},
+          sort_specs: [asc: :dob],
+          align_specs: [center: :dob],
+          margins: [top: 2, bottom: 2, left: 2]
+        )
+        |> Spec.develop()
 
       Table.write(spec, people, style: :light)
       Table.write(spec, people, style: :light_alt)
       Table.write(spec, people, style: :light_mult)
       Table.write(spec, people, style: :cyan_alt)
       Table.write(spec, people, style: :cyan_mult)
+      Table.write(spec, people, style: :green_alt)
+      Table.write(spec, people, style: :green_mult)
   """
   @spec write(Spec.t(), [Access.container()], keyword) :: :ok
   defdelegate write(spec, maps, options \\ []), to: Spec, as: :write_table

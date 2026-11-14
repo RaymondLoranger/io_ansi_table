@@ -83,7 +83,8 @@ defmodule IO.ANSI.Table.Header do
       {attr, {key, mod}} when is_atom(mod) and key == header -> attr
       # :dob
       key when key == header -> default_attr
-      _ -> false
+      # continue searching...
+      _other -> false
     end)
   end
 

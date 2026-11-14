@@ -115,5 +115,5 @@ The latest version supports:
 [Version]: https://hexdocs.pm/elixir/Version.html
 [mw]: https://github.com/milkwine
 [github_issues]: https://hex.pm/packages/github_issues
-[noaa_observations]: https://hex.pm/packages/noaa_observations
+[noaa_observations]: httpssssssssssssssssssssssssssssss://hex.pm/packages/noaa_observations
 [write/3]: https://hexdocs.pm/io_ansi_table/IO.ANSI.Table.html#write/3

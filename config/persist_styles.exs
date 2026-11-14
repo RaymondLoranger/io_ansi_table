@@ -1,6 +1,7 @@
 import Config
 
 config :io_ansi_table, table_styles: [
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   light: %{
     note: "light colors",
     rank: 10,
@@ -29,6 +30,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :light_white
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   light_alt: %{
     note: "light colors, alternating row colors",
     rank: 15,
@@ -67,6 +69,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :light_white
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   light_mult: %{
     note: "light colors, 3 repeating row colors",
     rank: 17,
@@ -109,6 +112,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :light_white
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   medium: %{
     note: "medium colors",
     rank: 20,
@@ -137,6 +141,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :gold
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   medium_alt: %{
     note: "medium colors, alternating row colors",
     rank: 25,
@@ -175,6 +180,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :gold
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   medium_mult: %{
     note: "medium colors, 3 repeating row colors",
     rank: 27,
@@ -217,6 +223,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :gold
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   dark: %{
     note: "dark colors",
     rank: 30,
@@ -245,6 +252,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :chartreuse
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   dark_alt: %{
     note: "dark colors, alternating row colors",
     rank: 35,
@@ -283,6 +291,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :chartreuse
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   dark_mult: %{
     note: "dark colors, 3 repeating row colors",
     rank: 37,
@@ -325,6 +334,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :chartreuse
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   pretty: %{
     note: "multicolored",
     rank: 40,
@@ -353,6 +363,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :fuchsia
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   pretty_alt: %{
     note: "multicolored, alternating row colors",
     rank: 45,
@@ -391,6 +402,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :fuchsia
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   pretty_mult: %{
     note: "multicolored, 3 repeating row colors",
     rank: 47,
@@ -433,6 +445,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :fuchsia
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   cyan: %{
     note: "cyan background",
     rank: 50,
@@ -461,6 +474,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_white, :cyan_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   yellow: %{
     note: "light yellow background",
     rank: 60,
@@ -489,6 +503,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:blue, :light_yellow_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   green: %{
     note: "green background",
     rank: 70,
@@ -517,6 +532,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_white, :green_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   cyan_border: %{
     note: "light cyan border",
     rank: 80,
@@ -545,6 +561,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_cyan, :light_cyan_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   yellow_border: %{
     note: "light yellow border",
     rank: 90,
@@ -573,6 +590,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_yellow, :light_yellow_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   green_border: %{
     note: "light green border",
     rank: 100,
@@ -601,6 +619,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_green, :light_green_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   mixed: %{
     note: "fillers revealed",
     rank: 110,
@@ -629,6 +648,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:black, :light_yellow_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   dotted: %{
     note: "slightly colored",
     rank: 120,
@@ -651,6 +671,7 @@ config :io_ansi_table, table_styles: [
     ],
     non_key_attrs: :light_white,
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   dotted_alt: %{
     note: "slightly colored, alternating row colors",
     rank: 125,
@@ -689,6 +710,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :light_white
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   dotted_mult: %{
     note: "slightly colored, 3 repeating row colors",
     rank: 127,
@@ -731,6 +753,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :light_white
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   dashed: %{
     note: "no colors",
     rank: 130,
@@ -747,6 +770,7 @@ config :io_ansi_table, table_styles: [
     key_attrs:     :normal,
     non_key_attrs: :normal
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   plain: %{
     note: "slightly colored",
     rank: 140,
@@ -775,6 +799,7 @@ config :io_ansi_table, table_styles: [
       bottom:    :light_yellow
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   test: %{
     note: "no colors",
     rank: 150,
@@ -791,6 +816,7 @@ config :io_ansi_table, table_styles: [
     key_attrs:     :normal,
     non_key_attrs: :normal
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   bare: %{
     note: "no colors",
     rank: 160,
@@ -805,6 +831,7 @@ config :io_ansi_table, table_styles: [
     key_attrs:     :normal,
     non_key_attrs: :normal
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   barish: %{
     note: "like bare but colored",
     rank: 170,
@@ -827,6 +854,7 @@ config :io_ansi_table, table_styles: [
       row:       :normal
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   green_padded: %{
     note: "like green but with extra padding",
     rank: 180,
@@ -855,6 +883,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_white, :green_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   green_unpadded: %{
     note: "like green but without padding",
     rank: 190,
@@ -883,6 +912,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_white, :green_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   green_border_padded: %{
     note: "light green border with extra padding",
     rank: 200,
@@ -911,6 +941,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_green, :light_green_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   green_border_unpadded: %{
     note: "light green border without padding",
     rank: 210,
@@ -939,6 +970,7 @@ config :io_ansi_table, table_styles: [
       bottom:    [:light_green, :light_green_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   cyan_alt: %{
     note: "cyan header, alternating row colors",
     rank: 220,
@@ -979,6 +1011,7 @@ config :io_ansi_table, table_styles: [
       odd_row:   [:black, :chartreuse_yellow_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   cyan_mult: %{
     note: "cyan header, 3 repeating row colors",
     rank: 230,
@@ -1024,6 +1057,7 @@ config :io_ansi_table, table_styles: [
       row_3:     [:black, :chartreuse_yellow_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   green_alt: %{
     note: "green header, alternating row colors",
     rank: 240,
@@ -1064,6 +1098,7 @@ config :io_ansi_table, table_styles: [
       odd_row:   [:black, :chartreuse_yellow_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   green_mult: %{
     note: "green header, 3 repeating row colors",
     rank: 250,
@@ -1109,6 +1144,7 @@ config :io_ansi_table, table_styles: [
       row_3:     [:black, :chartreuse_yellow_background]
     ]
   },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   game: %{
     note: "game board",
     rank: 255,
@@ -1128,4 +1164,5 @@ config :io_ansi_table, table_styles: [
       row:    :normal
     ]
   }
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
 ]

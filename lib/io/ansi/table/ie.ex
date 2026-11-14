@@ -4,30 +4,30 @@ defmodule IO.ANSI.Table.IE do
   # Example of an IEx session...
   #
   #   use IO.ANSI.Table.IE
-  #   styles
+  #   styles()
   #   styles(:light_green)
-  #   Style.styles
-  #   people_with_date_dobs
-  #   people_with_string_dobs
+  #   Style.styles()
+  #   people_with_date_dobs()
+  #   people_with_string_dobs()
   #   sort_people(people_with_date_dobs, asc: {:dob, Date}, desc: :likes)
   #   sort_people(people_with_string_dobs, asc: :dob, desc: :likes)
-  #   start
-  #   format_islands
-  #   write_islands
+  #   start()
+  #   format_islands()
+  #   write_islands()
   #   format_islands(:game)
   #   write_islands(:game)
   #   format_islands(:game, 111)
   #   write_islands(:game, 111)
   #   format_people_sync(:dotted_alt)
   #   format_people_async(:dotted_alt)
-  #   format_people
-  #   write_people
+  #   format_people()
+  #   write_people()
   #   format_people(:pretty_alt)
   #   write_people(:pretty_alt)
   #   format_people(:pretty, 111)
   #   write_people(:pretty, 111)
-  #   get_spec
-  #   stop
+  #   get_spec()
+  #   stop()
 
   use PersistConfig
 
@@ -52,6 +52,7 @@ defmodule IO.ANSI.Table.IE do
   defmacro __using__(_options) do
     quote do
       import unquote(__MODULE__)
+
       alias unquote(__MODULE__)
       alias IO.ANSI.Plus, as: ANSI
 
@@ -84,7 +85,9 @@ defmodule IO.ANSI.Table.IE do
       }
 
       alias IO.ANSI.Table
+
       require MapSorter
+
       :ok
     end
   end

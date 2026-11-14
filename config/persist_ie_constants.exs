@@ -2,6 +2,7 @@ import Config
 
 alias IO.ANSI.Plus, as: ANSI
 
+# i => island, f => forested, w => water, h => hit, m => miss
 i = "#{ANSI.format([:sandy_brown, :sandy_brown_background, "isl"], true)}"
 f = "#{ANSI.format([:islamic_green, :islamic_green_background, "for"], true)}"
 w = "#{ANSI.format([:dodger_blue, :dodger_blue_background, "wat"], true)}"
