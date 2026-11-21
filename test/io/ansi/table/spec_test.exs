@@ -37,9 +37,9 @@ defmodule IO.ANSI.Table.SpecTest do
       style: :test
     ]
 
-    spec_000 = Spec.new(headers, options_000) |> Spec.develop()
-    spec_102 = Spec.new(headers, options_102) |> Spec.develop()
-    bad_margins_101 = Spec.new(headers, bad_margins_101) |> Spec.develop()
+    spec_000 = Spec.new(headers, options_000) |> Spec.expand()
+    spec_102 = Spec.new(headers, options_102) |> Spec.expand()
+    bad_margins_101 = Spec.new(headers, bad_margins_101) |> Spec.expand()
 
     %{
       spec_000: spec_000,

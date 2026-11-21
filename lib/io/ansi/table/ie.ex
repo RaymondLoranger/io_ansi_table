@@ -2,6 +2,8 @@ defmodule IO.ANSI.Table.IE do
   @moduledoc false
 
   # Example of an IEx session...
+
+  #   iex -S mix
   #
   #   use IO.ANSI.Table.IE
   #   styles()
@@ -22,10 +24,10 @@ defmodule IO.ANSI.Table.IE do
   #   format_people_async(:dotted_alt)
   #   format_people()
   #   write_people()
-  #   format_people(:pretty_alt)
-  #   write_people(:pretty_alt)
-  #   format_people(:pretty, 111)
-  #   write_people(:pretty, 111)
+  #   format_people(:dotted_alt)
+  #   write_people(:dotted_alt)
+  #   format_people(:dotted, 111)
+  #   write_people(:dotted, 111)
   #   get_spec()
   #   stop()
 
@@ -33,7 +35,7 @@ defmodule IO.ANSI.Table.IE do
 
   alias IO.ANSI.Plus, as: ANSI
   alias IO.ANSI.Table
-  alias IO.ANSI.Table.Style
+  alias IO.ANSI.Table.{Spec, Style}
 
   @islands get_env(:islands)
   @attacks get_env(:attacks)
@@ -138,13 +140,22 @@ defmodule IO.ANSI.Table.IE do
   # Format people...
   def format_people(style \\ :pretty, times \\ 1)
       when is_atom(style) and is_integer(times) and times >= 1 do
-    import Table, only: [format: 2]
+    Spec.maybe_ring_bell(@people_options[:bell])
 
     {microsecs, _} =
       :timer.tc(fn ->
         for _ <- 1..times do
-          format(@people.string_dobs, style: style, spec_name: "string_dobs")
-          format(@people.date_dobs, style: style, spec_name: "date_dobs")
+          Table.format(@people.string_dobs,
+            bell: false,
+            style: style,
+            spec_name: "string_dobs"
+          )
+
+          Table.format(@people.date_dobs,
+            bell: false,
+            style: style,
+            spec_name: "date_dobs"
+          )
         end
       end)
 
@@ -154,14 +165,22 @@ defmodule IO.ANSI.Table.IE do
   # Write people...
   def write_people(style \\ :pretty, times \\ 1)
       when is_atom(style) and is_integer(times) and times >= 1 do
+    Spec.maybe_ring_bell(@people_options[:bell])
     left_spec = Table.get_spec(spec_name: "string_dobs")
     right_spec = Table.get_spec(spec_name: "date_dobs")
 
     {microsecs, _} =
       :timer.tc(fn ->
         for _ <- 1..times do
-          Table.write(left_spec, @people_with_string_dobs, style: style)
-          Table.write(right_spec, @people_with_date_dobs, style: style)
+          Table.write(left_spec, @people_with_string_dobs,
+            bell: false,
+            style: style
+          )
+
+          Table.write(right_spec, @people_with_date_dobs,
+            bell: false,
+            style: style
+          )
         end
       end)
 

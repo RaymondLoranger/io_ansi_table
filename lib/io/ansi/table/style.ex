@@ -79,12 +79,12 @@ defmodule IO.ANSI.Table.Style do
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> length Style.styles
-      36
+      iex> Style.styles() |> length()
+      38
 
       iex> alias IO.ANSI.Table.Style
-      iex> Enum.take Style.styles, 7
-      [:bare, :barish, :cyan, :cyan_alt, :cyan_border, :cyan_mult, :dark]
+      iex> Style.styles() |> Enum.take(7)
+      [:bare, :barish, :blue_alt, :blue_mult, :cyan, :cyan_alt, :cyan_border]
   """
   @spec styles :: [t]
   def styles, do: @sorted_style_ids
@@ -179,6 +179,7 @@ defmodule IO.ANSI.Table.Style do
     @line_types {style, LineTypes.from(@types)}
     def line_types(unquote(style)), do: @line_types[unquote(style)]
 
+    # Removes existing entries but attributes will still accumulate.
     Module.delete_attribute(__MODULE__, :left_lengths)
     Module.delete_attribute(__MODULE__, :inner_lengths)
     Module.delete_attribute(__MODULE__, :right_lengths)
@@ -253,16 +254,20 @@ defmodule IO.ANSI.Table.Style do
   @attr_funs [:border_attr, :filler_attr, :key_attr, :non_key_attr]
 
   for fun <- @attr_funs do
+    # E.g. :border_attrs for :border_attr.
     key = :"#{fun}s"
 
     for {style, style_map} <- @styles do
+      # E.g. :light_yellow or [top: :light_yellow,...]
       attrs = Map.get(style_map, key)
 
       if Keyword.keyword?(attrs) do
         for {type, attr} <- attrs do
+          # E.g. {:top, :light_yellow} or {:header, [:light_yellow, :underline]}
           def unquote(fun)(unquote(style), unquote(type)), do: unquote(attr)
         end
       else
+        # E.g. :light_yellow for [:top, :header, :separator, [:row], :bottom]
         for type <- List.flatten(@line_types[style]) do
           def unquote(fun)(unquote(style), unquote(type)), do: unquote(attrs)
         end
@@ -278,7 +283,7 @@ defmodule IO.ANSI.Table.Style do
   ## Examples
 
       iex> alias IO.ANSI.Table.Style
-      iex> Style.texts("  - `&style`&filler - &note\n") |> Enum.slice(16..18)
+      iex> Style.texts("  - `&style`&filler - &note\n") |> Enum.slice(18..20)
       ["  - `:green_border`          - light green border\n",
        "  - `:green_border_padded`   - light green border with extra padding\n",
        "  - `:green_border_unpadded` - light green border without padding\n"]

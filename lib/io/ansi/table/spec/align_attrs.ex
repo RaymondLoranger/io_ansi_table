@@ -19,7 +19,10 @@ defmodule IO.ANSI.Table.Spec.AlignAttrs do
   """
   @spec derive_and_put(Spec.t()) :: Spec.t()
   def derive_and_put(%Spec{headers: headers, align_specs: specs} = spec) do
-    attrs = Enum.map(headers, &Header.find_attr(&1, specs, :left))
-    put_in(spec.align_attrs, attrs)
+    # attrs = Enum.map(headers, &Header.find_attr(&1, specs, :left))
+    # put_in(spec.align_attrs, attrs)
+    headers
+    |> Enum.map(&Header.find_attr(&1, specs, :left))
+    |> then(&put_in(spec.align_attrs, &1))
   end
 end

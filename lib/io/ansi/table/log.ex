@@ -3,9 +3,9 @@ defmodule IO.ANSI.Table.Log do
 
   import IO.ANSI.Table.SpecServer, only: [via: 1]
 
-  error :app_start, {reason, app, env} do
+  error :error_starting_app, {reason, app, env} do
     """
-    \nError starting application...
+    \nError starting application at 'compile time'...
     • Call: 'Application.ensure_all_started/1'
     • App argument: #{inspect(app)}
     • Reason: #{inspect(reason) |> maybe_break(10)}
@@ -77,6 +77,7 @@ defmodule IO.ANSI.Table.Log do
     \nSpawning table spec server...
     • Spec name: #{inspect(spec.spec_name)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
+    • Spec: #{inspect(spec) |> maybe_break(8)}
     #{from(env, __MODULE__)}\
     """
   end
@@ -86,6 +87,7 @@ defmodule IO.ANSI.Table.Log do
     \nRestarted table spec server...
     • Spec name: #{inspect(spec.spec_name)}
     • Server PID: #{self() |> inspect() |> maybe_break(14)}
+    • Spec: #{inspect(spec) |> maybe_break(8)}
     #{from(env, __MODULE__)}\
     """
   end

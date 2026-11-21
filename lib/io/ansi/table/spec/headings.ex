@@ -30,7 +30,10 @@ defmodule IO.ANSI.Table.Spec.Headings do
   """
   @spec derive_and_put(Spec.t()) :: Spec.t()
   def derive_and_put(%Spec{headers: headers} = spec) do
-    headings = Enum.map(headers, &Header.to_heading(&1, spec))
-    put_in(spec.headings, headings)
+    # headings = Enum.map(headers, &Header.to_heading(&1, spec))
+    # put_in(spec.headings, headings)
+    headers
+    |> Enum.map(&Header.to_heading(&1, spec))
+    |> then(&put_in(spec.headings, &1))
   end
 end

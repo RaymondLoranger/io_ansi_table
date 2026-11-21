@@ -19,7 +19,10 @@ defmodule IO.ANSI.Table.Spec.SortAttrs do
   """
   @spec derive_and_put(Spec.t()) :: Spec.t()
   def derive_and_put(%Spec{headers: headers, sort_specs: sort_specs} = spec) do
-    attrs = Enum.map(headers, &Header.find_attr(&1, sort_specs, :asc))
-    put_in(spec.sort_attrs, attrs)
+    # attrs = Enum.map(headers, &Header.find_attr(&1, sort_specs, :asc))
+    # put_in(spec.sort_attrs, attrs)
+    headers
+    |> Enum.map(&Header.find_attr(&1, sort_specs, :asc))
+    |> then(&put_in(spec.sort_attrs, &1))
   end
 end

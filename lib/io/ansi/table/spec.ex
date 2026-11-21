@@ -129,8 +129,8 @@ defmodule IO.ANSI.Table.Spec do
   @doc """
   Updates the derived fields of `spec`.
   """
-  @spec develop(t) :: t
-  def develop(%Spec{} = spec) do
+  @spec expand(t) :: t
+  def expand(%Spec{} = spec) do
     spec
     |> Spec.AlignAttrs.derive_and_put()
     |> Spec.Headings.derive_and_put()
@@ -140,7 +140,7 @@ defmodule IO.ANSI.Table.Spec do
 
   @doc """
   Gets the table spec server name in `options`.
-  Defaults to the current app name expressed as a string.
+  Defaults to the current app name (as a string).
 
   ## Examples
 
@@ -169,12 +169,13 @@ defmodule IO.ANSI.Table.Spec do
   end
 
   @doc """
-  Writes data from `maps` to `:stdio` per table `spec` and `options`.
+  Writes data from `maps` to `:stdio` according to table `spec` and `options`.
   """
   @spec write_table(t, [Access.container()], keyword) :: :ok
   def write_table(%Spec{} = spec, maps, options \\ [])
       when is_list(maps) and is_list(options) do
     spec
+    # Only 4 options may override table specs...
     |> put(:bell, options[:bell])
     |> put(:count, options[:count])
     |> put(:max_width, options[:max_width])
@@ -182,6 +183,14 @@ defmodule IO.ANSI.Table.Spec do
     |> Spec.Rows.derive_and_put(maps)
     |> Spec.ColumnWidths.derive_and_put()
     |> write_table()
+  end
+
+  @doc """
+  Maybe chime the bell.
+  """
+  @spec maybe_ring_bell(boolean) :: :ok
+  def maybe_ring_bell(bell) when is_boolean(bell) do
+    :os.type() |> maybe_ring_bell(bell)
   end
 
   ## Private functions
@@ -209,9 +218,49 @@ defmodule IO.ANSI.Table.Spec do
 
   @spec write_table(t) :: :ok
   defp write_table(spec) do
+    # IO.write(if spec.bell, do: "\a", else: "")
+    maybe_ring_bell(spec.bell)
     top_margin(spec) |> IO.write()
     Style.line_types(spec.style) |> Enum.each(&LineType.write_lines(&1, spec))
     bottom_margin(spec) |> IO.write()
-    IO.write(if spec.bell, do: "\a", else: "")
+  end
+
+  # On Windows, with Elixir 1.20.5 (which runs on Erlang/OTP 27–29),
+  # `IO.write("\a")` no longer triggers the terminal bell. Instead, the
+  # Erlang I/O driver intercepts the ASCII bell byte (0x07) and escapes
+  # it into printable characters (such as ^G or ^') before it ever reaches
+  # PowerShell.
+
+  # To play the standard Windows notification chime, call the .NET
+  # SystemSounds class...
+
+  # Or better use this suggestion by @garazdawi (Erlang Core Team):
+
+  # port = :erlang.open_port({:fd, 1, 1}, [:out])
+  # :erlang.port_command(port, "\a")
+  # :erlang.port_close(port)
+
+  @spec maybe_ring_bell(tuple, boolean) :: :ok
+  defp maybe_ring_bell(_os_type = {:win32, :nt}, _ring_bell? = true) do
+    # Spawn process to minimize delay...
+    # args = "[System.Media.SystemSounds]::Beep.Play()"
+    # spawn(fn ->
+    #  System.cmd("powershell", ["-NoProfile", "-Command", args])
+    # end)
+
+    port = :erlang.open_port({:fd, 1, 1}, [:out])
+    :erlang.port_command(port, "\a")
+    :erlang.port_close(port)
+    :ok
+  end
+
+  defp maybe_ring_bell(_os_type = {:unix, _os_name}, _ring_bell? = true) do
+    IO.write("\a")
+    # Or if the above fails...
+    # File.write("/dev/tty", "\a")
+  end
+
+  defp maybe_ring_bell(_os_type, _ring_bell?) do
+    :ok
   end
 end

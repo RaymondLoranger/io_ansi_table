@@ -1,6 +1,7 @@
 defmodule IO.ANSI.Table.SpecServer do
   @moduledoc """
   A server process that holds a table spec struct as its state.
+  Times out after 60 minutes of inactivity.
   """
 
   use GenServer, restart: :transient
@@ -11,6 +12,8 @@ defmodule IO.ANSI.Table.SpecServer do
 
   @ets get_env(:ets_name)
   @reg get_env(:registry)
+  @timeout :timer.minutes(60)
+  # @timeout :timer.seconds(60)
   # @wait 50
 
   @doc """
@@ -22,44 +25,47 @@ defmodule IO.ANSI.Table.SpecServer do
   end
 
   @doc """
-  Allows to register or look up a table spec server process via a `spec name`.
+  Allows to register or look up a table spec server process via `spec_name`.
   """
   @spec via(String.t()) :: {:via, Registry, tuple}
   def via(spec_name), do: {:via, Registry, {@reg, key(spec_name)}}
 
   ## Callbacks
 
-  @spec init(Spec.t()) :: {:ok, Spec.t()}
-  def init(spec), do: {:ok, develop_or_lookup(spec)}
+  @spec init(Spec.t()) :: {:ok, Spec.t(), timeout}
+  def init(spec), do: {:ok, expand_or_lookup(spec), @timeout}
 
-  @spec handle_cast(term, Spec.t()) :: {:noreply, Spec.t()}
+  @spec handle_cast(term, Spec.t()) :: {:noreply, Spec.t(), timeout}
   def handle_cast({:format, maps, options} = request, spec) do
     Log.info(:handle_cast, {spec, request, __ENV__})
     Spec.write_table(spec, maps, options)
-    {:noreply, spec}
+    {:noreply, spec, @timeout}
   end
 
   @spec handle_call(term, GenServer.from(), Spec.t()) ::
-          {:reply, :ok | Spec.t(), Spec.t()}
+          {:reply, :ok | Spec.t(), Spec.t(), timeout}
   def handle_call({:format, maps, options} = request, {from_pid, _tag}, spec) do
     # Update group leader in case request comes from remote shell...
     group_leader = Process.info(from_pid)[:group_leader]
     if group_leader, do: self() |> Process.group_leader(group_leader)
     Log.info(:handle_call, {spec, request, __ENV__})
     Spec.write_table(spec, maps, options)
-    {:reply, :ok, spec}
+    {:reply, :ok, spec, @timeout}
   end
 
   def handle_call(request = :get_spec, _from, spec) do
     Log.info(:handle_call, {spec, request, __ENV__})
-    {:reply, spec, spec}
+    {:reply, spec, spec, @timeout}
   end
 
-  @spec handle_info(term, Spec.t()) :: {:noreply, Spec.t()}
+  @spec handle_info(term, Spec.t()) ::
+          {:stop, reason :: tuple, Spec.t()} | {:noreply, Spec.t()}
+  def handle_info(:timeout, spec), do: {:stop, {:shutdown, :timeout}, spec}
   def handle_info(_message, spec), do: {:noreply, spec}
 
   @spec terminate(term, Spec.t()) :: true
-  def terminate(reason = :shutdown, spec) do
+  def terminate(reason, spec)
+      when reason in [:shutdown, {:shutdown, :timeout}] do
     Log.info(:terminating, {reason, spec, __ENV__})
     true = :ets.delete(@ets, key(spec.spec_name))
     # Ensure message logged before exiting...
@@ -78,12 +84,12 @@ defmodule IO.ANSI.Table.SpecServer do
   @spec key(String.t()) :: tuple
   defp key(spec_name), do: {SpecServer, spec_name}
 
-  @spec develop_or_lookup(Spec.t()) :: Spec.t()
-  defp develop_or_lookup(spec) do
+  @spec expand_or_lookup(Spec.t()) :: Spec.t()
+  defp expand_or_lookup(spec) do
     case :ets.lookup(@ets, key(spec.spec_name)) do
       [] ->
         Log.info(:spawning, {spec, __ENV__})
-        Spec.develop(spec) |> save()
+        Spec.expand(spec) |> save()
 
       [{_key, spec}] ->
         Log.info(:restarted, {spec, __ENV__})

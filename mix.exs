@@ -22,7 +22,7 @@ defmodule IO.ANSI.Table.Mixfile do
 
   defp description do
     """
-    Writes data to "stdio" in a table with borders and colors.
+    Writes data to "stdio" as a table with borders and colors.
     Can choose a table style to change the look of the table.
     """
   end
@@ -30,7 +30,10 @@ defmodule IO.ANSI.Table.Mixfile do
   defp package do
     [
       files: ["lib", "mix.exs", "README*", "config/persist*.exs"],
-      exclude_patterns: ["lib/io/ansi/table/ie.ex"],
+      exclude_patterns: [
+        "lib/io/ansi/table/ie.ex",
+        "config/persist_ie_constants.exs"
+      ],
       maintainers: ["Raymond Loranger"],
       licenses: ["MIT"],
       links: %{"GitHub" => source_url()}

@@ -1145,9 +1145,96 @@ config :io_ansi_table, table_styles: [
     ]
   },
   # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+  blue_alt: %{
+    note: "blue header, alternating row colors",
+    rank: 260,
+    borders: [
+      #           left  inner  right dash
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│" ,  "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      even_row:  ["│" ,  "│" ,  "│", nil],
+      odd_row:   ["│" ,  "│" ,  "│", nil]
+    ],
+    border_attrs: [
+      top:       [:bright_blue, :bright_blue_background],
+      header:    [:bright_blue, :bright_blue_background],
+      separator: [:bright_blue, :bright_blue_background],
+      even_row:  [:aqua, :aqua_background],
+      odd_row:   [:chartreuse_yellow, :chartreuse_yellow_background]
+    ],
+    filler_attrs: [
+      top:       :bright_blue_background,
+      header:    :bright_blue_background,
+      separator: :bright_blue_background,
+      even_row:  :aqua_background,
+      odd_row:   :chartreuse_yellow_background
+    ],
+    key_attrs: [
+      top:       [:bright_blue, :bright_blue_background],
+      header:    [:light_white, :bright_blue_background, :underline],
+      separator: [:bright_blue, :bright_blue_background],
+      even_row:  [:free_speech_red, :aqua_background],
+      odd_row:   [:free_speech_red, :chartreuse_yellow_background]
+    ],
+    non_key_attrs: [
+      top:       [:bright_blue, :bright_blue_background],
+      header:    [:light_white, :bright_blue_background],
+      separator: [:bright_blue, :bright_blue_background],
+      even_row:  [:black, :aqua_background],
+      odd_row:   [:black, :chartreuse_yellow_background]
+    ]
+  },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
+  blue_mult: %{
+    note: "blue header, 3 repeating row colors",
+    rank: 270,
+    borders: [
+      #           left  inner  right dash
+      top:       ["┌─", "─┬─", "─┐", "─"],
+      header:    ["│" ,  "│" ,  "│", nil],
+      separator: ["├─", "─┼─", "─┤", "─"],
+      row_1:     ["│" ,  "│" ,  "│", nil],
+      row_2:     ["│" ,  "│" ,  "│", nil],
+      row_3:     ["│" ,  "│" ,  "│", nil]
+    ],
+    border_attrs: [
+      top:       [:bright_blue, :bright_blue_background],
+      header:    [:bright_blue, :bright_blue_background],
+      separator: [:bright_blue, :bright_blue_background],
+      row_1:     [:aqua, :aqua_background],
+      row_2:     [:screamin_green, :screamin_green_background],
+      row_3:     [:chartreuse_yellow, :chartreuse_yellow_background]
+    ],
+    filler_attrs: [
+      top:       :bright_blue_background,
+      header:    :bright_blue_background,
+      separator: :bright_blue_background,
+      row_1:     :aqua_background,
+      row_2:     :screamin_green_background,
+      row_3:     :chartreuse_yellow_background
+    ],
+    key_attrs: [
+      top:       [:bright_blue, :bright_blue_background],
+      header:    [:light_white, :bright_blue_background, :underline],
+      separator: [:bright_blue, :bright_blue_background],
+      row_1:     [:free_speech_red, :aqua_background],
+      row_2:     [:free_speech_red, :screamin_green_background],
+      row_3:     [:free_speech_red, :chartreuse_yellow_background]
+    ],
+    non_key_attrs: [
+      top:       [:bright_blue, :bright_blue_background],
+      header:    [:light_white, :bright_blue_background],
+      separator: [:bright_blue, :bright_blue_background],
+      row_1:     [:black, :aqua_background],
+      row_2:     [:black, :screamin_green_background],
+      row_3:     [:black, :chartreuse_yellow_background]
+    ]
+  },
+  # • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • • •
   game: %{
     note: "game board",
-    rank: 255,
+    rank: 280,
     borders: [
       #        left inner right dash
       header: ["",  "",   "",   nil],

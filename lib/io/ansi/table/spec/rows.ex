@@ -10,7 +10,7 @@ defmodule IO.ANSI.Table.Spec.Rows do
   # May need `mix compile --force` and `mix test --force`.
   case Application.ensure_all_started(app = :log_reset) do
     {:ok, _apps} -> :ok
-    {:error, reason} -> Log.error(:app_start, {reason, app, __ENV__})
+    {:error, reason} -> Log.error(:error_starting_app, {reason, app, __ENV__})
   end
 
   @doc """
@@ -28,16 +28,18 @@ defmodule IO.ANSI.Table.Spec.Rows do
   """
   @spec derive_and_put(Spec.t(), [Access.container()]) :: Spec.t()
   def derive_and_put(
-        %Spec{
-          count: count,
-          headers: headers,
-          sort_specs: specs
-        } = spec,
+        %Spec{count: count, headers: headers, sort_specs: specs} = spec,
         maps
       ) do
     require MapSorter
-    rows = MapSorter.sort(maps, specs) |> Enum.take(count) |> select(headers)
-    put_in(spec.rows, rows)
+
+    # rows = MapSorter.sort(maps, specs) |> Enum.take(count) |> select(headers)
+    # put_in(spec.rows, rows)
+    maps
+    |> MapSorter.sort(specs)
+    |> Enum.take(count)
+    |> select(headers)
+    |> then(&put_in(spec.rows, &1))
   end
 
   @doc """
@@ -56,31 +58,29 @@ defmodule IO.ANSI.Table.Spec.Rows do
   @spec transpose([Row.t()]) :: [Column.t()]
   def transpose(rows), do: Enum.zip(rows) |> Enum.map(&Tuple.to_list/1)
 
-  ## Private functions
+  @doc """
+  Selects specific `headers` in `maps` and returns the list of resulting rows.
 
-  # @doc """
-  # Gets the values for `headers` in `maps` and returns a list of rows.
+  ## Examples
 
-  # ## Examples
+      iex> alias IO.ANSI.Table.Spec.Rows
+      iex> maps = [
+      ...>   %{a: 1, b: 2, c: 3},
+      ...>   %{a: 4, b: 5, c: 6}
+      ...> ]
+      iex> Rows.select(maps, [:c, :a])
+      [["3", "1"], ["6", "4"]]
 
-  #     iex> alias IO.ANSI.Table.Spec.Rows
-  #     iex> maps = [
-  #     ...>   %{a: 1, b: 2, c: 3},
-  #     ...>   %{a: 4, b: 5, c: 6}
-  #     ...> ]
-  #     iex> Rows.select(maps, [:c, :a])
-  #     [["3", "1"], ["6", "4"]]
-
-  #     iex> alias IO.ANSI.Table.Spec.Rows
-  #     iex> maps = [
-  #     ...>   %{:one => "1", '2' => 2.0, "3" => :three},
-  #     ...>   %{:one => '4', '2' => "5", "3" => 000006}
-  #     ...> ]
-  #     iex> Rows.select(maps, ["3", :one, '2'])
-  #     [["three", "1", "2.0"], ["6", "4", "5"]]
-  # """
+      iex> alias IO.ANSI.Table.Spec.Rows
+      iex> maps = [
+      ...>   %{:one => "1", <<2>> => 2.0, "3" => :three},
+      ...>   %{:one => 004, <<2>> => "5", "3" => 000006}
+      ...> ]
+      iex> Rows.select(maps, ["3", :one, <<2>>])
+      [["three", "1", "2.0"], ["6", "4", "5"]]
+  """
   @spec select([Access.container()], [Header.t()]) :: [Row.t()]
-  defp select(maps, headers) do
+  def select(maps, headers) do
     for map <- maps do
       for header <- headers, do: map[header] |> to_string()
     end

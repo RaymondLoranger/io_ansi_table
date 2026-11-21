@@ -3,7 +3,7 @@
 # └───────────────────────────────────────────────────────────┘
 defmodule IO.ANSI.Table do
   @moduledoc """
-  Writes data to `:stdio` in a table with borders and colors.
+  Writes data to `:stdio` as a table with borders and colors.
   Can choose a table style to change the look of the table.
 
   ##### Inspired by the book [Programming Elixir](https://pragprog.com/titles/elixir16/programming-elixir-1-6) by Dave Thomas.
@@ -16,11 +16,11 @@ defmodule IO.ANSI.Table do
   @doc """
   Starts a new table spec server process and supervises it.
   Upon request (see `format/2`), the server will write data from a list of
-  maps to `:stdio` in a table formatted per `headers` and `options`.
+  maps to `:stdio` as a table formatted according to `headers` and `options`.
 
-  The table columns are identified by `headers` (`Map` keys).
+  The table columns are identified by `headers` (`t:Map.key/0`).
   We calculate the width of each column to fit the longest element
-  in that column, also considering the column heading.
+  in that column, also considering the column heading (derived from header).
   However, the `:max_width` option prevails.
 
   If the `:count` option is positive, we format the first _count_
@@ -45,6 +45,10 @@ defmodule IO.ANSI.Table do
     - `:sort_symbols` - to denote sort direction (keyword)
     - `:spec_name`    - to identify the table spec server (string)
     - `:style`        - table style (atom)
+
+  ## Notes
+
+    - Option `:spec_name` defaults to the current app name (as a string).
 
   ## Examples
 
@@ -74,11 +78,15 @@ defmodule IO.ANSI.Table do
 
     - `:spec_name` - to identify the table spec server (string)
 
+  ## Notes
+
+    - Option `:spec_name` defaults to the current app name (as a string).
+
   ## Examples
 
       iex> alias IO.ANSI.Table
       iex> Table.start([:name, :dob, :likes])
-      iex> Table.stop
+      iex> Table.stop()
       :ok
 
       iex> alias IO.ANSI.Table
@@ -94,8 +102,8 @@ defmodule IO.ANSI.Table do
 
   @doc """
   Sends a request to the table spec server identified by option `:spec_name`.
-  The server will write data from `maps` to `:stdio` in a table formatted per
-  its spec and `options`.
+  The server will write data from `maps` to `:stdio` as a table formatted
+  according to its spec and `options`.
 
   Also supports:
 
@@ -122,6 +130,10 @@ defmodule IO.ANSI.Table do
     - `:max_width` - to cap column widths (non neg integer)
     - `:spec_name` - to identify the table spec server (string)
     - `:style`     - table style (atom)
+
+  ## Notes
+
+    - Option `:spec_name` defaults to the current app name (as a string).
 
   ## Examples
 
@@ -181,6 +193,10 @@ defmodule IO.ANSI.Table do
 
     - `:spec_name` - to identify the table spec server (string)
 
+  ## Notes
+
+    - Option `:spec_name` defaults to the current app name (as a string).
+
   ## Examples
 
       iex> alias IO.ANSI.Table
@@ -197,13 +213,17 @@ defmodule IO.ANSI.Table do
   """
   @spec get_spec(keyword) :: Spec.t()
   def get_spec(options \\ []) when is_list(options) do
-    spec_name = Spec.spec_name(options)
-    SpecServer.via(spec_name) |> GenServer.call(:get_spec)
+    # spec_name = Spec.spec_name(options)
+    # SpecServer.via(spec_name) |> GenServer.call(:get_spec)
+    options
+    |> Spec.spec_name()
+    |> SpecServer.via()
+    |> GenServer.call(:get_spec)
   end
 
   @doc """
-  Writes data from `maps` to `:stdio` in a table formatted per `spec` and
-  `options`.
+  Writes data from `maps` to `:stdio` as a table formatted according to
+  `spec` and `options`.
 
   Also supports:
 
@@ -230,6 +250,21 @@ defmodule IO.ANSI.Table do
     - `:max_width` - to cap column widths (non neg integer)
     - `:style`     - table style (atom)
 
+  ## Notes
+
+    - If only using this function (`write/3` and not `format/2` whatsoever),
+      you could configure `io_ansi_table` as an included application so it
+      runs as a library application (without needing its supervision tree):
+
+      ```elixir
+      def application do
+        [
+          included_applications: [:io_ansi_table],
+          extra_applications: [:logger]
+        ]
+      end
+      ```
+
   ## Examples
 
       alias IO.ANSI.Table
@@ -252,15 +287,13 @@ defmodule IO.ANSI.Table do
           align_specs: [center: :dob],
           margins: [top: 2, bottom: 2, left: 2]
         )
-        |> Spec.develop()
+        |> Spec.expand()
 
       Table.write(spec, people, style: :light)
       Table.write(spec, people, style: :light_alt)
       Table.write(spec, people, style: :light_mult)
       Table.write(spec, people, style: :cyan_alt)
       Table.write(spec, people, style: :cyan_mult)
-      Table.write(spec, people, style: :green_alt)
-      Table.write(spec, people, style: :green_mult)
   """
   @spec write(Spec.t(), [Access.container()], keyword) :: :ok
   defdelegate write(spec, maps, options \\ []), to: Spec, as: :write_table
