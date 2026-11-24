@@ -13,6 +13,8 @@ defmodule IO.ANSI.Table do
 
   alias __MODULE__.{DynSpecSup, Header, Spec, SpecServer}
 
+  @reg get_env(:registry)
+
   @doc """
   Starts a new table spec server process and supervises it.
   Upon request (see `format/2`), the server will write data from a list of
@@ -222,6 +224,56 @@ defmodule IO.ANSI.Table do
   end
 
   @doc """
+  Sends a request to the table spec server identified by option `:spec_name`
+  to update its table spec using the given `options`.
+
+  See `IO.ANSI.Table.Options` for a list of all options in this API.
+
+  ## Parameters
+
+    - `options` - up to `10` options (keyword)
+
+  ## Options
+
+    - `:align_specs`  - to align column elements (list/keyword)
+    - `:bell`         - whether to ring the bell (boolean)
+    - `:count`        - number of maps to format (integer)
+    - `:header_fixes` - to alter the `headers` (map)
+    - `:margins`      - to position the table (keyword)
+    - `:max_width`    - to cap column widths (non neg integer)
+    - `:sort_specs`   - to sort the maps (list/keyword)
+    - `:sort_symbols` - to denote sort direction (keyword)
+    - `:spec_name`    - to identify the table spec server (string)
+    - `:style`        - table style (atom)
+
+  ## Notes
+
+    - Option `:spec_name` defaults to the current app name (as a string).
+    - Options `:margins` and `:sort_symbols` can specify a subset of their keys.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table
+      iex> alias IO.ANSI.Table.Spec
+      iex> Table.start([:name, :dob, :likes])
+      iex> options = [margins: [top: -9], bell: true, sort_symbols: [asc: "⇑"]]
+      iex> :ok = Table.update_spec(options)
+      iex> spec = Table.get_spec()
+      iex> %Spec{margins: m, sort_symbols: ss, bell: b} = spec
+      iex> {Enum.sort(m), Enum.sort(ss), b}
+      {[bottom: 1, left: 2, top: -9],
+       [asc: "⇑", desc: "↓", pos: :trailing],
+       true}
+  """
+  @spec update_spec(keyword) :: :ok
+  def update_spec(options \\ []) when is_list(options) do
+    options
+    |> Spec.spec_name()
+    |> SpecServer.via()
+    |> GenServer.call({:update_spec, options})
+  end
+
+  @doc """
   Writes data from `maps` to `:stdio` as a table formatted according to
   `spec` and `options`.
 
@@ -297,4 +349,36 @@ defmodule IO.ANSI.Table do
   """
   @spec write(Spec.t(), [Access.container()], keyword) :: :ok
   defdelegate write(spec, maps, options \\ []), to: Spec, as: :write_table
+
+  @doc """
+  Returns a sorted list of registered spec names.
+  """
+  @spec spec_names :: [String.t() | atom]
+  def spec_names do
+    DynamicSupervisor.which_children(DynSpecSup)
+    |> Enum.map(&child_name/1)
+    |> Enum.sort()
+  end
+
+  @doc """
+  Returns the PID of the spec server process registered via the
+  given `spec_name`, or `nil` if no such process is registered.
+  """
+  @spec spec_pid(String.t()) :: pid | nil
+  def spec_pid(spec_name), do: SpecServer.via(spec_name) |> GenServer.whereis()
+
+  ## Private functions
+
+  @spec child_name(tuple) :: String.t() | atom
+  defp child_name({:undefined, pid, :worker, modules}) when is_pid(pid) do
+    if SpecServer in modules do
+      [{SpecServer, spec_name}] = Registry.keys(@reg, pid)
+      spec_name
+    else
+      :worker
+    end
+  end
+
+  defp child_name({:undefined, :restarting, _type, _modules}), do: :restarting
+  defp child_name({:undefined, _pid, :supervisor, _modules}), do: :supervisor
 end

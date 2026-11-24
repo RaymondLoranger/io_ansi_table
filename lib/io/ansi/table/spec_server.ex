@@ -45,17 +45,27 @@ defmodule IO.ANSI.Table.SpecServer do
   @spec handle_call(term, GenServer.from(), Spec.t()) ::
           {:reply, :ok | Spec.t(), Spec.t(), timeout}
   def handle_call({:format, maps, options} = request, {from_pid, _tag}, spec) do
-    # Update group leader in case request comes from remote shell...
-    group_leader = Process.info(from_pid)[:group_leader]
-    if group_leader, do: self() |> Process.group_leader(group_leader)
     Log.info(:handle_call, {spec, request, __ENV__})
+    {:group_leader, server_leader} = Process.info(self(), :group_leader)
+    {:group_leader, caller_leader} = Process.info(from_pid, :group_leader)
+    Log.info(:changing_group_leader, {spec, from_pid, caller_leader, __ENV__})
+    # Update group leader in case request comes from remote shell...
+    Process.group_leader(self(), caller_leader)
     Spec.write_table(spec, maps, options)
+    # Restore group leader...
+    Process.group_leader(self(), server_leader)
     {:reply, :ok, spec, @timeout}
   end
 
   def handle_call(request = :get_spec, _from, spec) do
     Log.info(:handle_call, {spec, request, __ENV__})
     {:reply, spec, spec, @timeout}
+  end
+
+  def handle_call({:update_spec, options} = request, _from, spec) do
+    spec = Spec.update_spec(spec, options) |> Spec.expand() |> save()
+    Log.info(:handle_call, {spec, request, __ENV__})
+    {:reply, :ok, spec, @timeout}
   end
 
   @spec handle_info(term, Spec.t()) ::
@@ -103,4 +113,12 @@ defmodule IO.ANSI.Table.SpecServer do
     true = :ets.insert(@ets, {key(spec.spec_name), spec})
     spec
   end
+
+  # E.g. #PID<0.104.0> => %{"node" => "0", "process" => "104", "serial" => "0"}
+  # @spec pid_to_map(pid) :: map
+  # defp pid_to_map(pid) when is_pid(pid) do
+  #   ~r/<(?<node>\d+)\.(?<process>\d+)\.(?<serial>\d+)>/
+  #   |> Regex.named_captures(inspect(pid))
+  #   |> Map.new(fn {k, v} -> {String.to_atom(k), String.to_integer(v)} end)
+  # end
 end

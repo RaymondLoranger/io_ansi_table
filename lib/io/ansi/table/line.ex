@@ -102,8 +102,8 @@ defmodule IO.ANSI.Table.Line do
   end
 
   @doc ~S"""
-  Returns an Erlang I/O format (see `:io.format/2`) reflecting `item widths` and
-  `item attributes`.
+  Returns an Erlang I/O format (see `:io.format/2`) reflecting `item_widths` and
+  `item_attrs`.
 
   It consists of a string with control sequences and embedded
   [ANSI codes](https://en.wikipedia.org/wiki/ANSI_escape_code)
@@ -244,7 +244,7 @@ defmodule IO.ANSI.Table.Line do
         [%{}, [%{}, :what, %{}]     ]
       ]
   """
-  @spec delimiters([border], any) :: [any]
+  @spec delimiters([border] | border, any) :: [any]
   def delimiters([left, inner, right] = _borders, filler) do
     [
       [        [filler, left,  filler], filler], # left delimiter
@@ -253,7 +253,6 @@ defmodule IO.ANSI.Table.Line do
     ]
   end
 
-  @spec delimiters(border, any) :: [any]
   def delimiters(border_attr, filler_attr) do
     delimiters([border_attr, border_attr, border_attr], filler_attr)
   end

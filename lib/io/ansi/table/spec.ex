@@ -107,6 +107,14 @@ defmodule IO.ANSI.Table.Spec do
 
   @doc """
   Creates a table spec struct from `headers` and `options`.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Spec
+      iex> spec = Spec.new([:name, :dob, :likes], sort_specs: [desc: :dob])
+      iex> %Spec{header_fixes: hf, margins: m, sort_specs: ss, style: s} = spec
+      iex> {hf, m, ss, s}
+      {%{}, [top: 1, bottom: 1, left: 2], [desc: :dob], :plain}
   """
   @spec new([Header.t(), ...], keyword) :: t
   def new([_ | _] = headers, options \\ []) when is_list(options) do
@@ -124,6 +132,35 @@ defmodule IO.ANSI.Table.Spec do
         Keyword.merge(@default_sort_symbols, options[:sort_symbols] || []),
       style: Keyword.get(options, :style, @default_style)
     }
+  end
+
+  @doc """
+  Updates a table `spec` struct from `options`.
+
+  ## Examples
+
+      iex> alias IO.ANSI.Table.Spec
+      iex> spec = Spec.new([:name, :dob, :likes], sort_specs: [desc: :dob])
+      iex> options = [margins: [top: -9], bell: true, sort_symbols: [asc: "⇑"]]
+      iex> spec = Spec.update_spec(spec, options)
+      iex> %Spec{margins: m, sort_symbols: ss, bell: b} = spec
+      iex> {Enum.sort(m), Enum.sort(ss), b}
+      {[bottom: 1, left: 2, top: -9],
+       [asc: "⇑", desc: "↓", pos: :trailing],
+       true}
+  """
+  @spec update_spec(t, keyword) :: t
+  def update_spec(%Spec{} = spec, options) when is_list(options) do
+    # options = Keyword.delete(options, :spec_name)
+    margins = Keyword.merge(spec.margins, options[:margins] || [])
+
+    sort_symbols =
+      Keyword.merge(spec.sort_symbols, options[:sort_symbols] || [])
+
+    options =
+      Keyword.merge(options, margins: margins, sort_symbols: sort_symbols)
+
+    struct(spec, options)
   end
 
   @doc """

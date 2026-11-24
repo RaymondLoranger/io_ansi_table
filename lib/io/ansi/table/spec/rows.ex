@@ -6,11 +6,11 @@ defmodule IO.ANSI.Table.Spec.Rows do
 
   alias IO.ANSI.Table.{Column, Header, Log, Row, Spec}
 
-  # Reset log files at compile time to log debug messages.
+  # Reset log files and log debug messages at compile time.
   # May need `mix compile --force` and `mix test --force`.
-  case Application.ensure_all_started(app = :log_reset) do
-    {:ok, _apps} -> :ok
-    {:error, reason} -> Log.error(:error_starting_app, {reason, app, __ENV__})
+  case Application.ensure_all_started(args = [:log_reset, :file_only_logger]) do
+    {:ok, apps} -> Log.info(:apps_started, {apps, args, __ENV__})
+    {:error, reason} -> Log.error(:error_starting_app, {reason, args, __ENV__})
   end
 
   @doc """

@@ -11,9 +11,10 @@ defmodule IO.ANSI.Table.IE do
   #   Style.styles()
   #   people_with_date_dobs()
   #   people_with_string_dobs()
-  #   sort_people(people_with_date_dobs, asc: {:dob, Date}, desc: :likes)
-  #   sort_people(people_with_string_dobs, asc: :dob, desc: :likes)
+  #   people_with_date_dobs() |> sort_people(asc: {:dob, Date}, desc: :likes)
+  #   people_with_string_dobs() |> sort_people(asc: :dob, desc: :likes)
   #   start()
+  #   Table.spec_names()
   #   format_islands()
   #   write_islands()
   #   format_islands(:game)
@@ -26,10 +27,21 @@ defmodule IO.ANSI.Table.IE do
   #   write_people()
   #   format_people(:dotted_alt)
   #   write_people(:dotted_alt)
+  #   format_people(:barish)
+  #   write_people(:barish)
+  #   Table.update_spec(spec_name: "date_dobs", margins: [top: -9])
+  #   format_people(:barish)
+  #   write_people(:barish)
+  #   format_people(:dotted_alt)
+  #   write_people(:dotted_alt)
+  #   Table.update_spec(spec_name: "date_dobs", margins: [top: -11])
+  #   format_people(:dotted_alt)
+  #   write_people(:dotted_alt)
   #   format_people(:dotted, 111)
   #   write_people(:dotted, 111)
   #   get_spec()
   #   stop()
+  #   Table.spec_names()
 
   use PersistConfig
 
@@ -258,12 +270,12 @@ defmodule IO.ANSI.Table.IE do
           ]
       )
 
-    [
-      left_board: left_board,
-      right_board: right_board,
-      string_dobs: string_dobs,
-      date_dobs: date_dobs
-    ]
+    %{
+      "left_board" => left_board,
+      "right_board" => right_board,
+      "string_dobs" => string_dobs,
+      "date_dobs" => date_dobs
+    }
   end
 
   # Get server specs...
@@ -273,12 +285,12 @@ defmodule IO.ANSI.Table.IE do
     string_dobs = Table.get_spec(spec_name: "string_dobs")
     date_dobs = Table.get_spec(spec_name: "date_dobs")
 
-    [
-      left_board: left_board,
-      right_board: right_board,
-      string_dobs: string_dobs,
-      date_dobs: date_dobs
-    ]
+    %{
+      "left_board" => left_board,
+      "right_board" => right_board,
+      "string_dobs" => string_dobs,
+      "date_dobs" => date_dobs
+    }
   end
 
   # Stop servers...

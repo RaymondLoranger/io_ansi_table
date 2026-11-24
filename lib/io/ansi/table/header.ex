@@ -73,7 +73,8 @@ defmodule IO.ANSI.Table.Header do
   """
   @spec find_attr(t, [align_spec | sort_spec], :left | :asc) ::
           align_attr | sort_attr | nil
-  def find_attr(header, specs, default_attr) do
+  def find_attr(header, specs, default_attr)
+      when default_attr in [:left, :asc] do
     Enum.find_value(specs, fn
       # {:center, :dob} or {:desc, :dob}
       {attr, key} when key == header -> attr
