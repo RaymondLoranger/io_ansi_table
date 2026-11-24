@@ -46,10 +46,11 @@ defmodule IO.ANSI.Table.SpecServer do
           {:reply, :ok | Spec.t(), Spec.t(), timeout}
   def handle_call({:format, maps, options} = request, {from_pid, _tag}, spec) do
     Log.info(:handle_call, {spec, request, __ENV__})
-    {:group_leader, server_leader} = Process.info(self(), :group_leader)
+    server_leader = Process.group_leader()
     {:group_leader, caller_leader} = Process.info(from_pid, :group_leader)
-    Log.info(:changing_group_leader, {spec, from_pid, caller_leader, __ENV__})
-    # Update group leader in case request comes from remote shell...
+    changing_group_leader = {spec, from_pid, caller_leader, server_leader}
+    Log.info(:changing_group_leader, {changing_group_leader, __ENV__})
+    # Change group leader in case request comes from remote shell...
     Process.group_leader(self(), caller_leader)
     Spec.write_table(spec, maps, options)
     # Restore group leader...
